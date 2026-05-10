@@ -232,6 +232,14 @@ function getAddressDetails(address, scriptPubkey, sort, limit, offset) {
 
 			if (balanceData) {
 				addressDetails.balanceSat = balanceData.confirmed;
+				
+				if (balanceData.confirmed_received) {
+					addressDetails.totalReceivedSat = balanceData.confirmed_received;
+					addressDetails.totalSentSat = balanceData.confirmed_received - balanceData.confirmed;
+					addressDetails.recvCount = balanceData.received_count;
+					addressDetails.spentCount = balanceData.spent_count;
+					addressDetails.unspentCount = balanceData.unspent_count;
+				}
 
 				if (balanceData.unconfirmed) {
 					addressDetails.unconfirmedBalanceSat = balanceData.unconfirmed;

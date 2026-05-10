@@ -123,11 +123,11 @@
 						td.text-start
 							if (block.miner)
 								if (block.miner.type == "address-only")
-									span.badge.bg-secondary
-										.d-inline.d-md-none
-											span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{utils.ellipsizeMiddle(block.miner.name, 10)}
-
-										.d-none.d-md-inline
+									.d-none.d-md-inline
+										span.badge.bg-secondary
+											span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{block.miner.name}
+									.d-md-none
+										span.badge.bg-secondary
 											span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{utils.ellipsizeMiddle(block.miner.name, 14)}
 											+copyTextButton(block.miner.name)
 
@@ -139,7 +139,7 @@
 											i.bi-asterisk.ms-2(data-bs-toggle="tooltip", title=block.miner.note)
 
 									.d-none.d-sm-inline
-										span.badge.bg-primary(data-bs-toggle="tooltip", data-bs-html="true", title=`Identified by: ${block.miner.identifiedBy}`) #{utils.ellipsize(block.miner.name, 14)}
+										span.badge.bg-primary(data-bs-toggle="tooltip", data-bs-html="true", title=`Identified by: ${block.miner.identifiedBy}`) #{block.miner.name}
 
 										if (block.miner.note)
 											i.bi-asterisk.ms-2(data-bs-toggle="tooltip", title=block.miner.note)
@@ -197,15 +197,17 @@
 								span.border-dotted(title=`Value: ${feeEstimateVal}`, data-bs-toggle="tooltip") #{currencyValue}
 
 						td.text-end.d-none.d-lg-table-cell
-							if (block.totalFees)
+							if (block.totalFees !== undefined && block.totalFees !== null)
 								- var currencyValue = new Decimal(block.totalFees);
 								- var currencyValueDecimals = 3;
 
-								if (userSettings.displayCurrency == "btc")
-									+valueDisplaySpecial(block.totalFees, 4)
-
+								if (currencyValue > 0)
+									if (userSettings.displayCurrency == "btc" || userSettings.displayCurrency == "btcx")
+										+valueDisplaySpecial(block.totalFees, 4)
+									else
+										+valueDisplay(block.totalFees)
 								else
-									+valueDisplay(block.totalFees)
+									span 0
 
 							else
 								span(title="This data is unavailable due to blockchain pruning", data-bs-toggle="tooltip")

@@ -94,8 +94,8 @@ block content
 									+summaryItem("Transactions")
 										| #{addressDetails.txCount.toLocaleString()}
 
-								if (addressDetails && addressDetails.balanceSat)
-									+summaryItem("Balance")
+								if (addressDetails && addressDetails.balanceSat !== undefined)
+									+summaryItem("Confirmed Balance")
 										span(class=(addressDetails.balanceSat > 0 ? "text-success" : false))
 											- var currencyValue = new Decimal(addressDetails.balanceSat).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
 											+valueDisplay(currencyValue)
@@ -112,21 +112,40 @@ block content
 											+valueDisplay(currencyValue)
 
 								if (addressDetails && addressDetails.totalReceivedSat)
-									+summaryItem("Total Received / Sent")
-										span(class=(addressDetails.totalReceivedSat > 0 ? "text-success" : false))
-											if (addressDetails.totalReceivedSat)
-												span.me-1 +
+									+summaryItem("Confirmed Received")
+										if (addressDetails.recvCount !== undefined)
+											- var countObj = utils.formatLargeNumber(addressDetails.recvCount, 0);
+											span #{countObj[0]} outputs (
 
-											- var currencyValue = new Decimal(Math.abs(addressDetails.totalReceivedSat)).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
-											+valueDisplay(currencyValue)
+										- var currencyValue = new Decimal(Math.abs(addressDetails.totalReceivedSat)).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
+										+valueDisplay(currencyValue)
+										
+										if (addressDetails.recvCount !== undefined)
+											span )
 
-										br
-										span(class=(addressDetails.totalSentSat > 0 ? "text-danger" : false))
-											if (addressDetails.totalSentSat > 0)
-												span.me-1 -
+								if (addressDetails && addressDetails.totalSentSat)
+									+summaryItem("Confirmed Spent")
+										if (addressDetails.spentCount !== undefined)
+											- var countObj = utils.formatLargeNumber(addressDetails.spentCount, 0);
+											span #{countObj[0]} outputs (
+											
+										- var currencyValue = new Decimal(Math.abs(addressDetails.totalSentSat)).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
+										+valueDisplay(currencyValue)
+										
+										if (addressDetails.spentCount !== undefined)
+											span )
+											
+								if (addressDetails && addressDetails.balanceSat !== undefined)
+									+summaryItem("Confirmed Unspent")
+										if (addressDetails.unspentCount !== undefined)
+											- var countObj = utils.formatLargeNumber(addressDetails.unspentCount, 0);
+											span #{countObj[0]} outputs (
 
-											- var currencyValue = new Decimal(Math.abs(addressDetails.totalSentSat)).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
-											+valueDisplay(currencyValue)
+										- var currencyValue = new Decimal(addressDetails.balanceSat).dividedBy(coinConfig.baseCurrencyUnit.multiplier);
+										+valueDisplay(currencyValue)
+
+										if (addressDetails.unspentCount !== undefined)
+											span )
 
 								if (flags.length > 0)
 									+summaryItem("Flags")
