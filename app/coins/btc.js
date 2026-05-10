@@ -87,9 +87,9 @@ module.exports = {
 		"signet":"Signet Explorer",
 	},
 	demoSiteUrlsByNetwork: {
-		"main": "https://bitcoinexplorer.org",
-		"test": "https://testnet.bitcoinexplorer.org",
-		"signet": "https://signet.bitcoinexplorer.org",
+		"main": "https://explorer.bitcoin-po.cx/",
+		"test": "https://explorer.bitcoin-po.cx/testnet",
+		"signet": "https://explorer.bitcoin-po.cx/signet",
 	},
 	knownTransactionsByNetwork: {
 		main: "f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16",
@@ -97,10 +97,6 @@ module.exports = {
 		signet: "39332e10af6fe491e8ae4ba1e2dd674698fedf8aa3c8c42bf71572debc1bb5b9"
 	},
 	miningPoolsConfigUrls:[
-		"https://raw.githubusercontent.com/btc21/Bitcoin-Known-Miners/master/miners.json",
-		"https://raw.githubusercontent.com/bitcoin-data/mining-pools/generated/pools.json",
-		"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
-		"https://raw.githubusercontent.com/blockchain/Blockchain-Known-Pools/master/pools.json"
 	],
 	maxBlockWeight: 4000000,
 	maxBlockSize: 1000000,
@@ -165,7 +161,7 @@ module.exports = {
 	},
 	
 	genesisBlockHashesByNetwork:{
-		"main":	"000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+		"main":	"6ab422073e327d42a0e5dfaaa26564324ddb225e53c64da89283cd4e3dfb7ac6",
 		"test":	"000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
 		"regtest": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
 		"signet":  "00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6", 
@@ -201,12 +197,12 @@ module.exports = {
 						"reqSigs": 1,
 						"type": "pubkey",
 						"addresses": [
-							"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+							"pocx1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnaa"
 						]
 					}
 				}
 			],
-			"blockhash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+			"blockhash": "6ab422073e327d42a0e5dfaaa26564324ddb225e53c64da89283cd4e3dfb7ac6",
 			"time": 1230988505,
 			"blocktime": 1230988505
 		},
@@ -310,7 +306,7 @@ module.exports = {
 			"avgfee": 0,
 			"avgfeerate": 0,
 			"avgtxsize": 0,
-			"blockhash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+			"blockhash": "6ab422073e327d42a0e5dfaaa26564324ddb225e53c64da89283cd4e3dfb7ac6",
 			"feerate_percentiles": [
 				0,
 				0,
@@ -522,7 +518,7 @@ module.exports = {
 			}
 		}
 	},
-	genesisCoinbaseOutputAddressScripthash:"8b01df4e368ea28f8dc0423bcf7a4923e3a12d307c875e47a0cfbf90b5c39161",
+	genesisCoinbaseOutputAddressScripthash:"daaec3c74332cddf532ab46ceb59c8767141eacb49ba595f0b231f0fcdce68aa",
 	historicalData: btcFun.items,
 	exchangeRateData:{
 		jsonUrl:"https://api.coindesk.com/v1/bpi/currentprice.json",

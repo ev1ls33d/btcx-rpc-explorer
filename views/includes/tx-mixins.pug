@@ -96,7 +96,7 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 									span(title="Coinbase transactions are special transactions created by the miner of a block. They distribute the block reward (subsidy) as the miner chooses, along with all of the fees paid by transactions included in the block.", data-bs-toggle="tooltip") coinbase
 								
 								.mt-2
-									+hexDataDisplay(txVin.coinbase)
+									+hexDataDisplay(txVin.coinbase, "hex")
 
 
 							else
