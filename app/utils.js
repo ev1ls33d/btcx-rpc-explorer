@@ -576,12 +576,13 @@ function identifyMiner(coinbaseTx, blockHeight) {
 
 			if (miningPoolsConfig && miningPoolsConfig.coinbase_tags) {
 				for (let coinbaseTag in miningPoolsConfig.coinbase_tags) {
-				if (miningPoolsConfig.coinbase_tags.hasOwnProperty(coinbaseTag)) {
-					if (formatHex(coinbaseTx.vin[0].coinbase, "utf8").indexOf(coinbaseTag) != -1) {
-						let minerInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];
-						minerInfo.identifiedBy = "coinbase tag '" + coinbaseTag + "'";
+					if (miningPoolsConfig.coinbase_tags.hasOwnProperty(coinbaseTag)) {
+						if (formatHex(coinbaseTx.vin[0].coinbase, "utf8").indexOf(coinbaseTag) != -1) {
+							let minerInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];
+							minerInfo.identifiedBy = "coinbase tag '" + coinbaseTag + "'";
 
-						return minerInfo;
+							return minerInfo;
+						}
 					}
 				}
 			}
