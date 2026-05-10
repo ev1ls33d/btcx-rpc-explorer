@@ -5,7 +5,7 @@ const Decimal8 = Decimal.clone({ precision:8, rounding:8 });
 
 const btcFun = require("./btcFun.js");
 
-const blockRewardEras = [ new Decimal8(50) ];
+const blockRewardEras = [ new Decimal8(10) ];
 for (let i = 1; i < 34; i++) {
 	let previous = blockRewardEras[i - 1];
 	blockRewardEras.push(new Decimal8(previous).dividedBy(2));
@@ -116,7 +116,7 @@ module.exports = {
 	targetBlockTimeSeconds: 600,
 	targetBlockTimeMinutes: 10,
 	currencyUnits:currencyUnits,
-	currencyUnitsByName:{"BTC":currencyUnits[0], "mBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
+	currencyUnitsByName:{"BTCX":currencyUnits[0], "mBTCX":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
 	defaultCurrencyUnit:currencyUnits[0],
 	feeSatoshiPerByteBucketMaxima: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 50, 75, 100, 150],
@@ -193,7 +193,7 @@ module.exports = {
 			],
 			"vout": [
 				{
-					"value": 50,
+					"value": 10,
 					"n": 0,
 					"scriptPubKey": {
 						"asm": "04f5eeb2b10c944c6b9fbcfff94c35bdeecd93df977882babc7f3a2cf7f5c81d3b09a68db7f0e04f21de5d4230e75e6dbe7ad16eefe0d4325a62067dc6f369446a OP_CHECKSIG",
@@ -227,7 +227,7 @@ module.exports = {
 			],
 			"vout": [
 				{
-					"value": 50.00000000,
+					"value": 10.00000000,
 					"n": 0,
 					"scriptPubKey": {
 						"asm": "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f OP_CHECKSIG",
@@ -261,7 +261,7 @@ module.exports = {
 			],
 			"vout": [
 				{
-					"value": 50.00000000,
+					"value": 10.00000000,
 					"n": 0,
 					"scriptPubKey": {
 						"asm": "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f OP_CHECKSIG",
@@ -291,7 +291,7 @@ module.exports = {
 			],
 			"vout": [
 				{
-					"value": 50.00000000,
+					"value": 10.00000000,
 					"n": 0,
 					"scriptPubKey": {
 						"asm": "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f OP_CHECKSIG",

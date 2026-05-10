@@ -258,14 +258,14 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 
 								.my-2
 									if (vout.scriptPubKey.asm)
-										+hexDataDisplay(vout.scriptPubKey.asm.substring("OP_RETURN ".length))
+										+hexDataDisplay(vout.scriptPubKey.asm.substring("OP_RETURN ".length), "hex")
 
 							else if (vout.scriptPubKey.asm && vout.scriptPubKey.asm.startsWith('OP_RETURN '))
 								span
 									+primaryBadge("OP_RETURN")
 
 								.my-2
-									+hexDataDisplay(vout.scriptPubKey.asm.substring("OP_RETURN ".length))
+									+hexDataDisplay(vout.scriptPubKey.asm.substring("OP_RETURN ".length), "hex")
 							
 							else if (vout.scriptPubKey.type)
 								span.d-none.d-sm-inline
