@@ -653,7 +653,7 @@ block endOfBody
 					analysis.outputTypeCounts[outputType]++;
 				}
 
-				if (txSummary.vsize) {
+				if (txSummary.vsize || txSummary.size) {
 					vByteSizes = true;
 				}
 

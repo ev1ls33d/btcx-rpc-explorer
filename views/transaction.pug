@@ -158,7 +158,7 @@ block content
 								else
 									- var feePaid = mempoolDetails ? new Decimal(mempoolDetails.entry.fees.base) : new Decimal(totalInputValue).minus(totalOutputValue);
 									
-									span #{utils.addThousandsSeparators(new DecimalRounded(feePaid).dividedBy(tx.vsize).times(100000000))}
+									span #{utils.addThousandsSeparators(new DecimalRounded(feePaid).dividedBy(tx.vsize || tx.size || 1).times(100000000))}
 
 							+summaryItem("Total Fee")
 								if (!mempoolDetails && !global.txindexAvailable)
@@ -202,9 +202,12 @@ block content
 							| #{result.getrawtransaction.version}
 
 						+summaryItem("Size", null, "vB")
-							span #{tx.vsize.toLocaleString()}
+							if (tx.vsize !== undefined)
+								span #{tx.vsize.toLocaleString()}
+							else
+								span -
 
-							if (tx.size != tx.vsize)
+							if (tx.size != tx.vsize && tx.size !== undefined)
 								span.small.text-muted.ms-2 (
 									span.border-dotted(title=`Raw size: ${tx.size.toLocaleString()} B`, data-bs-toggle="tooltip") #{tx.size.toLocaleString()}
 									| )

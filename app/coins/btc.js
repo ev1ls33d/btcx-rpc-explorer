@@ -14,17 +14,17 @@ for (let i = 1; i < 34; i++) {
 const currencyUnits = [
 	{
 		type:"native",
-		name:"BTC",
+		name:"BTCX",
 		multiplier:1,
 		default:true,
-		values:["", "btc", "BTC"],
+		values:["", "btcx", "BTCX"],
 		decimalPlaces:8
 	},
 	{
 		type:"native",
-		name:"mBTC",
+		name:"mBTCX",
 		multiplier:1000,
-		values:["mbtc"],
+		values:["mbtcx"],
 		decimalPlaces:5
 	},
 	{
@@ -60,8 +60,8 @@ const currencyUnits = [
 ];
 
 module.exports = {
-	name:"Bitcoin",
-	ticker:"BTC",
+	name:"BitcoinX",
+	ticker:"BTCX",
 	logoUrlsByNetwork:{
 		"main":"./img/network-mainnet/logo.svg",
 		"test":"./img/network-testnet/logo.svg",

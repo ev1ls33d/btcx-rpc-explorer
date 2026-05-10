@@ -216,12 +216,12 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 								- var mempoolDetailsFee = ((mempoolDetails.fees && mempoolDetails.fees.modified) ? mempoolDetails.fees.modified : (mempoolDetails.fee ? mempoolDetails.fee : 0));
 								
 								- txFee = new Decimal(mempoolDetailsFee);
-								- txFeeRate = txFee.times(coinConfig.baseCurrencyUnit.multiplier).dividedBy(mempoolDetails.vsize);
+								- txFeeRate = txFee.times(coinConfig.baseCurrencyUnit.multiplier).dividedBy(mempoolDetails.vsize || mempoolDetails.size || 1);
 
 
 							if (!coinbaseTx && totalIOValues.input && totalIOValues.output)
 								- txFee = new Decimal(totalIOValues.input).minus(totalIOValues.output);
-								- txFeeRate = txFee.dividedBy(tx.vsize).times(coinConfig.baseCurrencyUnit.multiplier);
+								- txFeeRate = txFee.dividedBy(tx.vsize || tx.size || 1).times(coinConfig.baseCurrencyUnit.multiplier);
 
 							
 							if (!coinbaseTx && Object.keys(txInputs).length < tx.vin.length)
@@ -236,7 +236,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 
 									if (txFee > 0)
 										span.ms-2 (
-											| #{parseInt(txFee.dividedBy(tx.vsize).times(coinConfig.baseCurrencyUnit.multiplier)).toLocaleString()}
+											| #{parseInt(txFee.dividedBy(tx.vsize || tx.size || 1).times(coinConfig.baseCurrencyUnit.multiplier)).toLocaleString()}
 											span.text-tiny.ms-1 sat/vB
 											span )
 								

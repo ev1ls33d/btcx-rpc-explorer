@@ -233,11 +233,51 @@ block content
 						+summaryItem("Version")
 							| 0x#{result.getblock.versionHex}
 
-						+summaryItem("Nonce")
-							| #{result.getblock.nonce}
+						if result.getblock.nonce !== undefined
+							+summaryItem("Nonce")
+								| #{result.getblock.nonce}
 
-						+summaryItem("Bits")
-							| #{result.getblock.bits}
+						if result.getblock.bits !== undefined
+							+summaryItem("Bits")
+								| #{result.getblock.bits}
+
+						if result.getblock.base_target !== undefined
+							+summaryItem("Base Target")
+								| #{result.getblock.base_target}
+							
+						if result.getblock.pocx_proof !== undefined
+							+summaryItem("PoCX Account")
+								| #{result.getblock.pocx_proof.account_id}
+							+summaryItem("PoCX Seed")
+								| #{utils.ellipsizeMiddle(result.getblock.pocx_proof.seed, 12)}
+								+copyTextButton(result.getblock.pocx_proof.seed)
+							+summaryItem("PoCX Nonce")
+								| #{result.getblock.pocx_proof.nonce}
+							+summaryItem("PoCX Quality")
+								| #{result.getblock.pocx_proof.quality}
+								
+						if result.getblock.pubkey !== undefined
+							+summaryItem("Signer Pubkey")
+								| #{utils.ellipsizeMiddle(result.getblock.pubkey, 12)}
+								+copyTextButton(result.getblock.pubkey)
+
+						if result.getblock.signer_address !== undefined
+							+summaryItem("Signer Address")
+								| #{result.getblock.signer_address}
+								
+						if result.getblock.poc_time !== undefined
+							+summaryItem("PoCX Time")
+								| #{result.getblock.poc_time}
+								
+						if result.getblock.time_since_last_block !== undefined
+							+summaryItem("Time Since Last Block")
+								| #{result.getblock.time_since_last_block} s
+
+						if result.getblock.generation_signature !== undefined
+							+summaryItem("Gen. Sig.")
+								| #{utils.ellipsizeMiddle(result.getblock.generation_signature, 12)}
+								+copyTextButton(result.getblock.generation_signature)
+
 
 						+summaryItem("Merkle Root")
 							| #{utils.ellipsizeMiddle(result.getblock.merkleroot, 12)}
