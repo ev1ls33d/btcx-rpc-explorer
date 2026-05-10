@@ -379,9 +379,11 @@ function loadMiningPoolConfigs() {
 		});
 
 		for (var i = 0; i < global.miningPoolsConfigs.length; i++) {
-			for (var x in global.miningPoolsConfigs[i].payout_addresses) {
-				if (global.miningPoolsConfigs[i].payout_addresses.hasOwnProperty(x)) {
-					global.specialAddresses[x] = {type:"minerPayout", minerInfo:global.miningPoolsConfigs[i].payout_addresses[x]};
+			if (global.miningPoolsConfigs[i] && global.miningPoolsConfigs[i].payout_addresses) {
+				for (var x in global.miningPoolsConfigs[i].payout_addresses) {
+					if (global.miningPoolsConfigs[i].payout_addresses.hasOwnProperty(x)) {
+						global.specialAddresses[x] = {type:"minerPayout", minerInfo:global.miningPoolsConfigs[i].payout_addresses[x]};
+					}
 				}
 			}
 		}
@@ -390,7 +392,7 @@ function loadMiningPoolConfigs() {
 
 async function getSourcecodeProjectMetadata() {
 	var options = {
-		url: "https://api.github.com/repos/janoside/btc-rpc-explorer",
+		url: "https://github.com/ev1ls33d/btcx-rpc-explorer",
 		headers: {
 			'User-Agent': 'request'
 		}

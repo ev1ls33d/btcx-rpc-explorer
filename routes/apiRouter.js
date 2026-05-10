@@ -453,7 +453,7 @@ router.get("/address/:address", asyncHandler(async (req, res, next) => {
 
 		if (global.miningPoolsConfigs) {
 			for (let i = 0; i < global.miningPoolsConfigs.length; i++) {
-				if (global.miningPoolsConfigs[i].payout_addresses[address]) {
+				if (global.miningPoolsConfigs[i] && global.miningPoolsConfigs[i].payout_addresses && global.miningPoolsConfigs[i].payout_addresses[address]) {
 					let note = global.miningPoolsConfigs[i].payout_addresses[address];
 					note.type = "payout address for miner";
 

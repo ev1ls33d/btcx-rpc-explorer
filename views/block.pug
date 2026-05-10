@@ -65,40 +65,38 @@ block content
 				
 
 				+contentSection("Summary")
-					+summaryRow(2 + (result.getblock.miner ? 1 : 0) + (result.blockstats ? 1 : 0))
-						+summaryItem("Date / Time")
-							+timestamp(result.getblock.time, {agoOptions:{oneElement:true}})
+					+summaryRow(8)
+						+summaryItem("Height")
+							| #{result.getblock.height.toLocaleString()}
 							
-
 						+summaryItem("Confirmations")
 							+confirmations(result.getblock.confirmations, false)
 							
+						+summaryItem("Date / Time")
+							+timestamp(result.getblock.time, {agoOptions:{oneElement:true}})
 
-						if (result.getblock.miner)
+						if (result.getblock.size)
+							+summaryItem("Size")
+								- var sizeKB = new Decimal(result.getblock.size).dividedBy(1000);
+								| #{sizeKB.toDP(3)} KB
+
+						if (result.getblock.weight)
+							+summaryItem("Virtual Size")
+								- var vsizeKB = new Decimal(result.getblock.weight).dividedBy(4000);
+								| #{vsizeKB.toDP(0)} vKB
+
+						if (result.getblock.weight)
+							+summaryItem("Weight Units")
+								- var weightKWU = new Decimal(result.getblock.weight).dividedBy(1000);
+								| #{weightKWU.toDP(3)} KWU
+
+						if result.getblock.pocx_proof !== undefined && result.getblock.pocx_proof.account_id
 							+summaryItem("Miner")
-								if (result.getblock.miner.type == "address-only")
-									span.badge.bg-secondary
-										span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${result.getblock.miner.name}`) #{utils.ellipsizeMiddle(result.getblock.miner.name, 16)}
-										+copyTextButton(result.getblock.miner.name)
+								span.text-break #{result.getblock.pocx_proof.account_id}
 
-								else if (result.getblock.miner.identifiedBy)
-									span.badge.bg-primary(data-bs-toggle="tooltip", data-bs-html="true", title=`Identified by: ${result.getblock.miner.identifiedBy}`) #{result.getblock.miner.name}
-
-									if (result.getblock.miner.note)
-										i.bi-asterisk.ms-2(data-bs-toggle="tooltip", title=result.getblock.miner.note)
-
-								else
-									small.badge.bg-primary #{result.getblock.miner.name}
-
-						if (result.blockstats)
-							+summaryItem("Total Output", "Total value of all transaction outputs")
-								if (result.blockstats.total_out)
-									- var currencyValue = new Decimal(result.blockstats.total_out).plus(new Decimal(result.blockstats.totalfee)).plus(new Decimal(result.blockstats.subsidy));
-									- currencyValue = currencyValue.dividedBy(coinConfig.baseCurrencyUnit.multiplier);
-									+valueDisplay(currencyValue)
-
-								else
-									span 0
+						if result.getblock.signer_address !== undefined
+							+summaryItem("Forger")
+								span.text-break #{result.getblock.signer_address}
 
 				if (result.blockstats && result.blockstats.ins && result.blockstats.ins > 0)
 					+contentSection("Fee Details", true, "blockPageShowFeeSummary", true)
@@ -246,8 +244,6 @@ block content
 								| #{result.getblock.base_target}
 							
 						if result.getblock.pocx_proof !== undefined
-							+summaryItem("PoCX Account")
-								| #{result.getblock.pocx_proof.account_id}
 							+summaryItem("PoCX Seed")
 								| #{utils.ellipsizeMiddle(result.getblock.pocx_proof.seed, 12)}
 								+copyTextButton(result.getblock.pocx_proof.seed)
@@ -257,13 +253,6 @@ block content
 								| #{result.getblock.pocx_proof.quality}
 								
 						if result.getblock.pubkey !== undefined
-							+summaryItem("Signer Pubkey")
-								| #{utils.ellipsizeMiddle(result.getblock.pubkey, 12)}
-								+copyTextButton(result.getblock.pubkey)
-
-						if result.getblock.signer_address !== undefined
-							+summaryItem("Signer Address")
-								| #{result.getblock.signer_address}
 								
 						if result.getblock.poc_time !== undefined
 							+summaryItem("PoCX Time")

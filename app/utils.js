@@ -559,20 +559,23 @@ function identifyMiner(coinbaseTx, blockHeight) {
 		for (let i = 0; i < global.miningPoolsConfigs.length; i++) {
 			let miningPoolsConfig = global.miningPoolsConfigs[i];
 
-			for (let payoutAddress in miningPoolsConfig.payout_addresses) {
-				if (miningPoolsConfig.payout_addresses.hasOwnProperty(payoutAddress)) {
-					if (coinbaseTx.vout && coinbaseTx.vout.length > 0) {
-						if (getVoutAddresses(coinbaseTx.vout[0]).includes(payoutAddress)) {
-							let minerInfo = miningPoolsConfig.payout_addresses[payoutAddress];
-							minerInfo.identifiedBy = "payout address " + payoutAddress;
+			if (miningPoolsConfig && miningPoolsConfig.payout_addresses) {
+				for (let payoutAddress in miningPoolsConfig.payout_addresses) {
+					if (miningPoolsConfig.payout_addresses.hasOwnProperty(payoutAddress)) {
+						if (coinbaseTx.vout && coinbaseTx.vout.length > 0) {
+							if (getVoutAddresses(coinbaseTx.vout[0]).includes(payoutAddress)) {
+								let minerInfo = miningPoolsConfig.payout_addresses[payoutAddress];
+								minerInfo.identifiedBy = "payout address " + payoutAddress;
 
-							return minerInfo;
+								return minerInfo;
+							}
 						}
 					}
 				}
 			}
 
-			for (let coinbaseTag in miningPoolsConfig.coinbase_tags) {
+			if (miningPoolsConfig && miningPoolsConfig.coinbase_tags) {
+				for (let coinbaseTag in miningPoolsConfig.coinbase_tags) {
 				if (miningPoolsConfig.coinbase_tags.hasOwnProperty(coinbaseTag)) {
 					if (formatHex(coinbaseTx.vin[0].coinbase, "utf8").indexOf(coinbaseTag) != -1) {
 						let minerInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];

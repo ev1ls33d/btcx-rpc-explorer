@@ -1343,7 +1343,9 @@ function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
 
 			for (let height = startBlock; height <= endBlock; height++) {
 				const blockSummary = summariesByHeight[height];
-				const miner = blockSummary.mn;
+				if (!blockSummary) continue; // skip undefined summaries
+				
+				const miner = blockSummary.mn || "Unknown";
 
 				if (!summary.miners[miner]) {
 					summary.minerNamesSortedByBlockCount.push(miner);
