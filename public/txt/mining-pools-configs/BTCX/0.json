@@ -1,5 +1,5 @@
 {
-	"coinbase_tags" : {
+	"payout_addresses" : {
 		"pocx1qp00ljf5sy0kdk4h8x5n4erzdshkzj4cdmvjpsv": {
 			"name": "Official Pool",
 			"link": "https://pool.bitcoin-pocx.org/info"
