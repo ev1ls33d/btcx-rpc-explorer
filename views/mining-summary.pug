@@ -30,11 +30,12 @@ block content
 
 	div#summary-table
 		.row
-			.col-lg-6
+			.col-lg-12.mb-3
 				+contentSection("Revenue Breakdown")
-					canvas(id="revenue-breakdown-chart")
+					div(style="height: 350px;")
+						canvas(id="revenue-breakdown-chart")
 
-			.col-lg-6
+			.col-lg-12
 				+contentSection("Data")
 					.table-responsive
 						table.table.table-borderless.table-striped.mb-0
@@ -267,9 +268,15 @@ block endOfBody
 				graph = new Chart(ctx, {
 					type: 'doughnut',
 					options: {
+						maintainAspectRatio: false,
 						plugins: {
 							legend: {
-								position: "left"
+								position: "left",
+								labels: {
+									font: {
+										size: 11
+									}
+								}
 							},
 						}
 					},
