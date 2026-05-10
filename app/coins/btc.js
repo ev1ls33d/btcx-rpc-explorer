@@ -109,8 +109,8 @@ module.exports = {
 		"regtest": new Decimal(21000000),
 		"signet": new Decimal(21000000)
 	},
-	targetBlockTimeSeconds: 600,
-	targetBlockTimeMinutes: 10,
+	targetBlockTimeSeconds: 120,
+	targetBlockTimeMinutes: 2,
 	currencyUnits:currencyUnits,
 	currencyUnitsByName:{"BTCX":currencyUnits[0], "mBTCX":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],

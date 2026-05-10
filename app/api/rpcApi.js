@@ -302,6 +302,7 @@ function getRawTransaction(txid, blockhash) {
 				resolve(result);
 
 			}).catch(function(err) {
+				debugLog(`getrawtransaction failed for ${txid} with blockhash ${blockhash}:`, err);
 				if (!global.txindexAvailable) {
 					noTxIndexTransactionLookup(txid, !!blockhash).then(resolve, reject);
 				} else {

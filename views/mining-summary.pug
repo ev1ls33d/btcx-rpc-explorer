@@ -99,7 +99,7 @@ block endOfBody
 		$(document).ready(function() {
 			prepareUI();
 
-			loadMiningData(currentBlockHeight - 144, currentBlockHeight);
+			loadMiningData(currentBlockHeight - 720, currentBlockHeight);
 		});
 
 		function updateStatus() {
@@ -216,7 +216,7 @@ block endOfBody
 
 				if (revenuePercent > 1) {
 					if (minerName.startsWith("address-only:")) {
-						pieChartData.labels.push(ellipsizeMiddle(minerName.substring("address-only:".length), 16));
+						pieChartData.labels.push(minerName.substring("address-only:".length));
 
 					} else {
 						pieChartData.labels.push(minerName);

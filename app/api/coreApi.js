@@ -981,11 +981,14 @@ function getRawTransactions(txids, blockhash) {
 	return new Promise(function(resolve, reject) {
 		let promises = [];
 		for (let i = 0; i < txids.length; i++) {
-			promises.push(getRawTransaction(txids[i], blockhash));
+			promises.push(getRawTransaction(txids[i], blockhash).catch(err => {
+				debugLog(`getRawTransaction failed for ${txids[i]}: ${err}`);
+				return null;
+			}));
 		}
 
 		Promise.all(promises).then(function(results) {
-			resolve(results);
+			resolve(results.filter(tx => tx != null));
 
 		}).catch(function(err) {
 			reject(err);
@@ -995,11 +998,16 @@ function getRawTransactions(txids, blockhash) {
 
 async function getRawTransactionsByHeights(txids, blockHeightsByTxid) {
 	return Promise.all(txids.map(async txid => {
-		let blockheight = blockHeightsByTxid[txid];
-		let blockhash = blockheight ? await getBlockByHeight(blockheight) : null;
-		
-		return getRawTransaction(txid, blockhash);
-	}))
+		try {
+			let blockheight = blockHeightsByTxid[txid];
+			let blockhash = (blockheight !== undefined && blockheight > 0) ? await getBlockHashByHeight(blockheight) : null;
+			
+			return await getRawTransaction(txid, blockhash);
+		} catch (err) {
+			debugLog(`getRawTransaction by height failed for ${txid}: ${err}`);
+			return null;
+		}
+	})).then(txs => txs.filter(tx => tx != null));
 }
 
 function buildBlockAnalysisData(blockHeight, blockHash, txids, txIndex, results, callback) {
