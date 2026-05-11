@@ -51,16 +51,16 @@ block content
 							tbody(id="summary-table-body")
 								tr(id="miner-summary-prototype", style="display: none;")
 									td
-										span.badge.bg-primary.miner-name
-										span.badge.bg-secondary.miner-name-unknown
+										span.badge.bg-primary.miner-name.text-wrap.text-break
+										span.badge.bg-secondary.miner-name-unknown.text-wrap.text-break
 									
 									td.text-end
 										span.miner-block-count
 									
-									td.text-end
+									td.text-end.text-nowrap
 										span.miner-subsidy-fees
 
-									td.text-end
+									td.text-end.text-nowrap
 										span.miner-percent
 
 								tr(id="hidden-row-to-fix-stripe-pattern", style="display: none;")
@@ -100,7 +100,7 @@ block endOfBody
 		$(document).ready(function() {
 			prepareUI();
 
-			loadMiningData(currentBlockHeight - 720, currentBlockHeight);
+			loadMiningData(Math.max(0, currentBlockHeight - 720), currentBlockHeight);
 		});
 
 		function updateStatus() {
@@ -269,13 +269,23 @@ block endOfBody
 					type: 'doughnut',
 					options: {
 						maintainAspectRatio: false,
+						layout: {
+							padding: {
+								left: 20,
+								right: 20,
+								top: 0,
+								bottom: 0
+							}
+						},
 						plugins: {
 							legend: {
 								position: "left",
 								labels: {
 									font: {
-										size: 11
-									}
+										size: 11,
+										family: "monospace"
+									},
+									boxWidth: 20
 								}
 							},
 						}
@@ -313,7 +323,7 @@ block endOfBody
 				$("#summary-table").hide();
 				$("#progress-wrapper").show();
 
-				loadMiningData(currentBlockHeight - blockCount, currentBlockHeight);
+				loadMiningData(Math.max(0, currentBlockHeight - blockCount), currentBlockHeight);
 			});
 
 			$("#block-selections-buttons .dropdown-item").on("click", function() {
@@ -344,6 +354,21 @@ block endOfBody
 				
 				var bStart = parseInt($("#custom-range-start").val());
 				var bEnd = parseInt($("#custom-range-end").val());
+				
+				if (bEnd > currentBlockHeight) {
+					bEnd = currentBlockHeight;
+					$("#custom-range-end").val(bEnd);
+				}
+				
+				if (bStart < 0) {
+					bStart = 0;
+					$("#custom-range-start").val(bStart);
+				}
+				
+				if (bStart > bEnd) {
+					bStart = bEnd;
+					$("#custom-range-start").val(bStart);
+				}
 
 				$(".miner-summary-row").remove();
 
