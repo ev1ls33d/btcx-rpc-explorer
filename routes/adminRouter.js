@@ -27,8 +27,44 @@ const addressApi = require("./../app/api/addressApi.js");
 const statTracker = require("./../app/statTracker.js");
 const appStats = require("./../app/appStats.js");
 
+const basicAuth = require('basic-auth');
 
+router.use(function(req, res, next) {
+	const adminPassword = process.env.BTCEXP_ADMIN_PASSWORD;
+	const ipWhitelistStr = process.env.BTCEXP_ADMIN_IP_WHITELIST;
+	
+	if (!adminPassword) {
+		return next();
+	}
 
+	if (ipWhitelistStr) {
+		const whitelist = ipWhitelistStr.split(',').map(ip => ip.trim());
+		const xForwardedFor = req.headers['x-forwarded-for'];
+		const clientIps = [
+			req.ip,
+			req.connection.remoteAddress,
+			...(xForwardedFor ? xForwardedFor.split(',').map(ip => ip.trim()) : [])
+		].filter(Boolean);
+		
+		let isWhitelisted = false;
+		for (const clientIp of clientIps) {
+			if (whitelist.includes(clientIp)) {
+				isWhitelisted = true;
+				break;
+			}
+		}
+		if (isWhitelisted) {
+			return next();
+		}
+	}
+
+	const credentials = basicAuth(req);
+	if (!credentials || credentials.pass !== adminPassword) {
+		res.set('WWW-Authenticate', 'Basic realm="Admin Dashboard"');
+		return res.status(401).send('Access denied');
+	}
+	next();
+});
 
 router.get("/dashboard", function(req, res, next) {
 	res.locals.appStartTime = global.appStartTime;

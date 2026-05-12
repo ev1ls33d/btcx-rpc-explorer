@@ -4,7 +4,7 @@
 
 ![homepage](./public/img/screenshots/homepage.png)
 
-This is a self-hosted explorer for the BitcoinX (POCX) blockchain, driven by RPC calls to your own [POCX Node](https://github.com/PoC-Consortium/bitcoin). It is easy to run and fully compatible with the custom Proof of Capacity (PoC) consensus parameters and transaction implementations of the POCX fork.
+This is a self-hosted explorer for the BitcoinX (POCX) blockchain, driven by RPC calls to your own [POCX Node](https://github.com/PoC-Consortium/bitcoin-pocx). It is easy to run and fully compatible with the custom Proof of Capacity (PoC) consensus parameters and transaction implementations of the POCX fork.
 
 ### What's new in this fork?
 
@@ -45,7 +45,7 @@ The most important environment variables are exposed right out of the box in our
 - `BTCEXP_BITCOIND_PASS` - RPC password for your POCX node.
 - `BTCEXP_COIN` - Setting the network coin parameter (configured automatically as `BTCX`).
 
-See the underlying `app/config.js` or standard BTC RPC Explorer documentation for more advanced variables.
+See the underlying `app/config.js` or standard BTCX RPC Explorer documentation for more advanced variables.
 
 ---
 
@@ -66,13 +66,13 @@ Or, via a lightning address:
 thanks@donate.btc21.org
 
 
-[npm-ver-img]: https://img.shields.io/npm/v/btc-rpc-explorer.svg?style=flat
-[npm-ver-url]: https://www.npmjs.com/package/btc-rpc-explorer
-[npm-dl-img]: http://img.shields.io/npm/dm/btc-rpc-explorer.svg?style=flat
-[npm-dl-url]: https://npmcharts.com/compare/btc-rpc-explorer?minimal=true
+[npm-ver-img]: https://img.shields.io/npm/v/btcx-rpc-explorer.svg?style=flat
+[npm-ver-url]: https://www.npmjs.com/package/btcx-rpc-explorer
+[npm-dl-img]: http://img.shields.io/npm/dm/btcx-rpc-explorer.svg?style=flat
+[npm-dl-url]: https://npmcharts.com/compare/btcx-rpc-explorer?minimal=true
 
-[npm-dl-weekly-img]: https://badgen.net/npm/dw/btc-rpc-explorer?icon=npm&cache=300
-[npm-dl-monthly-img]: https://badgen.net/npm/dm/btc-rpc-explorer?icon=npm&cache=300
-[npm-dl-yearly-img]: https://badgen.net/npm/dy/btc-rpc-explorer?icon=npm&cache=300
-[npm-dl-alltime-img]: https://badgen.net/npm/dt/btc-rpc-explorer?icon=npm&cache=300&label=total%20downloads
+[npm-dl-weekly-img]: https://badgen.net/npm/dw/btcx-rpc-explorer?icon=npm&cache=300
+[npm-dl-monthly-img]: https://badgen.net/npm/dm/btcx-rpc-explorer?icon=npm&cache=300
+[npm-dl-yearly-img]: https://badgen.net/npm/dy/btcx-rpc-explorer?icon=npm&cache=300
+[npm-dl-alltime-img]: https://badgen.net/npm/dt/btcx-rpc-explorer?icon=npm&cache=300&label=total%20downloads
 

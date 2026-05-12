@@ -81,15 +81,15 @@ module.exports = {
 		"regtest": "#777"
 	},
 	siteTitlesByNetwork: {
-		"main":"Bitcoin Explorer",
+		"main":"Bitcoin-POCX Explorer",
 		"test":"Testnet Explorer",
 		"regtest":"Regtest Explorer",
 		"signet":"Signet Explorer",
 	},
 	demoSiteUrlsByNetwork: {
-		"main": "https://explorer.bitcoin-po.cx/",
-		"test": "https://explorer.bitcoin-po.cx/testnet",
-		"signet": "https://explorer.bitcoin-po.cx/signet",
+		"main": "https://explorer.bitcoin-pocx-po.cx/",
+		"test": "https://explorer.bitcoin-pocx-po.cx/testnet",
+		"signet": "https://explorer.bitcoin-pocx-po.cx/signet",
 	},
 	knownTransactionsByNetwork: {
 		main: "f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16",
@@ -100,11 +100,11 @@ module.exports = {
 	],
 	maxBlockWeight: 4000000,
 	maxBlockSize: 1000000,
-	minTxBytes: 166, // ref: https://en.bitcoin.it/wiki/Maximum_transaction_rate
+	minTxBytes: 166, // ref: https://en.bitcoin-pocx.it/wiki/Maximum_transaction_rate
 	minTxWeight: 166 * 4, // hack
 	difficultyAdjustmentBlockCount: 2016,
 	maxSupplyByNetwork: {
-		"main": new Decimal(20999817.31308491), // ref: https://bitcoin.stackexchange.com/a/38998
+		"main": new Decimal(20999817.31308491), // ref: https://bitcoin-pocx.stackexchange.com/a/38998
 		"test": new Decimal(21000000),
 		"regtest": new Decimal(21000000),
 		"signet": new Decimal(21000000)
