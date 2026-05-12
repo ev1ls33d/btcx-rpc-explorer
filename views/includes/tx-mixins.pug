@@ -97,6 +97,8 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 								
 								.mt-2
 									+hexDataDisplay(txVin.coinbase, "hex")
+									.mt-2.text-danger.word-wrap.font-monospace
+										| #{utils.formatHex(txVin.coinbase, 'utf8')}
 
 
 							else
@@ -298,7 +300,7 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 						if (vout && vout.scriptPubKey && vout.scriptPubKey.asm && !vout.scriptPubKey.asm.startsWith("OP_RETURN "))
 							if (voutAddresses.length == 0)
 								.my-2
-									+hexDataDisplay(vout.scriptPubKey.hex)
+									+hexDataDisplay(vout.scriptPubKey.hex, "hex")
 
 
 						if (voutAddresses.length > 0)
@@ -337,7 +339,7 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 									span(title=`Output Type: ${utils.outputTypeName(vout.scriptPubKey.type)}`, data-bs-toggle="tooltip")
 										+darkBadge(utils.outputTypeAbbreviation(vout.scriptPubKey.type))
 
-								+hexDataDisplay(vout.scriptPubKey.asm)
+								+hexDataDisplay(vout.scriptPubKey.asm, "hex")
 
 
 					if (voutIndex < (tx.vout.length - 1) || nonZeroVoutValueCount > 1)

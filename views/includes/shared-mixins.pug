@@ -543,9 +543,10 @@ mixin hexDataDisplay(hex, order="utf8,ascii,hex")
 								+copyTextButton(hex)
 		
 
-		div
-			a.text-muted.ms-2(href="javascript:void(0)", onclick=`$('#hex-display-expanded-${uniqueId}').toggle(); $(this).find(".toggle-plus-minus").toggleClass("bi-plus-square"); $(this).find(".toggle-plus-minus").toggleClass("bi-dash-square"); return false;`, title="Toggle More Encodings")
-				i.toggle-plus-minus.bi-plus-square.text-card-highlight
+		if (items.length > 1)
+			div
+				a.text-muted.ms-2(href="javascript:void(0)", onclick=`$('#hex-display-expanded-${uniqueId}').toggle(); $(this).find(".toggle-plus-minus").toggleClass("bi-plus-square"); $(this).find(".toggle-plus-minus").toggleClass("bi-dash-square"); return false;`, title="Toggle More Encodings")
+					i.toggle-plus-minus.bi-plus-square.text-card-highlight
 
 	
 

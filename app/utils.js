@@ -169,7 +169,14 @@ function redirectToConnectPageIfNeeded(req, res) {
 }
 
 function formatHex(hex, outputFormat="utf8") {
-	return Buffer.from(hex, "hex").toString(outputFormat);
+	let buf = Buffer.from(hex, "hex");
+	if (outputFormat === "utf8") {
+		let nullIdx = buf.indexOf(0);
+		if (nullIdx !== -1) {
+			buf = buf.slice(nullIdx + 1);
+		}
+	}
+	return buf.toString(outputFormat);
 }
 
 function splitArrayIntoChunks(array, chunkSize) {
