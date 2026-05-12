@@ -604,6 +604,7 @@ router.get("/mining-summary", asyncHandler(async (req, res, next) => {
 		let getblockchaininfo = await utils.timePromise("mining-summary.getBlockchainInfo", coreApi.getBlockchainInfo);
 
 		res.locals.currentBlockHeight = getblockchaininfo.blocks;
+		res.locals.getblockchaininfo = getblockchaininfo;
 
 		await utils.timePromise("mining-summary.render", async () => {
 			res.render("mining-summary");
@@ -839,6 +840,7 @@ router.get("/block-stats", asyncHandler(async (req, res, next) => {
 	try {
 		const getblockchaininfo = await coreApi.getBlockchainInfo();
 		res.locals.currentBlockHeight = getblockchaininfo.blocks;
+		res.locals.getblockchaininfo = getblockchaininfo;
 
 		await utils.timePromise("block-stats.render", async () => {
 			res.render("block-stats");
@@ -1354,11 +1356,12 @@ router.get("/block-analysis/:blockHashOrHeight", function(req, res, next) {
 	}
 });
 
-router.get("/block-analysis", function(req, res, next) {
+router.get("/block-analysis", asyncHandler(async (req, res, next) => {
+	res.locals.getblockchaininfo = await coreApi.getBlockchainInfo();
 	res.render("block-analysis-search");
 
 	next();
-});
+}));
 
 router.get("/tx/:transactionId@:blockHeight", asyncHandler(async (req, res, next) => {
 	req.query.blockHeight = req.params.blockHeight;
