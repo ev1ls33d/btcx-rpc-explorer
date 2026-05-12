@@ -130,17 +130,20 @@ mixin toolSections(sectionsData)
 
 							each itemIndex in section.items
 								- var item = config.siteTools[itemIndex];
+								if item
+									- var rpcAuthPassword = process.env.BTCEXP_BASIC_AUTH_PASSWORD;
+									if (!item.requiresAuth || rpcAuthPassword)
 								
-								.clearfix
-									div.float-start(style="width: 38px;")
-										i.fs-5(class=item.iconClass, style="width: 20px; margin-right: 10px;")
+									.clearfix
+										div.float-start(style="width: 38px;")
+											i.fs-5(class=item.iconClass, style="width: 20px; margin-right: 10px;")
 
-									.float-start
-										div
-											a(href=item.url) #{item.name}
+										.float-start
+											div
+												a(href=item.url) #{item.name}
 
-								.mt-n1(style="padding-left: 39px;")
-									p #{item.desc}
+									.mt-n1(style="padding-left: 39px;")
+										p #{item.desc}
 
 
 
@@ -153,13 +156,13 @@ if (true)
 		// xs
 		if (true)
 			div.d-block.d-sm-none(id="tools-1-col")
-				+toolSections([[0, 1, 2, 3, 4]])
+				+toolSections([[0, 1, 2, 3]])
 
 		// sm, md, lg
 		div.d-none.d-sm-block.d-xl-none(id="tools-2-col")
-			+toolSections([[0, 1, 4], [2, 3]])
+			+toolSections([[0, 1], [2, 3]])
 			
 
 		// xl, xxl
 		div.d-none.d-xl-block(id="tools-3-col")
-			+toolSections([[0, 1], [2], [3, 4]])
+			+toolSections([[0, 1], [2], [3]])
