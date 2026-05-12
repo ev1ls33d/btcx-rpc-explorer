@@ -115,6 +115,7 @@ router.get("/", asyncHandler(async (req, res, next) => {
 
 
 		res.locals.getblockchaininfo = getblockchaininfo;
+		res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
 
 		res.locals.difficultyPeriod = parseInt(Math.floor(getblockchaininfo.blocks / coinConfig.difficultyAdjustmentBlockCount));
 			
@@ -605,6 +606,7 @@ router.get("/mining-summary", asyncHandler(async (req, res, next) => {
 
 		res.locals.currentBlockHeight = getblockchaininfo.blocks;
 		res.locals.getblockchaininfo = getblockchaininfo;
+		res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
 
 		await utils.timePromise("mining-summary.render", async () => {
 			res.render("mining-summary");
@@ -841,6 +843,7 @@ router.get("/block-stats", asyncHandler(async (req, res, next) => {
 		const getblockchaininfo = await coreApi.getBlockchainInfo();
 		res.locals.currentBlockHeight = getblockchaininfo.blocks;
 		res.locals.getblockchaininfo = getblockchaininfo;
+		res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
 
 		await utils.timePromise("block-stats.render", async () => {
 			res.render("block-stats");
@@ -1758,6 +1761,7 @@ router.get("/next-halving", asyncHandler(async (req, res, next) => {
 		let promises = [];
 
 		res.locals.getblockchaininfo = getblockchaininfo;
+		res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
 		res.locals.difficultyPeriod = parseInt(Math.floor(getblockchaininfo.blocks / coinConfig.difficultyAdjustmentBlockCount));
 
 		let blockHeights = [];

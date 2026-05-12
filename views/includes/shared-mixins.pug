@@ -916,10 +916,10 @@ mixin blockRangeFilters
 						- var genesisTime = 1777777777;
 						- var currentTime = (global.getblockchaininfo || getblockchaininfo || {}).mediantime || Math.floor(Date.now() / 1000);
 						- var avgBlockTime = (currentTime - genesisTime) / ((global.getblockchaininfo || getblockchaininfo || {}).blocks || 1);
-						- var blocksPerDay = Math.floor(86400 / avgBlockTime);
-						- var blocksPerWeek = Math.floor(604800 / avgBlockTime);
-						- var blocksPerMonth = Math.floor(2592000 / avgBlockTime);
-						- var blocksPerYear = Math.floor(31536000 / avgBlockTime);
+						- var blocksPerDay = typeof interestingBlocks !== 'undefined' && interestingBlocks ? interestingBlocks.firstDay : Math.floor(86400 / avgBlockTime);
+												- var blocksPerWeek = typeof interestingBlocks !== 'undefined' && interestingBlocks ? interestingBlocks.firstWeek : Math.floor(604800 / avgBlockTime);
+												- var blocksPerMonth = typeof interestingBlocks !== 'undefined' && interestingBlocks ? interestingBlocks.firstMonth : Math.floor(2592000 / avgBlockTime);
+												- var blocksPerYear = typeof interestingBlocks !== 'undefined' && interestingBlocks ? interestingBlocks.firstYear : Math.floor(31536000 / avgBlockTime);
 
 						a.dropdown-item(href="javascript:void(0)", data-blocks="0-1000") First 1000 blocks
 						a.dropdown-item(href="javascript:void(0)", data-blocks=`0-${blocksPerDay}`) First day (##{blocksPerDay})
