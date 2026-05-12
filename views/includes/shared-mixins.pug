@@ -513,7 +513,7 @@ mixin cardHighlightBadge(text)
 
 
 
-mixin hexDataDisplay(hex, order="utf8,ascii,hex")
+mixin hexDataDisplay(hex, order="utf8,ascii,hex", showUtf8Below=false)
 	- var items = order.split(",");
 	- var uniqueId = utils.getRandomString(12, "aA");
 
@@ -526,6 +526,12 @@ mixin hexDataDisplay(hex, order="utf8,ascii,hex")
 			if (items[0] == "hex")
 				.d-none.d-md-inline
 					+copyTextButton(hex)
+			
+			if (showUtf8Below)
+				hr.my-2.border-secondary
+				+bodyBgBadge("utf8")
+				span.small.d-none.d-sm-inline #{utils.formatHex(hex, "utf8")}
+				span.text-tiny.d-inline.d-sm-none #{utils.formatHex(hex, "utf8")}
 
 			div(id=`hex-display-expanded-${uniqueId}`, style="display: none;")
 				each item, itemIndex in items
