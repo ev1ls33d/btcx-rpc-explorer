@@ -26,6 +26,7 @@ const config = require("./../app/config.js");
 const coreApi = require("./../app/api/coreApi.js");
 const addressApi = require("./../app/api/addressApi.js");
 const rpcApi = require("./../app/api/rpcApi.js");
+const timestampSearch = require("./../app/timestampSearch.js");
 const btcQuotes = require("./../app/coins/btcQuotes.js");
 
 const forceCsrf = csrfApi({ ignoreMethods: [] });
