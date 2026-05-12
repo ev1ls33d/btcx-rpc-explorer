@@ -16,19 +16,22 @@ mixin toolSections(sectionsData)
 							each itemIndex, itemIndexIndex in section.items
 								- var item = config.siteTools[itemIndex];
 
-								if (itemIndexIndex > 0)
-									hr
-								
-								.clearfix
-									.float-start.pt-1(style="width: 38px;")
-										i.fs-5(class=item.iconClass, style="width: 20px; margin-right: 10px;")
+								if item
+									- var rpcAuthPassword = process.env.BTCEXP_BASIC_AUTH_PASSWORD;
+									if (!item.requiresAuth || rpcAuthPassword)
+										if (itemIndexIndex > 0)
+											hr
+										
+										.clearfix
+											.float-start.pt-1(style="width: 38px;")
+												i.fs-5(class=item.iconClass, style="width: 20px; margin-right: 10px;")
 
-									.float-start
-										div
-											a(href=item.url) #{item.name}
+											.float-start
+												div
+													a(href=item.url) #{item.name}
 
-								div.mt-n1(style="padding-left: 39px;")
-									p #{item.desc}
+										div.mt-n1(style="padding-left: 39px;")
+											p #{item.desc}
 
 
 
