@@ -125,9 +125,12 @@ html(lang="en")
 											each itemIndex in section.items
 												- var item = config.siteTools[itemIndex];
 
-												a.dropdown-item(href=item.url)
-													i(class=item.iconClass, style="width: 20px; margin-right: 10px;")
-													span  #{item.name}
+												if item
+													- var rpcAuthPassword = process.env.BTCEXP_BASIC_AUTH_PASSWORD;
+													if (!item.requiresAuth || rpcAuthPassword)
+														a.dropdown-item(href=item.url)
+															i(class=item.iconClass, style="width: 20px; margin-right: 10px;")
+															span  #{item.name}
 
 							li.nav-item.dropdown.me-0.me-md-3.mt-2.mt-md-0.text-center.text-md-start
 								a.nav-link.rounded.bg-header-footer-highlight.text-white.dropdown-toggle(href="javascript:void(0)", id="navbarDropdown", role="button", data-bs-toggle="dropdown", aria-haspopup="true", aria-expanded="false") 
