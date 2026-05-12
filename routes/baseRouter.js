@@ -1101,7 +1101,7 @@ router.get("/block-height/:blockHeight", asyncHandler(async (req, res, next) => 
 				res.locals.metaDesc = "";
 			}
 		} else {
-			res.locals.metaTitle = `Bitcoin Block #${blockHeight.toLocaleString()}`;
+			res.locals.metaTitle = `Bitcoin-POCX Block #${blockHeight.toLocaleString()}`;
 			res.locals.metaDesc = "";
 		}
 		
@@ -1203,7 +1203,7 @@ router.get("/block/:blockHash", asyncHandler(async (req, res, next) => {
 			}
 
 		} else {
-			res.locals.metaTitle = `Bitcoin Block ${utils.ellipsizeMiddle(res.locals.result.getblock.hash, 16)}`;
+			res.locals.metaTitle = `Bitcoin-POCX Block ${utils.ellipsizeMiddle(res.locals.result.getblock.hash, 16)}`;
 			res.locals.metaDesc = "";
 		}
 
@@ -1449,7 +1449,7 @@ router.get("/tx/:transactionId", asyncHandler(async (req, res, next) => {
 				res.locals.metaDesc = "";
 			}
 		} else {
-			res.locals.metaTitle = `Bitcoin Transaction ${utils.ellipsizeMiddle(txid, 16)}`;
+			res.locals.metaTitle = `Bitcoin-POCX Transaction ${utils.ellipsizeMiddle(txid, 16)}`;
 			res.locals.metaDesc = "";
 		}
 
@@ -1522,7 +1522,7 @@ router.get("/address/:address", asyncHandler(async (req, res, next) => {
 		}
 
 
-		res.locals.metaTitle = `Bitcoin Address ${address}`;
+		res.locals.metaTitle = `Bitcoin-POCX Address ${address}`;
 
 		res.locals.address = address;
 		res.locals.limit = limit;
@@ -2075,7 +2075,7 @@ router.post("/terminal", function(req, res, next) {
 	let paramsStr = req.body.cmd.trim().substring(cmd.length).trim();
 
 	if (cmd == "parsescript") {
-		const nbs = require('node-bitcoin-script');
+		const nbs = require('node-bitcoin-pocx-script');
 		let parsedScript = nbs.parseRawScript(paramsStr, "hex");
 
 		res.write(JSON.stringify({"parsed":parsedScript}, null, 4), function() {
@@ -2436,14 +2436,14 @@ router.get("/quote/:quoteIndex", function(req, res, next) {
 	next();
 });
 
-router.get("/bitcoin-whitepaper", function(req, res, next) {
-	res.render("bitcoin-whitepaper");
+router.get("/bitcoin-pocx-whitepaper", function(req, res, next) {
+	res.render("bitcoin-pocx-whitepaper");
 
 	next();
 });
 
-router.get("/bitcoin.pdf", function(req, res, next) {
-	// ref: https://bitcoin.stackexchange.com/questions/35959/how-is-the-whitepaper-decoded-from-the-blockchain-tx-with-1000x-m-of-n-multisi
+router.get("/bitcoin-pocx.pdf", function(req, res, next) {
+	// ref: https://bitcoin-pocx.stackexchange.com/questions/35959/how-is-the-whitepaper-decoded-from-the-blockchain-tx-with-1000x-m-of-n-multisi
 	const whitepaperTxid = "54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713";
 
 	// get all outputs except the last 2 using `gettxout`

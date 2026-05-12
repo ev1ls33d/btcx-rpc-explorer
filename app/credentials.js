@@ -18,7 +18,7 @@ function loadFreshRpcCredentials() {
 	let username = btcAuth[0] || process.env.BTCEXP_BITCOIND_USER;
 	let password = btcAuth[1] || process.env.BTCEXP_BITCOIND_PASS;
 
-	let authCookieFilepath = btcUri.query.cookie || process.env.BTCEXP_BITCOIND_COOKIE || path.join(os.homedir(), '.bitcoin', '.cookie');
+	let authCookieFilepath = btcUri.query.cookie || process.env.BTCEXP_BITCOIND_COOKIE || path.join(os.homedir(), '.bitcoin-pocx', '.cookie');
 
 	let authType = "usernamePassword";
 

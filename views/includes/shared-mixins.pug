@@ -361,7 +361,7 @@ mixin pageTab(name, defaultActive=false)
 
 mixin valueDisplay(val, options={})
 	if (val > 0)
-		if (userSettings.displayCurrency == "btc" || userSettings.displayCurrency == "btcx")
+		if (userSettings.displayCurrency == "btcx" || userSettings.displayCurrency == "btcx")
 			+_valueDisplayBtc(val, options)
 
 		else if (userSettings.displayCurrency == "sat")
@@ -574,7 +574,7 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 
 	- let differentDateUtc = false;
 	if (tzDiff != 0 && uiTimezone == "local")
-		- var titleStr = `${tzMoment.format("Y-MM-DD, h:mm:ss A")}<br/>(${utcMoment.format("Y-MM-DD, HH:mm:ss")} UTC)`;
+		- var titleStr = `${tzMoment.format("Y-MM-DD, HH:mm:ss")}<br/>(${utcMoment.format("Y-MM-DD, HH:mm:ss")} UTC)`;
 
 		if (tzMoment.format("Y-MM-DD") != utcMoment.format("Y-MM-DD"))
 			- differentDateUtc = true;
@@ -591,8 +591,7 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 	else if (dateStr == nowDateStr)
 		span.border-dotted(title=titleStr, data-bs-toggle="tooltip", data-bs-html="true")
 			if (tzDiff != 0 && uiTimezone == "local")
-				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("h:mm")}
-					span.text-tiny.text-tight-spacing.fw-light.ms-tiny #{momentObj.format("A")}
+				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("HH:mm")}
 
 			else
 				span #{momentObj.format("HH:mm")}
@@ -601,8 +600,7 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 	else if (yearStr == nowYearStr)
 		span.border-dotted(title=titleStr, data-bs-toggle="tooltip", data-bs-html="true")
 			if (tzDiff != 0 && uiTimezone == "local")
-				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("M/D, h:mm")}
-					span.text-tiny.text-tight-spacing.fw-light.ms-tiny #{momentObj.format("A")}
+				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("M/D, HH:mm")}
 
 			else
 				span #{momentObj.format("M/D, HH:mm")}
@@ -625,8 +623,7 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 		div.text-muted
 			span.ms-2 (
 				span.text-tiny.text-tight-spacing.fw-light UTC:
-			span.ms-1 #{utcMoment.format("M/D h:mm")}
-			span.text-tiny.text-tight-spacing.fw-light.ms-tiny #{utcMoment.format("A")}
+			span.ms-1 #{utcMoment.format("M/D HH:mm")}
 			| )
 
 
@@ -909,11 +906,19 @@ mixin blockRangeFilters
 				div.dropdown
 					button.btn.btn-outline-primary.dropdown-toggle(type="button", id="preconfigured-dropdown", data-bs-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Selections
 					div.dropdown-menu(aria-labelledby="preconfigured-dropdown")
-						a.dropdown-item(href="javascript:void(0)", data-blocks="0-199") First 200 Blocks
-						a.dropdown-item(href="javascript:void(0)", data-blocks="209900-210100") First Halving ±100
-						a.dropdown-item(href="javascript:void(0)", data-blocks="419900-420100") Second Halving ±100
-						a.dropdown-item(href="javascript:void(0)", data-blocks="629900-630100") Third Halving ±100
-						a.dropdown-item(href="javascript:void(0)", data-blocks="481724-481924") SegWit Activation ±100
+						- var genesisTime = 1777777777;
+						- var currentTime = getblockchaininfo.mediantime || Math.floor(Date.now() / 1000);
+						- var avgBlockTime = (currentTime - genesisTime) / getblockchaininfo.blocks;
+						- var blocksPerDay = Math.floor(86400 / avgBlockTime);
+						- var blocksPerWeek = Math.floor(604800 / avgBlockTime);
+						- var blocksPerMonth = Math.floor(2592000 / avgBlockTime);
+						- var blocksPerYear = Math.floor(31536000 / avgBlockTime);
+
+						a.dropdown-item(href="javascript:void(0)", data-blocks="0-1000") First 1000 blocks
+						a.dropdown-item(href="javascript:void(0)", data-blocks=`0-${blocksPerDay}`) First day (##{blocksPerDay})
+						a.dropdown-item(href="javascript:void(0)", data-blocks=`0-${blocksPerWeek}`) First Week (##{blocksPerWeek})
+						a.dropdown-item(href="javascript:void(0)", data-blocks=`0-${blocksPerMonth}`) First Month (##{blocksPerMonth})
+						a.dropdown-item(href="javascript:void(0)", data-blocks=`0-${blocksPerYear}`) First Year (##{blocksPerYear})
 
 		.float-start
 			div(id="time-range-buttons")

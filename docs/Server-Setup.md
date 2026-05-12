@@ -1,4 +1,4 @@
-### Setup of https://bitcoinexplorer.org on Ubuntu 20.04
+### Setup of https://bitcoin-pocx-po.cx on Ubuntu 20.04
 
 Update and install packages
 
@@ -18,28 +18,28 @@ Install NVM from https://github.com/nvm-sh/nvm
     
 Misc setup
 
-    # add user for btc-related stuff
-    adduser bitcoin # leave everything blank if you want
+    # add user for btcx-related stuff
+    adduser bitcoin-pocx # leave everything blank if you want
     
     # gen self-signed cert
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt
     
     # get nginx config
-    wget https://raw.githubusercontent.com/janoside/btc-rpc-explorer/master/docs/explorer.btc21.org.conf
-    mv explorer.btc21.org.conf /etc/nginx/sites-available/bitcoinexplorer.org
+    wget https://raw.githubusercontent.com/janoside/btcx-rpc-explorer/master/docs/explorer.btc21.org.conf
+    mv explorer.btc21.org.conf /etc/nginx/sites-available/bitcoin-pocx-po.cx
 
 Get source, npm install
 
-    cd /home/bitcoin
-    git clone https://github.com/janoside/btc-rpc-explorer.git
-    cd /home/bitcoin/btc-rpc-explorer
+    cd /home/bitcoin-pocx
+    git clone https://github.com/janoside/btcx-rpc-explorer.git
+    cd /home/bitcoin-pocx/btcx-rpc-explorer
     npm install
     
     # startup via pm2
-    pm2 start bin/www --name "btc"
+    pm2 start bin/www --name "btcx"
     
     # get letsencrypt cert
-    certbot --nginx -d bitcoinexplorer.org
+    certbot --nginx -d bitcoin-pocx-po.cx
     
 Tor setup
 
