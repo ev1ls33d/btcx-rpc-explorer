@@ -309,7 +309,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 
 							if (options.showDates && tx.time)
 								- var utcMoment = moment.utc(new Date(parseInt(tx.time) * 1000));
-								- var titleStr = `${utcMoment.format("Y-MM-DD HH:mm:ss")} utc`;
+								- var titleStr = `${utcMoment.format("YY-MM-DD HH:mm:ss")} utc`;
 
 								.d-none.d-md-inline
 									+darkBadge
@@ -568,19 +568,19 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 	- var yearStr = momentObj.format("Y");
 	- var nowYearStr = nowMoment.format("Y");
 
-	- var dateStr = momentObj.format("Y-M-D");
-	- var nowDateStr = nowMoment.format("Y-M-D");
+	- var dateStr = momentObj.format("YY-MM-DD");
+	- var nowDateStr = nowMoment.format("YY-MM-DD");
 
 
 	- let differentDateUtc = false;
 	if (tzDiff != 0 && uiTimezone == "local")
-		- var titleStr = `${tzMoment.format("Y-MM-DD, HH:mm:ss")}<br/>(${utcMoment.format("Y-MM-DD, HH:mm:ss")} UTC)`;
+		- var titleStr = `${tzMoment.format("YY-MM-DD, HH:mm:ss")}<br/>(${utcMoment.format("YY-MM-DD, HH:mm:ss")} UTC)`;
 
-		if (tzMoment.format("Y-MM-DD") != utcMoment.format("Y-MM-DD"))
+		if (tzMoment.format("YY-MM-DD") != utcMoment.format("YY-MM-DD"))
 			- differentDateUtc = true;
 
 	else
-		- var titleStr = `${utcMoment.format("Y-MM-DD, HH:mm:ss")} utc`;
+		- var titleStr = `${utcMoment.format("YY-MM-DD, HH:mm:ss")} utc`;
 
 	if (options.formatString)
 		span.border-dotted(title=titleStr, data-bs-toggle="tooltip", data-bs-html="true")
@@ -600,19 +600,19 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 	else if (yearStr == nowYearStr)
 		span.border-dotted(title=titleStr, data-bs-toggle="tooltip", data-bs-html="true")
 			if (tzDiff != 0 && uiTimezone == "local")
-				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("M/D, HH:mm")}
+				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("YY-MM-DD, HH:mm")}
 
 			else
-				span #{momentObj.format("M/D, HH:mm")}
+				span #{momentObj.format("YY-MM-DD, HH:mm")}
 					span.text-tiny.text-tight-spacing.fw-light.ms-tiny UTC
 
 	else
 		span.border-dotted(title=titleStr, data-bs-toggle="tooltip", data-bs-html="true")
 			if (tzDiff != 0 && uiTimezone == "local")
-				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("YYYY-MM-DD")}
+				span.date-text(id=`xyz-${utils.getRandomString(10, "aA1")}`, data-timestamp-utc=`${parseInt(timestamp)}`, data-date-ago=includeAgo.toString()) #{momentObj.format("YY-MM-DD")}
 				
 			else
-				span #{momentObj.format("YYYY-MM-DD")}
+				span #{momentObj.format("YY-MM-DD")}
 
 	if (includeAgo)
 		small.text-muted.ms-1 (
@@ -623,7 +623,7 @@ mixin timestamp(timestamp, options={includeAgo:true, agoOptions:{}})
 		div.text-muted
 			span.ms-2 (
 				span.text-tiny.text-tight-spacing.fw-light UTC:
-			span.ms-1 #{utcMoment.format("M/D HH:mm")}
+			span.ms-1 #{utcMoment.format("YY-MM-DD HH:mm")}
 			| )
 
 
@@ -675,7 +675,7 @@ mixin timeAgo(timeAgoTime, options={oneElement:false, agoText:true, showPlus:tru
 				if (hideHoverText)
 					span #{utils.summarizeDuration(timeAgo, options)}
 				else
-					span.border-dotted(title=`${utils.summarizeDuration(timeAgo)}<br>${utcMoment.format("Y-MM-DD HH:mm:ss")} utc`, data-bs-toggle="tooltip", data-bs-html="true") #{utils.summarizeDuration(timeAgo, options)}
+					span.border-dotted(title=`${utils.summarizeDuration(timeAgo)}<br>${utcMoment.format("YY-MM-DD HH:mm:ss")} utc`, data-bs-toggle="tooltip", data-bs-html="true") #{utils.summarizeDuration(timeAgo, options)}
 			else
 				span #{utils.summarizeDuration(timeAgo, options)}
 
