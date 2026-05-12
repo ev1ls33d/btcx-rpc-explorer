@@ -129,7 +129,7 @@
 ###### 2021-04-14
 
 * Improvements to no-`txindex` support: now available for all versions of Bitcoin-POCX Core
-* Move public sites to [bitcoin-pocx-po.cx](https://bitcoin-pocx-po.cx) (BIG thanks [@SatoshisDomains](https://twitter.com/SatoshisDomains))
+* Move public sites to [bitcoin-po.cx](https://bitcoin-po.cx) (BIG thanks [@SatoshisDomains](https://twitter.com/SatoshisDomains))
 * Add back the [/peers](./peers) tool in the "Tools" menu
 	* Note: The map on the peers tool now requires users set their own `BTCEXP_MAPBOX_APIKEY` in `.env`
 * Response compression

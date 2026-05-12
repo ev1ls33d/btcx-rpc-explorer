@@ -1,4 +1,4 @@
-### Setup of https://bitcoin-pocx-po.cx on Ubuntu 20.04
+### Setup of https://bitcoin-po.cx on Ubuntu 20.04
 
 	# update and install packages
 	apt update

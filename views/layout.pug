@@ -18,19 +18,19 @@ html(lang="en")
 		+themeCss
 		
 
-		link(id="canonical" rel="canonical" href="https://bitcoin-pocx-po.cx")
+		link(id="canonical" rel="canonical" href="https://bitcoin-po.cx")
 
-		meta(property="og:title" content=(metaTitle != undefined ? metaTitle : "bitcoin-pocx-po.cx - Open-Source Bitcoin-POCX Explorer"))
+		meta(property="og:title" content=(metaTitle != undefined ? metaTitle : "bitcoin-po.cx - Open-Source Bitcoin-POCX Explorer"))
 		meta(property="og:description" content=(metaDesc != undefined ? metaDesc : "Open-source, easy-to-use, educational Bitcoin-POCX explorer whose only dependency is your Bitcoin-POCX Core node."))
-		meta(property="og:image" content="https://bitcoin-pocx-po.cx/img/preview.png")
+		meta(property="og:image" content="https://bitcoin-po.cx/img/preview.png")
 
 		meta(property="twitter:card" content="summary_large_image")
 		meta(property="twitter:site" content="@Bitcoin-POCX-POCX")
 		meta(property="twitter:creator" content="@Bitcoin-POCX-POCX")
-		meta(property="twitter:title" content=(metaTitle != undefined ? metaTitle : "bitcoin-pocx-po.cx"))
+		meta(property="twitter:title" content=(metaTitle != undefined ? metaTitle : "bitcoin-po.cx"))
 		meta(property="twitter:description" content=(metaDesc != undefined ? metaDesc : "Open-source, easy-to-use, educational Bitcoin-POCX explorer whose only dependency is your Bitcoin-POCX Core node."))
-		meta(property="twitter:image:src" content=(metaImgUrl != undefined ? metaImgUrl : "https://bitcoin-pocx-po.cx/img/preview.png"))
-		meta(property="twitter:domain" content="bitcoin-pocx-po.cx")
+		meta(property="twitter:image:src" content=(metaImgUrl != undefined ? metaImgUrl : "https://bitcoin-po.cx/img/preview.png"))
+		meta(property="twitter:domain" content="bitcoin-po.cx")
 
 		- var network = global.activeBlockchain || "main";
 		if (!network.endsWith("net") && network != "regtest")
@@ -299,7 +299,7 @@ html(lang="en")
 									if (coinConfig.demoSiteUrlsByNetwork && coinConfig.demoSiteUrlsByNetwork.main)
 										a.footer-link(href=coinConfig.demoSiteUrlsByNetwork.main) #{coinConfig.demoSiteUrlsByNetwork.main}
 									else
-										a.footer-link(href="https://bitcoin-pocx-po.cx") https://bitcoin-pocx-po.cx
+										a.footer-link(href="https://bitcoin-po.cx") https://bitcoin-po.cx
 
 									br
 
@@ -324,7 +324,7 @@ html(lang="en")
 										a.text-white.mb-1.me-3(href="https://github.com/janoside/btcx-rpc-explorer", title="View source code", data-bs-toggle="tooltip")
 											i.bi-git
 
-									a.text-danger.mb-1.me-3(href="https://donate.bitcoin-pocx-po.cx", target="_blank", title="Support this project with a donation", data-bs-toggle="tooltip")
+									a.text-danger.mb-1.me-3(href="https://donate.bitcoin-po.cx", target="_blank", title="Support this project with a donation", data-bs-toggle="tooltip")
 										i.bi-heart-fill.text-danger
 
 									a.text-white.mb-1(href="https://twitter.com/Bitcoin-POCX-POCX", target="_blank", title="Follow @Bitcoin-POCX-POCX on Twitter", data-bs-toggle="tooltip")

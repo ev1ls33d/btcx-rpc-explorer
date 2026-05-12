@@ -1,4 +1,4 @@
-### Setup of https://bitcoin-pocx-po.cx on Ubuntu 20.04
+### Setup of https://bitcoin-po.cx on Ubuntu 20.04
 
 Update and install packages
 
@@ -26,7 +26,7 @@ Misc setup
     
     # get nginx config
     wget https://raw.githubusercontent.com/janoside/btcx-rpc-explorer/master/docs/explorer.btc21.org.conf
-    mv explorer.btc21.org.conf /etc/nginx/sites-available/bitcoin-pocx-po.cx
+    mv explorer.btc21.org.conf /etc/nginx/sites-available/bitcoin-po.cx
 
 Get source, npm install
 
@@ -39,7 +39,7 @@ Get source, npm install
     pm2 start bin/www --name "btcx"
     
     # get letsencrypt cert
-    certbot --nginx -d bitcoin-pocx-po.cx
+    certbot --nginx -d bitcoin-po.cx
     
 Tor setup
 

@@ -87,9 +87,9 @@ module.exports = {
 		"signet":"Signet Explorer",
 	},
 	demoSiteUrlsByNetwork: {
-		"main": "https://explorer.bitcoin-pocx-po.cx/",
-		"test": "https://explorer.bitcoin-pocx-po.cx/testnet",
-		"signet": "https://explorer.bitcoin-pocx-po.cx/signet",
+		"main": "https://explorer.bitcoin-po.cx/",
+		"test": "https://explorer.bitcoin-po.cx/testnet",
+		"signet": "https://explorer.bitcoin-po.cx/signet",
 	},
 	knownTransactionsByNetwork: {
 		main: "f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16",

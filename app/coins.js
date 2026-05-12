@@ -1,6 +1,6 @@
 "use strict";
 
-const btcx = require("./coins/btcx.js");
+const btcx = require("./coins/btc.js");
 
 module.exports = {
 	"BTCX": btcx,

@@ -26,7 +26,7 @@ docker run --name pocxp -dit --net=pocx \
         -e BTCEXP_BITCOIND_USER=miner \
         -e BTCEXP_BITCOIND_PASS=password \
         -e BTCEXP_COIN=BTCX \
-        ghcr.io/ev1ls33d/btcx-rpc-explorer:master
+        ghcr.io/your-username/btcx-rpc-explorer:latest
 ```
 
 *Note: Replace `ghcr.io/your-username/btcx-rpc-explorer:latest` with your specific GitHub container registry package or Docker Hub package if published elsewhere.*

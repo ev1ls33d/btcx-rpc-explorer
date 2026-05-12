@@ -2075,7 +2075,7 @@ router.post("/terminal", function(req, res, next) {
 	let paramsStr = req.body.cmd.trim().substring(cmd.length).trim();
 
 	if (cmd == "parsescript") {
-		const nbs = require('node-bitcoin-pocx-script');
+		const nbs = require('node-bitcoin-script');
 		let parsedScript = nbs.parseRawScript(paramsStr, "hex");
 
 		res.write(JSON.stringify({"parsed":parsedScript}, null, 4), function() {
@@ -2437,7 +2437,7 @@ router.get("/quote/:quoteIndex", function(req, res, next) {
 });
 
 router.get("/bitcoin-pocx-whitepaper", function(req, res, next) {
-	res.render("bitcoin-pocx-whitepaper");
+	res.render("bitcoin-whitepaper");
 
 	next();
 });
