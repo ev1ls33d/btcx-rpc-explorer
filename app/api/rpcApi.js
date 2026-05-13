@@ -261,7 +261,7 @@ function getBlockByHash(blockHash) {
 				// the block is pruned, use `getblockheader` instead
 				debugLog('getblock failed, falling back to getblockheader', blockHash, err);
 				return getRpcDataWithParams({method:"getblockheader", parameters:[blockHash]})
-					.then(function(block) { block.tx = []; return block });
+					.then(function(block) { if (!block) throw new Error("Block not found"); block.tx = []; return block; });
 		}).then(function(block) {
 				block.subsidy = coinConfig.blockRewardFunction(block.height, global.activeBlockchain);
 				return block;
