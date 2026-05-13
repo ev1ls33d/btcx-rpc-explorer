@@ -1213,7 +1213,10 @@ expressApp.use(function(req, res, next) {
 /// error handlers
 
 const sharedErrorHandler = (req, err) => {
-	if (err && err.message && err.message.includes("Not Found")) {
+	if (err && err.code === "EBADCSRFTOKEN") {
+		// don't log this as an uncaught error
+		utils.logError("CSRFTokenError", err, {path: req.path}, false);
+	} else if (err && err.message && err.message.includes("Not Found")) {
 		const path = err.toString().substring(err.toString().lastIndexOf(" ") + 1);
 		const userAgent = req.headers['user-agent'];
 		const crawler = utils.getCrawlerFromUserAgentString(userAgent);
@@ -1245,10 +1248,18 @@ if (expressApp.get("env") === "development" || expressApp.get("env") === "local"
 		}
 
 		res.status(err.status || 500);
-		res.render('error', {
-			message: err.message,
+		
+		if (err && err.code === "EBADCSRFTOKEN") {
+			res.render('error', {
+				message: "Session expired or invalid form token. Please refresh the page and try again.",
+				error: err
+			});
+		} else {
+			res.render('error', {
+				message: err.message,
 			error: err
-		});
+			});
+		}
 	});
 }
 
@@ -1260,10 +1271,18 @@ expressApp.use(function(err, req, res, next) {
 	}
 
 	res.status(err.status || 500);
-	res.render('error', {
-		message: err.message,
-		error: {}
-	});
+	
+	if (err && err.code === "EBADCSRFTOKEN") {
+		res.render('error', {
+			message: "Session expired or invalid form token. Please refresh the page and try again.",
+			error: {}
+		});
+	} else {
+		res.render('error', {
+			message: err.message,
+			error: {}
+		});
+	}
 });
 
 expressApp.locals.moment = moment;
