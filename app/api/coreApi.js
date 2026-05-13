@@ -1841,6 +1841,10 @@ function buildMempoolSummary(statusId, ageBuckets, sizeBuckets, statusFunc) {
 				}
 			}
 
+			if (topIndex === -1) {
+				topIndex = 0;
+			}
+
 			summary.satoshiPerByteBucketLabels = summary.satoshiPerByteBucketLabels.slice(0, topIndex);
 
 			if (topIndex < feeBucketMaxCount) {
