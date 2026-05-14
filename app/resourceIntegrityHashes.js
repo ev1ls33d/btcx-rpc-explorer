@@ -12,7 +12,7 @@ module.exports =
     "sentry.min.js": "sha384-da/Bo2Ah6Uw3mlhl6VINMblg2SyGbSnULKrukse3P5D9PTJi4np9HoKvR19D7zOL",
     "site.js": "sha384-G8o2io5zIdQiiVN+4CAGGXPO4UvV8jGkSMlfddSPbqIUd3x5Rv01pNH6ec8QOATu",
     "bootstrap-icons.css": "sha384-rJFhkIguED0Z4GX6r6ReHpTCkwWtiPHZnQtWVP0DQWcKHzeJAlYb1m/xdYkeEk+f",
-    "dark-v1.min.css": "sha384-NJK2FF+pcgXOxhCACC4A35Noub6HxksU2B0JXRUWaCqpSksqX+6UWUG1wXugc/8W",
+    "dark-v1.min.css": "sha384-u3n57SCHFwlWMwSSDq5HBVFUPVZaENuQPoJ0NJDsGtGMjwR2yJMAtn6TpATcwtAz",
     "dark.min.css": "sha384-LHAaq3fAjMvoybNpSszaMfZOq7F85lXQ+w61fOncYy2NN9e3TFaFgU3KX8ApOpOU",
     "dataTables.bootstrap4.min.css": "sha384-EkHEUZ6lErauT712zSr0DZ2uuCmi3DoQj6ecNdHQXpMpFNGAQ48WjfXCE5n20W+R",
     "highlight.min.css": "sha384-s4RLYRjGGbVqKOyMGGwfxUTMOO6D7r2eom7hWZQ6BjK2Df4ZyfzLXEkonSm0KLIQ",
