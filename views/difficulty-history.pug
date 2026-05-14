@@ -41,6 +41,10 @@ block content
 						each yearItem in yearItems
 							a.btn.btn-outline-primary(id=`diff-hist-selector-${yearItem[1]}`, class="diff-hist-selector", href=`javascript:void(0)`, onclick=`$('.graph-diff-hist').hide(); $('#graph-diff-hist-${yearItem[1]}').show(); $('.graph-diff-change').hide(); $('#graph-diff-change-${yearItem[1]}').show(); $('.graph-network-capacity').hide(); $('#graph-network-capacity-${yearItem[1]}').show(); $(".diff-hist-selector").addClass("btn-outline-primary").removeClass("btn-primary"); $(this).toggleClass("btn-outline-primary").addClass("btn-primary"); return false;`) #{yearItem[0]}
 
+					.btn-group.mb-3.ms-3
+						each resItem in [["Daily", "day"], ["Weekly", "week"], ["Monthly", "month"]]
+							a.btn.btn-outline-primary(id=`diff-res-selector-${resItem[1]}`, class="diff-res-selector", href=`javascript:void(0)`, onclick=`setResolution('${resItem[1]}'); return false;`) #{resItem[0]}
+
 				.row
 					.col
 						+contentSection("Network Capacity")
@@ -120,6 +124,21 @@ block endOfBody
 		var height = 0;
 		var chunkSize = 10;
 		var summary = null;
+		var currentResolution = 'month';
+
+		function setResolution(res) {
+			currentResolution = res;
+			$(".diff-res-selector").addClass("btn-outline-primary").removeClass("btn-primary");
+			$(`#diff-res-selector-${res}`).removeClass("btn-outline-primary").addClass("btn-primary");
+			
+			for (var graphId in chartsById) {
+				var graph = chartsById[graphId];
+				if (graph.options.scales.x && graph.options.scales.x.time) {
+					graph.options.scales.x.time.unit = res;
+					graph.update();
+				}
+			}
+		}
 
 		while (height <= blockCount) {
 			heights.push([height]);
@@ -190,6 +209,8 @@ block endOfBody
 				$(`#graph-network-capacity-${yearItems[0][1]}`).show();
 
 				$(`#diff-hist-selector-${yearItems[0][1]}`).removeClass("btn-outline-primary").addClass("btn-primary");
+				
+				setResolution('month');
 			};
 
 			getData(results, chunkStrs, 0, statusCallback, finishedCallback);
@@ -328,11 +349,14 @@ block endOfBody
 					},
 					scales: {
 						x: {
-							type: 'linear',
+							type: 'time',
+							time: {
+								unit: currentResolution
+							},
 							position: 'bottom',
 							scaleLabel: {
 								display: true,
-								labelString: 'Difficulty Epoch'
+								labelString: 'Date'
 							},
 							grid: {
 								color: gridLineColor
@@ -420,11 +444,14 @@ block endOfBody
 					},
 					scales: {
 						x: {
-							type: 'linear',
+							type: 'time',
+							time: {
+								unit: currentResolution
+							},
 							position: 'bottom',
 							scaleLabel: {
 								display: true,
-								labelString: 'Difficulty Epoch'
+								labelString: 'Date'
 							},
 							grid: {
 								color: gridLineColor
@@ -501,15 +528,17 @@ block endOfBody
 				var heightStr = `${raw.heights[i]}`;
 				var previousHeightStr = `${raw.heights[i - 1]}`;
 
+				var xVal = raw[heightStr].time * 1000;
+
 				summary.difficultyData.push({epoch:i, date:raw[heightStr].time, difficulty:raw[heightStr].difficulty});
 
-				summary.graphData.push({x:i, y:raw[heightStr].difficulty});
+				summary.graphData.push({x:xVal, y:raw[heightStr].difficulty});
 
 				var yearIndex = Math.floor((raw.heights.length - i) / 26);
 
 				for (let j = 0; j < yearItems.length; j++) {
 					if (yearIndex < yearItems[j][1]) {
-						summary.graphData_years[yearItems[j][1]].push({x:i, y:raw[heightStr].difficulty});
+						summary.graphData_years[yearItems[j][1]].push({x:xVal, y:raw[heightStr].difficulty});
 					}
 				}
 
@@ -517,7 +546,7 @@ block endOfBody
 				if (i == 0) {
 					for (let j = 0; j < yearItems.length; j++) {
 						if (yearIndex < yearItems[j][1]) {
-							summary.changeGraphData_years[yearItems[j][1]].push({x:i, y:0});
+							summary.changeGraphData_years[yearItems[j][1]].push({x:xVal, y:0});
 						}
 					}
 
@@ -552,7 +581,7 @@ block endOfBody
 
 					for (let j = 0; j < yearItems.length; j++) {
 						if (yearIndex < yearItems[j][1]) {
-							summary.changeGraphData_years[yearItems[j][1]].push({x:i, y:deltaPercent});
+							summary.changeGraphData_years[yearItems[j][1]].push({x:xVal, y:deltaPercent});
 						}
 					}
 				}
