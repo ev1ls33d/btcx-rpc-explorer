@@ -39,7 +39,13 @@ block content
 				.text-center
 					.btn-group.mb-3
 						each yearItem in yearItems
-							a.btn.btn-outline-primary(id=`diff-hist-selector-${yearItem[1]}`, class="diff-hist-selector", href=`javascript:void(0)`, onclick=`$('.graph-diff-hist').hide(); $('#graph-diff-hist-${yearItem[1]}').show(); $('.graph-diff-change').hide(); $('#graph-diff-change-${yearItem[1]}').show(); $(".diff-hist-selector").addClass("btn-outline-primary").removeClass("btn-primary"); $(this).toggleClass("btn-outline-primary").addClass("btn-primary"); return false;`) #{yearItem[0]}
+							a.btn.btn-outline-primary(id=`diff-hist-selector-${yearItem[1]}`, class="diff-hist-selector", href=`javascript:void(0)`, onclick=`$('.graph-diff-hist').hide(); $('#graph-diff-hist-${yearItem[1]}').show(); $('.graph-diff-change').hide(); $('#graph-diff-change-${yearItem[1]}').show(); $('.graph-network-capacity').hide(); $('#graph-network-capacity-${yearItem[1]}').show(); $(".diff-hist-selector").addClass("btn-outline-primary").removeClass("btn-primary"); $(this).toggleClass("btn-outline-primary").addClass("btn-primary"); return false;`) #{yearItem[0]}
+
+				.row
+					.col
+						+contentSection("Network Capacity")
+							each yearItem in yearItems
+								canvas(id=`graph-network-capacity-${yearItem[1]}`, class='graph-network-capacity')
 
 				.row
 					.col
@@ -79,6 +85,7 @@ block content
 											//th Date
 											//th.text-end Block Start
 											th.text-end.text-card-highlight.text-uppercase.fw-light Difficulty
+											th.text-end.text-card-highlight.text-uppercase.fw-light Network Capacity
 											th.text-end.text-card-highlight.text-uppercase.fw-light Difficulty Δ
 												small.ms-1 (%)
 											
@@ -90,6 +97,7 @@ block content
 											//td.data-date
 											//td.text-end.data-block-start
 											td.text-end.data-difficulty
+											td.text-end.data-network-capacity
 											td.text-end.data-difficulty-delta
 
 										tr(id="empty-row-to-fix-striped-coloring", style="display: none;")
@@ -163,6 +171,10 @@ block endOfBody
 					createGraph(`graph-diff-change-${yearItems[i][1]}`, [summary.changeGraphData_years[yearItems[i][1]]], "Difficulty Change %", false);
 				}
 
+				for (var i = 0; i < yearItems.length; i++) {
+					createCapacityGraph(`graph-network-capacity-${yearItems[i][1]}`, [summary.graphData_years[yearItems[i][1]]], "Network Capacity", true);
+				}
+
 				//createGraph("graph-diff-hist-2", summary.epochChunks, "Difficulty 2");
 				
 				$("#main-content").show();
@@ -171,9 +183,11 @@ block endOfBody
 				// only show the first graph (All Time)
 				$(`.graph-diff-hist`).hide();
 				$(`.graph-diff-change`).hide();
+				$(`.graph-network-capacity`).hide();
 
 				$(`#graph-diff-hist-${yearItems[0][1]}`).show();
 				$(`#graph-diff-change-${yearItems[0][1]}`).show();
+				$(`#graph-network-capacity-${yearItems[0][1]}`).show();
 
 				$(`#diff-hist-selector-${yearItems[0][1]}`).removeClass("btn-outline-primary").addClass("btn-primary");
 			};
@@ -225,6 +239,8 @@ block endOfBody
 				} else {
 					row.find(".data-difficulty").text(new Decimal(item.difficulty).toDP(3));
 				}
+
+				row.find(".data-network-capacity").text(getNetworkCapacityFormatted(item.difficulty));
 
 				if (deltaItem.difficultyDelta) {
 					if (deltaItem.difficultyDelta > 0) {
@@ -343,6 +359,89 @@ block endOfBody
 									} else {
 										return value;
 									}
+								}
+							}
+						}
+					}
+				}
+			});
+
+			chartsById[graphId] = graph;
+		}
+
+		function getNetworkCapacityFormatted(difficulty) {
+			if (difficulty === null || difficulty === 0) return 'N/A';
+
+			const bytes = difficulty * Math.pow(2, 40);
+
+			const TiB = Math.pow(2, 40);
+			const PiB = Math.pow(2, 50);
+			const EiB = Math.pow(2, 60);
+
+			if (bytes >= EiB) {
+				return (bytes / EiB).toFixed(3) + ' EiB';
+			} else if (bytes >= PiB) {
+				return (bytes / PiB).toFixed(3) + ' PiB';
+			} else {
+				return (bytes / TiB).toFixed(3) + ' TiB';
+			}
+		}
+
+		function createCapacityGraph(graphId, datas, yLabelStr, logY) {
+			if (chartsById[graphId]) {
+				chartsById[graphId].destroy();
+			}
+
+			var datasets = [];
+
+			for (var i = 0; i < datas.length; i++) {
+				datasets.push({
+					borderColor: '#007bff',
+					borderWidth: 2,
+					backgroundColor: 'rgba(0,0,0,0)',
+					data: datas[i],
+					pointRadius: 0
+				});
+			}
+
+			var ctx = document.getElementById(graphId).getContext('2d');
+			var graph = new Chart(ctx, {
+				type: 'line',
+				data: {
+					datasets: datasets
+				},
+				options: {
+					interaction: {
+						intersect: false,
+						mode: 'index',
+					},
+					plugins: {
+						legend: { display: false },
+					},
+					scales: {
+						x: {
+							type: 'linear',
+							position: 'bottom',
+							scaleLabel: {
+								display: true,
+								labelString: 'Difficulty Epoch'
+							},
+							grid: {
+								color: gridLineColor
+							}
+						},
+						y: {
+							type: logY ? "logarithmic" : "linear",
+							scaleLabel: {
+								display: true,
+								labelString: yLabelStr
+							},
+							grid: {
+								color: gridLineColor
+							},
+							ticks: {
+								callback: function(value, index, values) {
+									return getNetworkCapacityFormatted(value);
 								}
 							}
 						}
