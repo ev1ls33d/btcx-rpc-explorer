@@ -124,17 +124,25 @@ block endOfBody
 		var height = 0;
 		var chunkSize = 10;
 		var summary = null;
-		var currentResolution = 'month';
+		var currentResolution = 'week';
 
 		function setResolution(res) {
 			currentResolution = res;
 			$(".diff-res-selector").addClass("btn-outline-primary").removeClass("btn-primary");
 			$(`#diff-res-selector-${res}`).removeClass("btn-outline-primary").addClass("btn-primary");
 			
+			var xLabelStr = "Date";
+			if (res == "day") xLabelStr = "Date (Daily)";
+			if (res == "week") xLabelStr = "Date (Weekly)";
+			if (res == "month") xLabelStr = "Date (Monthly)";
+
 			for (var graphId in chartsById) {
 				var graph = chartsById[graphId];
 				if (graph.options.scales.x && graph.options.scales.x.time) {
 					graph.options.scales.x.time.unit = res;
+					if (graph.options.scales.x.scaleLabel) {
+						graph.options.scales.x.scaleLabel.labelString = xLabelStr;
+					}
 					graph.update();
 				}
 			}
@@ -199,18 +207,21 @@ block endOfBody
 				$("#main-content").show();
 				$("#progress-wrapper").hide();
 
-				// only show the first graph (All Time)
+				// only show the default graph (1 yr)
 				$(`.graph-diff-hist`).hide();
 				$(`.graph-diff-change`).hide();
 				$(`.graph-network-capacity`).hide();
 
-				$(`#graph-diff-hist-${yearItems[0][1]}`).show();
-				$(`#graph-diff-change-${yearItems[0][1]}`).show();
-				$(`#graph-network-capacity-${yearItems[0][1]}`).show();
+				var defaultYearItem = yearItems[yearItems.length - 1][1];
 
-				$(`#diff-hist-selector-${yearItems[0][1]}`).removeClass("btn-outline-primary").addClass("btn-primary");
+				$(`#graph-diff-hist-${defaultYearItem}`).show();
+				$(`#graph-diff-change-${defaultYearItem}`).show();
+				$(`#graph-network-capacity-${defaultYearItem}`).show();
+
+				$(`.diff-hist-selector`).addClass("btn-outline-primary").removeClass("btn-primary");
+				$(`#diff-hist-selector-${defaultYearItem}`).removeClass("btn-outline-primary").addClass("btn-primary");
 				
-				setResolution('month');
+				setResolution('week');
 			};
 
 			getData(results, chunkStrs, 0, statusCallback, finishedCallback);
