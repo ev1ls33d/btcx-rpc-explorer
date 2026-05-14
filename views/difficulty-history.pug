@@ -143,6 +143,9 @@ block endOfBody
 					if (graph.options.scales.x.scaleLabel) {
 						graph.options.scales.x.scaleLabel.labelString = xLabelStr;
 					}
+					if (graph.options.scales.x.title) {
+						graph.options.scales.x.title.text = xLabelStr;
+					}
 					graph.update();
 				}
 			}
