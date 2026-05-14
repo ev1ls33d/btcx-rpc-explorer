@@ -29,7 +29,7 @@ block content
 
 
 	div#main-content(style="display: none;")
-		- var yearItems = [["All Time", 10000], ["8 yr", 8], ["4 yr", 4], ["2 yr", 2], ["1 yr", 1]];
+		- var yearItems = [["1 yr", 1], ["2 yr", 2], ["4 yr", 4], ["8 yr", 8], ["All Time", 10000]];
 
 		+pageTabs(["Details", "Data"])
 
@@ -124,8 +124,8 @@ block endOfBody
 		var height = 0;
 		var chunkSize = 10;
 		var summary = null;
-		var currentResolution = 'week';
-		var currentYearItem = yearItems[yearItems.length - 1][1];
+		var currentResolution = 'day';
+		var currentYearItem = yearItems[0][1];
 
 		function setResolution(res) {
 			if (currentResolution === res && summary !== null) return;
@@ -176,7 +176,7 @@ block endOfBody
 			$(`.diff-hist-selector`).addClass("btn-outline-primary").removeClass("btn-primary");
 			$(`#diff-hist-selector-${currentYearItem}`).removeClass("btn-outline-primary").addClass("btn-primary");
 
-			setResolution('week');
+			setResolution('day');
 		});
 
 		function loadData(chunkStrs) {
@@ -553,7 +553,15 @@ block endOfBody
 				summary.changeGraphData_years[yearItems[i][1]] = [];
 			}
 
+			var pointsPerYear = 26;
+			if (currentResolution == "day") pointsPerYear = 365;
+			if (currentResolution == "week") pointsPerYear = 52;
+			if (currentResolution == "month") pointsPerYear = 12;
+
+			var firstDisplayedPoint = true;
 			for (var i = 0; i < raw.heights.length; i++) {
+				if (raw.heights[i] == 0) continue;
+
 				var heightStr = `${raw.heights[i]}`;
 				var previousHeightStr = `${raw.heights[i - 1]}`;
 
@@ -563,7 +571,7 @@ block endOfBody
 
 				summary.graphData.push({x:xVal, y:raw[heightStr].difficulty});
 
-				var yearIndex = Math.floor((raw.heights.length - i) / 26);
+				var yearIndex = Math.floor((raw.heights.length - i) / pointsPerYear);
 
 				for (let j = 0; j < yearItems.length; j++) {
 					if (yearIndex < yearItems[j][1]) {
@@ -572,7 +580,7 @@ block endOfBody
 				}
 
 
-				if (i == 0) {
+				if (firstDisplayedPoint) {
 					for (let j = 0; j < yearItems.length; j++) {
 						if (yearIndex < yearItems[j][1]) {
 							summary.changeGraphData_years[yearItems[j][1]].push({x:xVal, y:0});
@@ -580,6 +588,7 @@ block endOfBody
 					}
 
 					summary.difficultyDeltaData.push({epoch:i});
+					firstDisplayedPoint = false;
 
 				} else {
 					var d1 = raw[heightStr].difficulty;
