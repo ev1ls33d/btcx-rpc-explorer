@@ -39,7 +39,7 @@ block content
 				.text-center
 					.btn-group.mb-3
 						each yearItem in yearItems
-							a.btn.btn-outline-primary(id=`diff-hist-selector-${yearItem[1]}`, class="diff-hist-selector", href=`javascript:void(0)`, onclick=`$('.graph-diff-hist').hide(); $('#graph-diff-hist-${yearItem[1]}').show(); $('.graph-diff-change').hide(); $('#graph-diff-change-${yearItem[1]}').show(); $('.graph-network-capacity').hide(); $('#graph-network-capacity-${yearItem[1]}').show(); $(".diff-hist-selector").addClass("btn-outline-primary").removeClass("btn-primary"); $(this).toggleClass("btn-outline-primary").addClass("btn-primary"); return false;`) #{yearItem[0]}
+							a.btn.btn-outline-primary(id=`diff-hist-selector-${yearItem[1]}`, class="diff-hist-selector", href=`javascript:void(0)`, onclick=`$('.graph-diff-hist').hide(); $('#graph-diff-hist-${yearItem[1]}').show(); $('.graph-diff-change').hide(); $('#graph-diff-change-${yearItem[1]}').show(); $('.graph-network-capacity').hide(); $('#graph-network-capacity-${yearItem[1]}').show(); $(".diff-hist-selector").addClass("btn-outline-primary").removeClass("btn-primary"); $(this).toggleClass("btn-outline-primary").addClass("btn-primary"); currentYearItem = ${yearItem[1]}; return false;`) #{yearItem[0]}
 
 					.btn-group.mb-3.ms-3
 						each resItem in [["Daily", "day"], ["Weekly", "week"], ["Monthly", "month"]]
@@ -125,40 +125,39 @@ block endOfBody
 		var chunkSize = 10;
 		var summary = null;
 		var currentResolution = 'week';
+		var currentYearItem = yearItems[yearItems.length - 1][1];
 
 		function setResolution(res) {
+			if (currentResolution === res && summary !== null) return;
 			currentResolution = res;
+			
 			$(".diff-res-selector").addClass("btn-outline-primary").removeClass("btn-primary");
 			$(`#diff-res-selector-${res}`).removeClass("btn-outline-primary").addClass("btn-primary");
 			
-			var xLabelStr = "Date";
-			if (res == "day") xLabelStr = "Date (Daily)";
-			if (res == "week") xLabelStr = "Date (Weekly)";
-			if (res == "month") xLabelStr = "Date (Monthly)";
+			loadDataForResolution(res);
+		}
 
-			for (var graphId in chartsById) {
-				var graph = chartsById[graphId];
-				if (graph.options.scales.x && graph.options.scales.x.time) {
-					graph.options.scales.x.time.unit = res;
-					if (graph.options.scales.x.scaleLabel) {
-						graph.options.scales.x.scaleLabel.labelString = xLabelStr;
-					}
-					if (graph.options.scales.x.title) {
-						graph.options.scales.x.title.text = xLabelStr;
-					}
-					graph.update();
-				}
+		function loadDataForResolution(res) {
+			$("#main-content").hide();
+			$("#progress-wrapper").show();
+
+			heights = [];
+			var step = !{coinConfig.difficultyAdjustmentBlockCount};
+			if (res == "day") step = !{Math.floor(86400 / coinConfig.targetBlockTimeSeconds)};
+			if (res == "week") step = !{Math.floor(604800 / coinConfig.targetBlockTimeSeconds)};
+			if (res == "month") step = !{Math.floor(2592000 / coinConfig.targetBlockTimeSeconds)};
+
+			var h = 0;
+			while (h <= blockCount) {
+				heights.push([h]);
+				h += step;
 			}
-		}
-
-		while (height <= blockCount) {
-			heights.push([height]);
-			height += !{coinConfig.difficultyAdjustmentBlockCount};
-		}
-
-		$(document).ready(function() {
-			var heightChunks = [];
 			
+			if (heights.length > 0 && heights[heights.length - 1][0] !== blockCount) {
+				heights.push([blockCount]);
+			}
+
+			var heightChunks = [];
 			var currentChunk = [];
 			heightChunks.push(currentChunk);
 
@@ -167,11 +166,17 @@ block endOfBody
 					currentChunk = [];
 					heightChunks.push(currentChunk);
 				}
-
 				currentChunk.push(heights[i]);
 			}
 
 			loadData(heightChunks.map(x => x.join(",")));
+		}
+
+		$(document).ready(function() {
+			$(`.diff-hist-selector`).addClass("btn-outline-primary").removeClass("btn-primary");
+			$(`#diff-hist-selector-${currentYearItem}`).removeClass("btn-outline-primary").addClass("btn-primary");
+
+			setResolution('week');
 		});
 
 		function loadData(chunkStrs) {
@@ -210,21 +215,14 @@ block endOfBody
 				$("#main-content").show();
 				$("#progress-wrapper").hide();
 
-				// only show the default graph (1 yr)
+				// only show the graph for current year selection
 				$(`.graph-diff-hist`).hide();
 				$(`.graph-diff-change`).hide();
 				$(`.graph-network-capacity`).hide();
 
-				var defaultYearItem = yearItems[yearItems.length - 1][1];
-
-				$(`#graph-diff-hist-${defaultYearItem}`).show();
-				$(`#graph-diff-change-${defaultYearItem}`).show();
-				$(`#graph-network-capacity-${defaultYearItem}`).show();
-
-				$(`.diff-hist-selector`).addClass("btn-outline-primary").removeClass("btn-primary");
-				$(`#diff-hist-selector-${defaultYearItem}`).removeClass("btn-outline-primary").addClass("btn-primary");
-				
-				setResolution('week');
+				$(`#graph-diff-hist-${currentYearItem}`).show();
+				$(`#graph-diff-change-${currentYearItem}`).show();
+				$(`#graph-network-capacity-${currentYearItem}`).show();
 			};
 
 			getData(results, chunkStrs, 0, statusCallback, finishedCallback);
@@ -246,10 +244,10 @@ block endOfBody
 		}
 
 		function fillDifficultyTable(summary) {
+			$("#difficulty-table-body").find("tr:not(#difficulty-table-row-prototype):not(#empty-row-to-fix-striped-coloring)").remove();
+
 			summary.difficultyData.reverse();
 			summary.difficultyDeltaData.reverse();
-
-			let latestBlockStart = 2016 * (summary.difficultyData.length - 1);
 
 			for (var i = 0; i < summary.difficultyData.length; i++) {
 				var item = summary.difficultyData[i];
@@ -259,7 +257,7 @@ block endOfBody
 				row.attr("id", null);
 				//row.addClass("fee-rate-table-row");
 
-				var startBlock = latestBlockStart - 2016 * i;
+				var startBlock = item.blockHeight;
 				//var startBlock = 2016 * i;
 
 				row.find(".data-epoch").text(item.epoch);
@@ -299,6 +297,8 @@ block endOfBody
 		}
 
 		function fillDifficultyDeltaTable(summary) {
+			$("#difficulty-delta-table-body").find("tr:not(#difficulty-delta-table-row-prototype)").remove();
+
 			for (var i = 0; i < summary.difficultyDeltaData.length; i++) {
 				var item = summary.difficultyDeltaData[i];
 
@@ -327,6 +327,13 @@ block endOfBody
 
 				$("#difficulty-delta-table-body").append(row);
 			}
+		}
+
+		function getXLabelStr() {
+			if (currentResolution == "day") return "Date (Daily)";
+			if (currentResolution == "week") return "Date (Weekly)";
+			if (currentResolution == "month") return "Date (Monthly)";
+			return "Date";
 		}
 
 		var chartsById = {};
@@ -370,7 +377,11 @@ block endOfBody
 							position: 'bottom',
 							scaleLabel: {
 								display: true,
-								labelString: 'Date'
+								labelString: getXLabelStr()
+							},
+							title: {
+								display: true,
+								text: getXLabelStr()
 							},
 							grid: {
 								color: gridLineColor
@@ -465,7 +476,11 @@ block endOfBody
 							position: 'bottom',
 							scaleLabel: {
 								display: true,
-								labelString: 'Date'
+								labelString: getXLabelStr()
+							},
+							title: {
+								display: true,
+								text: getXLabelStr()
 							},
 							grid: {
 								color: gridLineColor
@@ -544,7 +559,7 @@ block endOfBody
 
 				var xVal = raw[heightStr].time * 1000;
 
-				summary.difficultyData.push({epoch:i, date:raw[heightStr].time, difficulty:raw[heightStr].difficulty});
+				summary.difficultyData.push({epoch:i, blockHeight: parseInt(heightStr), date:raw[heightStr].time, difficulty:raw[heightStr].difficulty});
 
 				summary.graphData.push({x:xVal, y:raw[heightStr].difficulty});
 
