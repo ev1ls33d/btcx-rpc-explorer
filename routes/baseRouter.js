@@ -1121,7 +1121,9 @@ router.get("/block-height/:blockHeight", asyncHandler(async (req, res, next) => 
 	} catch (err) {
 		res.locals.userMessageMarkdown = `Failed loading block: height=**${req.params.blockHeight}**`;
 
-		res.locals.pageErrors.push(utils.logError("389wer07eghdd", err));
+		if (err && err.message != "Block not found") {
+			res.locals.pageErrors.push(utils.logError("389wer07eghdd", err));
+		}
 
 		await utils.timePromise("block-height.render", async () => {
 			res.render("block");
@@ -1223,7 +1225,9 @@ router.get("/block/:blockHash", asyncHandler(async (req, res, next) => {
 	} catch (err) {
 		res.locals.userMessageMarkdown = `Failed to load block: **${blockHash}**`;
 
-		res.locals.pageErrors.push(utils.logError("32824yhr2973t3d", err));
+		if (err && err.message != "Block not found") {
+			res.locals.pageErrors.push(utils.logError("32824yhr2973t3d", err));
+		}
 
 		await utils.timePromise("block.render", async () => {
 			res.render("block");
