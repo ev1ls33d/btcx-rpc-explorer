@@ -60,12 +60,6 @@ If you prefer to run from source without Docker:
 And your explorer should be accessible on port 3002.
 
 
-
-Or, via a lightning address:
-
-thanks@donate.btc21.org
-
-
 [npm-ver-img]: https://img.shields.io/npm/v/btcx-rpc-explorer.svg?style=flat
 [npm-ver-url]: https://www.npmjs.com/package/btcx-rpc-explorer
 [npm-dl-img]: http://img.shields.io/npm/dm/btcx-rpc-explorer.svg?style=flat
