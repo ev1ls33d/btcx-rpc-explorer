@@ -1172,6 +1172,11 @@ expressApp.use(csrfProtection, (req, res, next) => {
 
 expressApp.use(config.baseUrl, cleanupRouter);
 expressApp.use(config.baseUrl, baseActionsRouter);
+
+expressApp.get("/favicon.png", (req, res) => {
+	res.status(301).redirect(expressApp.locals.assetUrl("./img/logo/logo.svg"));
+});
+
 expressApp.use(config.baseUrl + 'internal-api/', internalApiActionsRouter);
 expressApp.use(config.baseUrl + 'api/', apiActionsRouter);
 expressApp.use(config.baseUrl + 'snippet/', snippetActionsRouter);
@@ -1291,16 +1296,16 @@ expressApp.locals.utils = utils;
 expressApp.locals.markdown = src => markdown.render(src);
 
 expressApp.locals.assetUrl = (path) => {
-	// trim off leading "./"
-	let normalizedPath = path.substring(2);
-
-	//console.log("assetUrl: " + path + " -> " + normalizedPath);
+	let normalizedPath = path;
+	if (path.startsWith("./")) {
+		normalizedPath = path.substring(2);
+	}
 
 	if (config.cdn.active && cdnFilepathMap[normalizedPath]) {
 		return `${config.cdn.baseUrl}/${global.cacheId}/${normalizedPath}`;
 
 	} else {
-		return `${path}?v=${global.cacheId}`;
+		return `${config.baseUrl}${normalizedPath}?v=${global.cacheId}`;
 	}
 };
 
