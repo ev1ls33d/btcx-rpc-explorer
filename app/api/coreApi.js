@@ -552,7 +552,7 @@ async function getTxStats(dataPtCount, blockStart, blockEnd) {
 
 	//console.log(results);
 
-	if (results.length == 0 || (results[0].name == "RpcError" && results[0].code == -8)) {
+	if (results.length == 0 || !results[0] || (results[0].name == "RpcError" && results[0].code == -8)) {
 		// recently started node - no meaningful data to return
 		return null;
 	}
