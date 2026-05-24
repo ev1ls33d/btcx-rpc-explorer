@@ -82,8 +82,8 @@ block content
 
 						if (result.getblock.weight)
 							+summaryItem("Virtual Size")
-								- var vsizeKB = new Decimal(result.getblock.weight).dividedBy(4000);
-								| #{vsizeKB.toDP(0)} vKB
+								- var vsizeKB = new Decimal(result.getblock.weight).dividedBy(4).ceil().dividedBy(1000);
+								| #{vsizeKB.toDP(3)} vKB
 
 						if (result.getblock.weight)
 							+summaryItem("Weight Units")
@@ -92,11 +92,15 @@ block content
 
 						if result.getblock.pocx_proof !== undefined && result.getblock.pocx_proof.account_id
 							+summaryItem("Miner")
-								span.text-break #{result.getblock.pocx_proof.account_id}
+								a.text-break(href=`./address/${result.getblock.pocx_proof.account_id}`) #{result.getblock.pocx_proof.account_id}
 
 						if result.getblock.signer_address !== undefined
 							+summaryItem("Forger")
-								span.text-break #{result.getblock.signer_address}
+								a.text-break(href=`./address/${result.getblock.signer_address}`) #{result.getblock.signer_address}
+
+						if result.getblock.time_since_last_block !== undefined
+							+summaryItem("Time Since Last Block")
+								| #{result.getblock.time_since_last_block} s
 
 				if (result.blockstats && result.blockstats.ins && result.blockstats.ins > 0)
 					+contentSection("Fee Details", true, "blockPageShowFeeSummary", true)
@@ -164,13 +168,13 @@ block content
 								span #{result.getblock.weight.toLocaleString()}
 
 								- var full = new Decimal(result.getblock.weight).dividedBy(coinConfig.maxBlockWeight).times(100);
-								- var full2 = full.toDP(0);
+								- var full2 = full.toDP(2);
 
 								small.text-muted.ms-1
 									| (
 									span.border-dotted(title=`${full.toDP(2)}% full`, data-bs-toggle="tooltip")
-										if (full >= 99 || full2 == 99)
-											span.text-success 99+%
+										if (full >= 99.99)
+											span.text-success 99.99+%
 
 										else
 											span.text-primary #{full2}%
@@ -257,10 +261,6 @@ block content
 						if result.getblock.poc_time !== undefined
 							+summaryItem("PoCX Time")
 								| #{result.getblock.poc_time}
-								
-						if result.getblock.time_since_last_block !== undefined
-							+summaryItem("Time Since Last Block")
-								| #{result.getblock.time_since_last_block} s
 
 						if result.getblock.generation_signature !== undefined
 							+summaryItem("Gen. Sig.")

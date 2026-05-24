@@ -125,10 +125,10 @@
 								if (block.miner.type == "address-only")
 									.d-none.d-md-inline
 										span.badge.bg-secondary
-											span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{block.miner.name}
+											a.text-reset(href=`./address/${block.miner.name}`, data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{block.miner.name}
 									.d-md-none
 										span.badge.bg-secondary
-											span(data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{utils.ellipsizeMiddle(block.miner.name, 14)}
+											a.text-reset(href=`./address/${block.miner.name}`, data-bs-toggle="tooltip", title=`Unknown Miner Payout Address: ${block.miner.name}`) #{utils.ellipsizeMiddle(block.miner.name, 14)}
 											+copyTextButton(block.miner.name)
 
 								else
@@ -203,7 +203,7 @@
 
 								if (currencyValue > 0)
 									if (userSettings.displayCurrency == "btcx" || userSettings.displayCurrency == "btcx")
-										+valueDisplaySpecial(block.totalFees, 4)
+										+valueDisplaySpecial(block.totalFees, 8)
 									else
 										+valueDisplay(block.totalFees)
 								else
@@ -226,11 +226,11 @@
 								if block.weight
 									if (true)
 										- var full = new Decimal(block.weight).dividedBy(coinConfig.maxBlockWeight).times(100);
-										- var full2 = full.toDP(0);
+										- var full2 = full.toDP(2);
 
 										
-										if (full >= 99 || full2 == 99)
-											span.text-success 99+
+										if (full >= 99.99)
+											span.text-success 99.99+
 
 										else
 											span.text-primary #{full2}

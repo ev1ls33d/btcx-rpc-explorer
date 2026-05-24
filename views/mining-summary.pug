@@ -198,7 +198,8 @@ block endOfBody
 					row.find(".miner-name-unknown").text(minerName);
 
 				} else if (minerName.startsWith("address-only:")) {
-					row.find(".miner-name-unknown").text(minerName.substring("address-only:".length));
+					var address = minerName.substring("address-only:".length);
+					row.find(".miner-name-unknown").html(`<a class="text-reset" href='./address/${address}'>${address}</a>`);
 
 				} else {
 					row.find(".miner-name").text(minerName);

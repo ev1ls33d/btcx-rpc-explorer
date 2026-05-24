@@ -35,10 +35,10 @@ include ../includes/shared-mixins.pug
 			span.mx-2.text-muted /
 
 			- var full = new Decimal(totalWeight).dividedBy(coinConfig.maxBlockWeight).times(100);
-			- var full2 = full.toDP(0);
+			- var full2 = full.toDP(2);
 
 			
-			if (full >= 99 || full2 == 99)
+			if (full >= 99.99)
 				span.text-success.small.border-dotted(title="The predicted next block is full.", data-bs-toggle="tooltip")
 					| Full
 					i.bi-check2.ms-1
@@ -53,7 +53,7 @@ include ../includes/shared-mixins.pug
 
 			span.small
 				span.me-1.border-dotted(title="Σ fees", data-bs-toggle="tooltip") &Sigma;
-				+valueDisplay(totalFees, {hideLessSignificantDigits:true})
+				+valueDisplay(totalFees)
 
 		else
 			span(title="No data available", data-bs-toggle="tooltip") -
