@@ -11,7 +11,7 @@ block content
 		h6.mb-2 About the Difficulty Adjustment
 
 		ul.mb-0.ms-n3
-			li Mining difficulty adjusts automatically every #{coinConfig.difficultyAdjustmentBlockCount.toLocaleString()} blocks.
+			li Mining difficulty adjusts automatically every #{coinConfig.difficultyAdjustmentBlockCount.toString()} blocks.
 			li The adjustment aims to maintain an average block-mining time of #{coinConfig.targetBlockTimeMinutes} minutes.
 			li An increase in the difficulty indicates that the average block-mining time during the previous adjustment epoch was less than #{coinConfig.targetBlockTimeMinutes} minutes (due to more miners joining the network and searching for blocks).
 			li A decrease in difficulty indicates miners have left the network so finding each block is adjusted to be easier for the smaller number remaining.
@@ -190,7 +190,7 @@ block endOfBody
 				var wPercent = `${parseInt(100 * (chunkIndexDone + 1) / parseFloat(chunkCount))}%`;
 				
 				$("#data-progress").css("width", wPercent);
-				$("#progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), chunkStrs.length).toLocaleString()} of ${chunkStrs.length.toLocaleString()} (${wPercent})`);
+				$("#progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), chunkStrs.length).toString()} of ${chunkStrs.length.toString()} (${wPercent})`);
 			};
 
 			var finishedCallback = function() {
@@ -261,13 +261,13 @@ block endOfBody
 				//var startBlock = 2016 * i;
 
 				row.find(".data-epoch").text(item.epoch);
-				row.find(".data-start-block").html(`<a href="./block-height/${startBlock}">${startBlock.toLocaleString()}</a>`);
+				row.find(".data-start-block").html(`<a href="./block-height/${startBlock}">${startBlock.toString()}</a>`);
 				row.find(".data-start-date").text(new Date(item.date * 1000).toISOString().slice(0, 10));
-				//row.find(".data-date").text(item.count.toLocaleString());
+				//row.find(".data-date").text(item.count.toString());
 				//row.find(".data-block-start").text(sumBlockCount.toDP(2));
 
 				if (item.difficulty >= 1000000) {
-					row.find(".data-difficulty").text(parseInt(item.difficulty).toLocaleString());
+					row.find(".data-difficulty").text(parseInt(item.difficulty).toString());
 
 				} else {
 					row.find(".data-difficulty").text(new Decimal(item.difficulty).toDP(3));
@@ -307,7 +307,7 @@ block endOfBody
 				//row.addClass("fee-rate-table-row");
 
 				row.find(".data-epoch").text(item.epoch);
-				//row.find(".data-date").text(item.count.toLocaleString());
+				//row.find(".data-date").text(item.count.toString());
 				//row.find(".data-block-start").text(sumBlockCount.toDP(2));
 				if (item.difficultyDelta) {
 					if (item.difficultyDelta > 0) {
@@ -403,7 +403,7 @@ block endOfBody
 								callback: function(value, index, values) {
 									if (value > 1000) {
 										var exp = Math.floor(Math.log10(value));
-										return (value / Math.pow(10, exp)).toLocaleString() + "e" + exp;
+										return (value / Math.pow(10, exp)).toString() + "e" + exp;
 
 									} else {
 										return value;

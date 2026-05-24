@@ -80,7 +80,7 @@ global.lruCaches = [ global.miscLruCache, global.blockLruCache, global.txLruCach
 		statTracker.trackValue("caches.mining.itemCount", global.miningSummaryLruCache.itemCount);
 
 
-		debugLog(`Pruned caches: ${totalSizeBefore.toLocaleString()} -> ${totalSizeAfter.toLocaleString()}`);
+		debugLog(`Pruned caches: ${totalSizeBefore.toString()} -> ${totalSizeAfter.toString()}`);
 	};
 
 	setInterval(pruneCaches, 60000);

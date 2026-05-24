@@ -10,16 +10,16 @@ block content
 	+dismissableInfoAlert("nextHavlingNoteDismissed", "About Next Halving...")
 		h6.mb-2 About Next Halving
 
-		| This page shows details about the next halving. Halvings occur every #{nextHalvingData.halvingBlockInterval.toLocaleString()} blocks and cut the block subsidy (new supply creation) in half. So far #{nextHalvingData.halvingCount.toLocaleString()} halving#{halvingCount == 1 ? " has" : "s have"} occurred. After #{nextHalvingData.terminalHalvingCount} halvings, the block subsidy will drop to zero and no more halvings will occur.
+		| This page shows details about the next halving. Halvings occur every #{nextHalvingData.halvingBlockInterval.toString()} blocks and cut the block subsidy (new supply creation) in half. So far #{nextHalvingData.halvingCount.toString()} halving#{halvingCount == 1 ? " has" : "s have"} occurred. After #{nextHalvingData.terminalHalvingCount} halvings, the block subsidy will drop to zero and no more halvings will occur.
 
 	if (nextHalvingData.nextHalvingIndex > -1)
 		+contentSection("Summary")
 			+summaryRow(3)
 				+summaryItem("Halving Number")
-					| #{nextHalvingData.nextHalvingIndex.toLocaleString()}
+					| #{nextHalvingData.nextHalvingIndex.toString()}
 
 				+summaryItem("Block Height", "The block height at which the new block subsidy will begin.")
-					| #{nextHalvingData.nextHalvingBlock.toLocaleString()}
+					| #{nextHalvingData.nextHalvingBlock.toString()}
 
 				+summaryItem("Subsidy", "The new supply that will be created (and rewarded to the winning miner) for each new block during the next halving's era.")
 					- let subsidy = coinConfig.blockRewardFunction(nextHalvingData.nextHalvingBlock, global.activeBlockchain);
@@ -28,7 +28,7 @@ block content
 		+contentSection("Timeline / Progress")
 			+summaryRow(2)
 				+summaryItem("Blocks Remaining")
-					| #{nextHalvingData.blocksUntilNextHalving.toLocaleString()}
+					| #{nextHalvingData.blocksUntilNextHalving.toString()}
 
 				+summaryItem("Date (Estimated)", "The date is estimated based on the number of blocks remaining and the current mining rate (up until the next difficulty adjustment).")
 					+timestamp(nextHalvingData.nextHalvingDate.getTime() / 1000)

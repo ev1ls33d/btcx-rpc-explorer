@@ -187,7 +187,7 @@ block endOfBody
 				var wPercent = `${parseInt(100 * (chunkIndexDone + 1) / parseFloat(chunkCount))}%`;
 				
 				$("#data-progress").css("width", wPercent);
-				$("#block-progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), count).toLocaleString()} of ${count.toLocaleString()} (${wPercent})`);
+				$("#block-progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), count).toString()} of ${count.toString()} (${wPercent})`);
 			};
 
 			var finishedCallback = function() {

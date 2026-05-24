@@ -63,10 +63,10 @@
 										+funItemIcon
 
 							if (block.height % 2016 == 0)
-								span.me-1(title=`This is the first block of difficulty era #${(block.height / 2016).toLocaleString()}`, data-bs-toggle="tooltip")
+								span.me-1(title=`This is the first block of difficulty era #${(block.height / 2016).toString()}`, data-bs-toggle="tooltip")
 									i.bi-info-circle
 
-							a(href=`./block-height/${block.height}`) #{block.height.toLocaleString()}
+							a(href=`./block-height/${block.height}`) #{block.height.toString()}
 						
 
 						- var timeAgoTime = moment.utc(new Date()).diff(moment.utc(new Date(parseInt(block.time) * 1000)));
@@ -152,7 +152,7 @@
 								span.badge.bg-secondary Unknown
 
 						
-						td.text-end #{block.nTx.toLocaleString()}
+						td.text-end #{block.nTx.toString()}
 
 						if (blockstatsByHeight)
 							td.text-end.d-none.d-lg-table-cell
@@ -219,7 +219,7 @@
 						if (false)
 							td.text-end
 								- var bSizeK = parseInt(block.size / 1000);
-								span #{bSizeK.toLocaleString()}
+								span #{bSizeK.toString()}
 
 						if (blocks && blocks.length > 0 && blocks[0].weight)
 							td.text-end.d-none.d-lg-table-cell
@@ -239,11 +239,11 @@
 										- var bWeightK = parseInt(block.weight / 1000);
 										- var fullPercent = new Decimal(100 * block.weight / coinConfig.maxBlockWeight).toDecimalPlaces(1);
 
-										span #{bWeightK.toLocaleString()} 
+										span #{bWeightK.toString()} 
 										small.fw-light.text-muted (#{fullPercent}%)
 
 										- var bSizeK = parseInt(block.size / 1000);
-										span.ms-1(data-bs-toggle="tooltip", title=`Size: ${bSizeK.toLocaleString()} kB`)
+										span.ms-1(data-bs-toggle="tooltip", title=`Size: ${bSizeK.toString()} kB`)
 											i.bi-three-dots.text-muted
 
 										div.progress(style="height: 4px;")
@@ -257,7 +257,7 @@
 								- var bSizeK = parseInt(block.size / 1000);
 								- var fullPercent = new Decimal(100 * block.size / coinConfig.maxBlockSize).toDecimalPlaces(1);
 
-								span #{bSizeK.toLocaleString()} 
+								span #{bSizeK.toString()} 
 								small.fw-light.text-muted (#{fullPercent}%)
 
 								div.progress(style="height: 4px;")

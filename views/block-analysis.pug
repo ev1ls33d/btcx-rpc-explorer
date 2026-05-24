@@ -1,7 +1,7 @@
 extends layout
 
 block headContent
-	title Block Analysis ##{result.getblock.height.toLocaleString()}, #{result.getblock.hash}
+	title Block Analysis ##{result.getblock.height.toString()}, #{result.getblock.hash}
 
 block content
 	
@@ -26,15 +26,15 @@ block content
 
 				if (result.getblock.weight)
 					+summaryItem("Weight", null, "wu", "Weight Units")
-						| #{result.getblock.weight.toLocaleString()}
+						| #{result.getblock.weight.toString()}
 
 				else if (result.getblock.size)
 					+summaryItem("Size", null, "B", "Bytes")
-						| #{result.getblock.size.toLocaleString()}
+						| #{result.getblock.size.toString()}
 
 
 				+summaryItem("Transactions")
-					| #{result.getblock.nTx.toLocaleString()}
+					| #{result.getblock.nTx.toString()}
 
 				+summaryItem("Confirmations")
 					+confirmations(result.getblock.confirmations, false)
@@ -285,7 +285,7 @@ block endOfBody
 				var wPercent = `${parseInt(100 * (chunkIndexDone + 1) / parseFloat(chunkCount))}%`;
 				
 				$("#data-progress").css("width", wPercent);
-				$("#progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), count).toLocaleString()} of ${count.toLocaleString()} (${wPercent})`);
+				$("#progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), count).toString()} of ${count.toString()} (${wPercent})`);
 			};
 
 			var finishedCallback = function() {
@@ -399,7 +399,7 @@ block endOfBody
 				row.removeClass("row-prototype");
 
 				row.find(".data-tx-link").html(`<a href='./tx/${item.txid}'>${item.txid.substring(0, 12)}…</a>`);
-				row.find(".data-tx-value").html(`<span>${parseInt(item.value).toLocaleString()}</span>`);
+				row.find(".data-tx-value").html(`<span>${parseInt(item.value).toString()}</span>`);
 				
 				row.show();
 
@@ -418,7 +418,7 @@ block endOfBody
 				row.removeClass("row-prototype");
 
 				row.find(".data-tx-link").html(`<a href='./tx/${item.txid}'>${item.txid.substring(0, 12)}…</a>`);
-				row.find(".data-tx-value").html(`<span>${parseInt(item.value).toLocaleString()}</span>`);
+				row.find(".data-tx-value").html(`<span>${parseInt(item.value).toString()}</span>`);
 
 				row.show();
 
@@ -466,7 +466,7 @@ block endOfBody
 				
 				// span(title=`Output Type: ${utils.outputTypeName(inputTypeKey)}`, data-bs-toggle="tooltip") #{utils.outputTypeAbbreviation(inputTypeKey)}
 				row.find(".data-type").html(`<span title='Type: ${item.type}' data-bs-toggle='tooltip'>${item.type}</span>`);
-				row.find(".data-count").text(item.count.toLocaleString());
+				row.find(".data-count").text(item.count.toString());
 
 				row.show();
 
@@ -486,7 +486,7 @@ block endOfBody
 				
 				// span(title=`Output Type: ${utils.outputTypeName(inputTypeKey)}`, data-bs-toggle="tooltip") #{utils.outputTypeAbbreviation(inputTypeKey)}
 				row.find(".data-type").html(`<span title='Type: ${item.type}' data-bs-toggle='tooltip'>${item.type}</span>`);
-				row.find(".data-count").text(item.count.toLocaleString());
+				row.find(".data-count").text(item.count.toString());
 
 				row.show();
 

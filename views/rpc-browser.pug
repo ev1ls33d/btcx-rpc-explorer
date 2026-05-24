@@ -50,7 +50,7 @@ block content
 								+sectionTitleBlock
 									span.me-2 Result
 									if (executionMillis)
-										small.text-muted (#{executionMillis.toLocaleString()} ms)
+										small.text-muted (#{executionMillis.toString()} ms)
 
 								+contentSection
 									pre
@@ -134,7 +134,7 @@ block content
 						.float-start
 							i.bi-star.me-2
 						.float-start
-							+sectionTitle(`Favorites (${session.favoriteRpcCommands.length.toLocaleString()})`)
+							+sectionTitle(`Favorites (${session.favoriteRpcCommands.length.toString()})`)
 					+contentSection
 						ol.mb-0.ps-4
 							each methodX, methodIndex in session.favoriteRpcCommands
@@ -146,7 +146,7 @@ block content
 						.float-start
 							i.bi-clock-history.me-2
 						.float-start
-							+sectionTitle(`Recent (${session.recentRpcCommands.length.toLocaleString()})`)
+							+sectionTitle(`Recent (${session.recentRpcCommands.length.toString()})`)
 					+contentSection
 						ol.mb-0.ps-4
 							each methodX, methodIndex in session.recentRpcCommands

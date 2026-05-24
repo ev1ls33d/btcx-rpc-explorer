@@ -2,16 +2,16 @@ extends layout
 
 block headContent
 	if (result.getblock)
-		title Block ##{result.getblock.height.toLocaleString()}, #{result.getblock.hash}
+		title Block ##{result.getblock.height.toString()}, #{result.getblock.hash}
 	else
 		title Block: Error
 
 block content
 	if (result.getblock)
 
-		+pageTitle(`Block #${result.getblock.height.toLocaleString()}`, result.getblock.hash, true)
+		+pageTitle(`Block #${result.getblock.height.toString()}`, result.getblock.hash, true)
 			if (result.getblock.previousblockhash)
-				a.btn.btn-sm.btn-primary.ms-2(href=`./block/${result.getblock.previousblockhash}`, title=`Block ${(result.getblock.height - 1).toLocaleString()}`, data-bs-toggle="tooltip") &larr;
+				a.btn.btn-sm.btn-primary.ms-2(href=`./block/${result.getblock.previousblockhash}`, title=`Block ${(result.getblock.height - 1).toString()}`, data-bs-toggle="tooltip") &larr;
 					span.d-none.d-md-inline.ms-1 Prev Block
 
 			else if (result.getblock.hash == genesisBlockHash)
@@ -19,7 +19,7 @@ block content
 				span.btn.btn-sm.btn-success.d-inline-block.d-md-none.ms-2 Genesis!
 
 			if (result.getblock.nextblockhash)
-				a.btn.btn-sm.btn-primary.ms-2(href=`./block/${result.getblock.nextblockhash}`, title=`Block ${(result.getblock.height + 1).toLocaleString()}`, data-bs-toggle="tooltip")
+				a.btn.btn-sm.btn-primary.ms-2(href=`./block/${result.getblock.nextblockhash}`, title=`Block ${(result.getblock.height + 1).toString()}`, data-bs-toggle="tooltip")
 					span.d-none.d-md-inline.ms-1 Next Block
 					span.ms-md-1 &rarr;
 			else
@@ -67,7 +67,7 @@ block content
 				+contentSection("Summary")
 					+summaryRow(8)
 						+summaryItem("Height")
-							| #{result.getblock.height.toLocaleString()}
+							| #{result.getblock.height.toString()}
 							
 						+summaryItem("Confirmations")
 							+confirmations(result.getblock.confirmations, false)
@@ -131,7 +131,7 @@ block content
 
 							+summaryItem("Min / Max Rates", null, "sat/vB")
 								if (result.blockstats.minfeerate || result.blockstats.minfeerate == 0)
-									span #{result.blockstats.minfeerate.toLocaleString()}
+									span #{result.blockstats.minfeerate.toString()}
 									
 								else
 									span ?
@@ -139,7 +139,7 @@ block content
 								span.mx-2 -
 
 								if (result.blockstats.maxfeerate)
-									span #{result.blockstats.maxfeerate.toLocaleString()}
+									span #{result.blockstats.maxfeerate.toString()}
 									
 								else
 									span ?
@@ -165,8 +165,8 @@ block content
 					+summaryRow(6 + (result.getblock.weight ? 1 : 0) + (result.getblock.size ? 1 : 0) + (result.blockstats ? 1 : 0) + (result.blockstats && result.blockstats.utxo_increase ? 1 : 0) + (result.blockstats && result.blockstats.maxtxsize ? 1 : 0))
 						if (result.getblock.weight)
 							+summaryItem("Weight", null, "wu", "Weight Units")
-								span #{result.getblock.weight.toLocaleString()}
-
+								span #{result.getblock.weight.toString()}
+								| &nbsp;
 								- var full = new Decimal(result.getblock.weight).dividedBy(coinConfig.maxBlockWeight).times(100);
 								- var full2 = full.toDP(2);
 
@@ -182,19 +182,19 @@ block content
 
 						if (result.getblock.size)
 							+summaryItem("Size", null, "B", "Bytes")
-								| #{result.getblock.size.toLocaleString()}
+								| #{result.getblock.size.toString()}
 
 						if (result.blockstats)
 							+summaryItem("Inputs / Outputs", "Total inputs and outputs across all transactions in the block")
 								if (result.blockstats.ins)
-									| #{result.blockstats.ins.toLocaleString()}
+									| #{result.blockstats.ins.toString()}
 								else
 									| 0
 
 								span.text-muted.mx-1 /
 
 								if (result.blockstats.outs)
-									| #{result.blockstats.outs.toLocaleString()}
+									| #{result.blockstats.outs.toString()}
 								else
 									| 1
 
@@ -202,7 +202,7 @@ block content
 							- var difficultyData = utils.formatLargeNumber(result.getblock.difficulty, 3);
 							
 							if (result.getblock.difficulty > 1000)
-								span.border-dotted(title=parseFloat(result.getblock.difficulty).toLocaleString(), data-bs-toggle="tooltip")
+								span.border-dotted(title=parseFloat(result.getblock.difficulty).toString(), data-bs-toggle="tooltip")
 									span #{difficultyData[0]}
 									span  x 10
 									sup #{difficultyData[1].exponent}
@@ -216,19 +216,19 @@ block content
 								- var sizeDeltaData = utils.formatLargeNumber(Math.abs(result.blockstats.utxo_size_inc), 1);
 								- var plusMinus = (result.blockstats.utxo_increase > 0) ? "+" : "";
 
-								span #{plusMinus}#{result.blockstats.utxo_increase.toLocaleString()}
+								span #{plusMinus}#{result.blockstats.utxo_increase.toString()}
 
 						if (result.blockstats && result.blockstats.maxtxsize)
 							+summaryItem("Min / Max Tx Size", null, "B", "Bytes")
 								if (result.blockstats.mintxsize)
-									span #{result.blockstats.mintxsize.toLocaleString()}
+									span #{result.blockstats.mintxsize.toString()}
 								else
 									span 0
 
 								span.text-muted.mx-1 -
 
 								if (result.blockstats.maxtxsize)
-									span #{result.blockstats.maxtxsize.toLocaleString()} 
+									span #{result.blockstats.maxtxsize.toString()} 
 								else
 									span 0
 
@@ -281,14 +281,14 @@ block content
 											
 
 				if (!result.getblock.tx || result.getblock.tx.length == 0)
-					+contentSection(`${txCount.toLocaleString()} Transaction${txCount>1?'s':''}`)
+					+contentSection(`${txCount.toString()} Transaction${txCount>1?'s':''}`)
 						span.me-2(title="This data is unavailable due to blockchain pruning", data-bs-toggle="tooltip")
 							i.bi-backspace.text-danger
 						
 						| Transaction details unavailable due to blockchain pruning
 						
 				else
-					+contentSection(`${txCount.toLocaleString()} Transaction${txCount == 1 ? "" : "s"}`, false, "blockPageShowTxDetails", true, false)
+					+contentSection(`${txCount.toString()} Transaction${txCount == 1 ? "" : "s"}`, false, "blockPageShowTxDetails", true, false)
 						+txList(result.transactions, txCount, limit, offset, result.txInputsByTransaction, {sharedBlockHeight: result.getblock.height, hidePagination:crawlerBot})
 						
 									

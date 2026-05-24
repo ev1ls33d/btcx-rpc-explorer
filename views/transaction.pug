@@ -16,7 +16,7 @@ block content
 			+contentSection("Summary")
 				+summaryRow(2)
 					+summaryItem("Block")
-						a(href=`./block/${block.hash}`) ##{block.height.toLocaleString()}
+						a(href=`./block/${block.hash}`) ##{block.height.toString()}
 
 					+summaryItem("Date / Time")
 						if (block.time)
@@ -116,7 +116,7 @@ block content
 
 						else
 							+summaryItem("Block")
-								a(href=`./block/${result.getrawtransaction.blockhash}`) #{result.getblock.height.toLocaleString()}
+								a(href=`./block/${result.getrawtransaction.blockhash}`) #{result.getblock.height.toString()}
 								small.ms-2.text-muted
 									| (
 									+confirmations(tx.confirmations)
@@ -203,22 +203,22 @@ block content
 
 						+summaryItem("Size", null, "vB")
 							if (tx.vsize !== undefined)
-								span #{tx.vsize.toLocaleString()}
+								span #{tx.vsize.toString()}
 							else
 								span -
 
 							if (tx.size != tx.vsize && tx.size !== undefined)
 								span.small.text-muted.ms-2 (
-									span.border-dotted(title=`Raw size: ${tx.size.toLocaleString()} B`, data-bs-toggle="tooltip") #{tx.size.toLocaleString()}
+									span.border-dotted(title=`Raw size: ${tx.size.toString()} B`, data-bs-toggle="tooltip") #{tx.size.toString()}
 									| )
 
-						+summaryItem("Raw Data", `The raw transaction consisting of ${result.getrawtransaction.hex.length.toLocaleString()} hexadecimal bytes.`, "hex")
+						+summaryItem("Raw Data", `The raw transaction consisting of ${result.getrawtransaction.hex.length.toString()} hexadecimal bytes.`, "hex")
 							| #{utils.ellipsizeMiddle(result.getrawtransaction.hex, 12)}
 							+copyTextButton(result.getrawtransaction.hex)
 
 						if (tx.weight)
 							+summaryItem("Weight", null, "wu", "Weight Units")
-								span #{tx.weight.toLocaleString()}
+								span #{tx.weight.toString()}
 
 						if (valueDestroyed)
 							+summaryItem("Value Destroyed", "The miner of this transaction's block failed to collect this value. As a result, it is permanently lost.")
@@ -230,7 +230,7 @@ block content
 							+summaryItem("Locktime", "A specification of the earliest that a transaction may be mined. If this value is &leq; 500M, the value is interpreted as a block height; otherwise, it is interpreted as a unix timestamp.")
 								if (tx.locktime < 500000000 && !isTxConfirmed)
 									span.me-1 
-									a.border-dotted(href=`./block-height/${result.getrawtransaction.locktime}`, title=`May be mined at this block height, or later`, data-bs-toggle="tooltip") #{result.getrawtransaction.locktime.toLocaleString()}
+									a.border-dotted(href=`./block-height/${result.getrawtransaction.locktime}`, title=`May be mined at this block height, or later`, data-bs-toggle="tooltip") #{result.getrawtransaction.locktime.toString()}
 
 								else
 									+timestamp(result.getrawtransaction.locktime)
@@ -246,7 +246,7 @@ block content
 
 
 				
-				- var inputsOutputsSectionTitle = `${tx.vin.length.toLocaleString()} Input${tx.vin.length == 1 ? "" : "s"}, ${tx.vout.length.toLocaleString()} Output${tx.vout.length == 1 ? "" : "s"}`;
+				- var inputsOutputsSectionTitle = `${tx.vin.length.toString()} Input${tx.vin.length == 1 ? "" : "s"}, ${tx.vout.length.toString()} Output${tx.vout.length == 1 ? "" : "s"}`;
 				
 				+sectionTitleBlock
 					.clearfix
@@ -284,7 +284,7 @@ block content
 				if (mempoolDetails)
 					if (mempoolDetails.ancestors.length > 0)
 						- var ancestorDesc = "Ancestor Transactions are transactions whose outputs are being spent by this transaction. All ancestors must be confirmed before this transaction can be confirmed (though they can be confirmed in the same block).";
-						+sectionTitle(`${mempoolDetails.ancestors.length.toLocaleString()} Unconfirmed Ancestor Transaction${mempoolDetails.ancestors.length == 1 ? "" : "s"}`, false, null, null, null, ancestorDesc)
+						+sectionTitle(`${mempoolDetails.ancestors.length.toString()} Unconfirmed Ancestor Transaction${mempoolDetails.ancestors.length == 1 ? "" : "s"}`, false, null, null, null, ancestorDesc)
 
 						+contentSection
 							ol.mb-0
@@ -294,7 +294,7 @@ block content
 
 					if (mempoolDetails.descendants.length > 0)
 						- var descendantDesc = "Descendant Transactions are transactions that spend outputs created by this transaction. This transaction (and all other ancestors transactions) must be confirmed before a descendant transaction can be confirmed (though they can be confirmed in the same block).";
-						+sectionTitle(`${mempoolDetails.descendants.length.toLocaleString()} Unconfirmed Descendant Transaction${mempoolDetails.descendants.length == 1 ? "" : "s"}`, false, null, null, null, descendantDesc)
+						+sectionTitle(`${mempoolDetails.descendants.length.toString()} Unconfirmed Descendant Transaction${mempoolDetails.descendants.length == 1 ? "" : "s"}`, false, null, null, null, descendantDesc)
 
 						+contentSection
 								ol.mb-0
@@ -316,7 +316,7 @@ block content
 									th
 										a.badge.card-highlight.border(data-bs-toggle="tooltip", title=`Input #${vinIndex}`, style="white-space: nowrap;")
 											i.bi-arrow-right.text-danger.me-1
-											span.font-monospace #{vinIndex.toLocaleString()}
+											span.font-monospace #{vinIndex.toString()}
 
 									td.word-wrap.text-break
 										if (vin.coinbase)
@@ -342,7 +342,7 @@ block content
 											each witnessItem, witnessIndex in vin.txinwitness
 												if (witnessIndex < maxWitnessDisplayCount)
 													span.me-2(class=(witnessIndex > 0 ? "mt-2" : false))
-														span.text-tiny.text-muted.me-1 ##{witnessIndex.toLocaleString()}
+														span.text-tiny.text-muted.me-1 ##{witnessIndex.toString()}
 
 														if (witnessItem.length == 0)
 															span.text-muted.text-tiny (empty)
@@ -351,7 +351,7 @@ block content
 													//.d-inline-block.small.border.rounded-1.p-1.px-2.card-highlight.word-wrap(class=(witnessIndex < (vin.txinwitness.length - 1) ? "mb-2" : false)) #{witnessItem}
 
 											if (vin.txinwitness.length > maxWitnessDisplayCount)
-												span.text-muted.text-tiny.fw-bold (#{(vin.txinwitness.length - maxWitnessDisplayCount).toLocaleString()} more witness items)
+												span.text-muted.text-tiny.fw-bold (#{(vin.txinwitness.length - maxWitnessDisplayCount).toString()} more witness items)
 
 										
 						
@@ -368,7 +368,7 @@ block content
 									th
 										a.badge.card-highlight.border.fw-normal(data-bs-toggle="tooltip", title=`Output #${(voutIndex + 1)}`, style="white-space: nowrap;")
 											i.bi-arrow-right.text-success.me-1
-											span.font-monospace #{voutIndex.toLocaleString()}
+											span.font-monospace #{voutIndex.toString()}
 
 									td.word-wrap
 										if (vout.scriptPubKey && vout.scriptPubKey.asm)
@@ -453,8 +453,8 @@ block endOfBody
 
 			}).done(res => {
 				if (res.included) {
-					$("#next-block-index").text((res.index + 1).toLocaleString());
-					$("#next-block-count").text(res.txCount.toLocaleString());
+					$("#next-block-index").text((res.index + 1).toString());
+					$("#next-block-count").text(res.txCount.toString());
 					$("#alert-included-next-block").show();
 				}
 			});

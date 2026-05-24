@@ -116,7 +116,7 @@ block endOfBody
 				var percent = new Decimal(res.done).dividedBy(res.count).times(100);
 				
 				$("#data-progress").css("width", `${percent.toDP(0)}%`);
-				$("#progress-text").html(`<span class='fw-bold d-inline-block' style='width: 55px;'>${percent.toDP(1)}%</span><span class='small fw-light ms-2'>(${res.done.toLocaleString()} of ${res.count.toLocaleString()})</span>`);
+				$("#progress-text").html(`<span class='fw-bold d-inline-block' style='width: 55px;'>${percent.toDP(1)}%</span><span class='small fw-light ms-2'>(${res.done.toString()} of ${res.count.toString()})</span>`);
 
 				if (res.done == res.count) {
 					clearInterval(statusInterval);
@@ -190,7 +190,7 @@ block endOfBody
 
 				var blockHeightsHtml = "";
 				for (var j = 0; j < minerSummary.blocks.length; j++) {
-					blockHeightsHtml += `<li><a href='./block-height/${minerSummary.blocks[j]}'>${minerSummary.blocks[j].toLocaleString()}</a></li>`;
+					blockHeightsHtml += `<li><a href='./block-height/${minerSummary.blocks[j]}'>${minerSummary.blocks[j].toString()}</a></li>`;
 				}
 				blockHeightsHtml = `<ol>${blockHeightsHtml}</ol>`
 				
@@ -205,7 +205,7 @@ block endOfBody
 					row.find(".miner-name").text(minerName);
 				}
 
-				row.find(".miner-block-count").html(`<a href='javascript:void(0);' onclick="javascipt:$('#miner-block-heights-${i}').toggle();" title="Click to show ${minerSummary.blocks.length.toLocaleString()} block height(s)" data-bs-toggle="tooltip">${minerSummary.blocks.length.toLocaleString()}</a><br/><small id='miner-block-heights-${i}' style='display: none;'>${blockHeightsHtml}</small>`);
+				row.find(".miner-block-count").html(`<a href='javascript:void(0);' onclick="javascipt:$('#miner-block-heights-${i}').toggle();" title="Click to show ${minerSummary.blocks.length.toString()} block height(s)" data-bs-toggle="tooltip">${minerSummary.blocks.length.toString()}</a><br/><small id='miner-block-heights-${i}' style='display: none;'>${blockHeightsHtml}</small>`);
 				row.find(".miner-block-percent").text(`(${new Decimal(minerSummary.blocks.length).dividedBy(summary.overall.blockCount).times(100).toDecimalPlaces(1)}%)`);
 				
 				var subsidyPlusFees = new Decimal(minerSummary.totalSubsidy).plus(new Decimal(minerSummary.totalFees));
@@ -245,7 +245,7 @@ block endOfBody
 
 
 			var totalsRow = $("#miner-summary-totals");
-			totalsRow.find(".miner-block-count").text(summary.overall.blockCount.toLocaleString());
+			totalsRow.find(".miner-block-count").text(summary.overall.blockCount.toString());
 			totalsRow.find(".miner-subsidy-fees").text(totalSubsidyPlusFees);
 
 			updateCurrencyValue(totalsRow.find(".miner-subsidy-fees"), totalSubsidyPlusFees);

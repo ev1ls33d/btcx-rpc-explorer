@@ -42,7 +42,7 @@ block content
 										td.small.text-muted #{index + 1}
 
 										td #{item[0]}
-										td.text-end #{item[1].toLocaleString()}
+										td.text-end #{item[1].toString()}
 
 				.col-md-6
 					+contentSection("Top Service Flags")
@@ -62,7 +62,7 @@ block content
 												| 0x
 
 											| #{item[0].replace(/^0+/, '')}
-										td.text-end #{item[1].toLocaleString()}
+										td.text-end #{item[1].toString()}
 
 
 			.row
@@ -81,7 +81,7 @@ block content
 											td.small.text-muted #{index + 1}
 
 											td #{item[0]}
-											td.text-end #{item[1].toLocaleString()}
+											td.text-end #{item[1].toString()}
 
 				if (peerSummary.connectionTypeSummary)
 					.col-md-6
@@ -98,10 +98,10 @@ block content
 											td.small.text-muted #{index + 1}
 
 											td #{item[0]}
-											td.text-end #{item[1].toLocaleString()}
+											td.text-end #{item[1].toString()}
 							
 
-			+contentSection(`${peerSummary.getpeerinfo.length.toLocaleString()} Peer${peerSummary.getpeerinfo.length == 1 ? "" : "s"}`)
+			+contentSection(`${peerSummary.getpeerinfo.length.toString()} Peer${peerSummary.getpeerinfo.length == 1 ? "" : "s"}`)
 				table.table.table-borderless.table-striped.table-responsive-sm.data-table.mt-4
 					thead
 						tr

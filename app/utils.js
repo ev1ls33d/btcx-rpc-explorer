@@ -90,7 +90,7 @@ if (fs.existsSync(ipCacheFile)) {
 
 		ipMemoryCache = JSON.parse(rawData);
 
-		debugLog(`Loaded ip address cache (${rawData.length.toLocaleString()} bytes)`);
+		debugLog(`Loaded ip address cache (${rawData.length.toString()} bytes)`);
 
 	} catch (err) {
 		// failed to read cache file, delete it in case it's corrupted
@@ -336,10 +336,7 @@ function formatCurrencyAmountInSmallestUnits(amount, forcedDecimalPlaces) {
 
 // ref: https://stackoverflow.com/a/2901298/673828
 function addThousandsSeparators(x) {
-	let parts = x.toString().split(".");
-	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-	return parts.join(".");
+	return x.toString();
 }
 
 function satoshisPerUnitOfLocalCurrency(localCurrency) {
@@ -1434,13 +1431,13 @@ function difficultyAdjustmentEstimates(eraStartBlockHeader, currentBlockHeader) 
 
 
 	let diffAdjPercent = blockRatioPercent.minus(new Decimal(100));
-	let diffAdjText = `Blocks during the current difficulty epoch have taken this long, on average, to be mined. If this pace continues, then in ${blocksUntilDifficultyAdjustment.toLocaleString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}) the difficulty will adjust upward: +${diffAdjPercent.toDP(1)}%`;
+	let diffAdjText = `Blocks during the current difficulty epoch have taken this long, on average, to be mined. If this pace continues, then in ${blocksUntilDifficultyAdjustment.toString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}) the difficulty will adjust upward: +${diffAdjPercent.toDP(1)}%`;
 	let diffAdjSign = "+";
 	let textColorClass = "text-success";
 
 	if (predictedBlockCount > blockCount) {
 		diffAdjPercent = new Decimal(100).minus(blockRatioPercent).times(-1);
-		diffAdjText = `Blocks during the current difficulty epoch have taken this long, on average, to be mined. If this pace continues, then in ${blocksUntilDifficultyAdjustment.toLocaleString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}) the difficulty will adjust downward: -${diffAdjPercent.toDP(1)}%`;
+		diffAdjText = `Blocks during the current difficulty epoch have taken this long, on average, to be mined. If this pace continues, then in ${blocksUntilDifficultyAdjustment.toString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}) the difficulty will adjust downward: -${diffAdjPercent.toDP(1)}%`;
 		diffAdjSign = "-";
 		textColorClass = "text-danger";
 	}
@@ -1464,7 +1461,7 @@ function difficultyAdjustmentEstimates(eraStartBlockHeader, currentBlockHeader) 
 		dt: dt,
 		predictedBlockCount: predictedBlockCount,
 
-		//nameDesc: `Estimate for the difficulty adjustment that will occur in ${blocksUntilDifficultyAdjustment.toLocaleString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}). This is calculated using the average block time over the last ${heightDiff} block(s). This estimate becomes more reliable as the difficulty epoch nears its end.`,
+		//nameDesc: `Estimate for the difficulty adjustment that will occur in ${blocksUntilDifficultyAdjustment.toString()} block${blocksUntilDifficultyAdjustment == 1 ? "" : "s"} (${daysUntilAdjustmentStr}). This is calculated using the average block time over the last ${heightDiff} block(s). This estimate becomes more reliable as the difficulty epoch nears its end.`,
 	};
 }
 

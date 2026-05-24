@@ -37,7 +37,7 @@ block content
 
 							tr
 								td
-									small.text-muted #{(blockIndex + 1).toLocaleString()}
+									small.text-muted #{(blockIndex + 1).toString()}
 
 								td.text-end
 									| +#{(blockIndex + 1)}
@@ -52,7 +52,7 @@ block content
 								//- var timeDiff = null;
 								
 								
-								td.text-end #{(block.txCount || 0).toLocaleString()}
+								td.text-end #{(block.txCount || 0).toString()}
 
 								td.text-end
 									| #{block.avgFeeRate}

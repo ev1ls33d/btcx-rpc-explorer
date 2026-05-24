@@ -17,7 +17,7 @@ block content
 			+contentSection("Summary")
 				+summaryRow(3)
 					+summaryItem("Transactions")
-						| #{blockTemplate.transactions.length.toLocaleString()}
+						| #{blockTemplate.transactions.length.toString()}
 
 
 					+summaryItem("Fee Rates", "Minimum / Median / Maximum fee rates for transaction expected to be included in the next block.", "sat/vB")
@@ -45,7 +45,7 @@ block content
 						+valueDisplay(totalFees)
 
 			if (true)
-				+contentSection(blockTemplate.transactions.length.toLocaleString() + " Transaction" + (blockTemplate.transactions.length == 1 ? "" : "s"))
+				+contentSection(blockTemplate.transactions.length.toString() + " Transaction" + (blockTemplate.transactions.length == 1 ? "" : "s"))
 					.table-responsive
 						table.table.table-borderless.table-striped.mb-0
 							thead
@@ -66,7 +66,7 @@ block content
 								each tx, txIndex in blockTemplate.transactions
 									tr
 										td
-											small.text-muted #{(txIndex).toLocaleString()}
+											small.text-muted #{(txIndex).toString()}
 
 										td
 											a(href=`./tx/${tx.txid}`) #{utils.ellipsizeMiddle(tx.txid, 16)}
@@ -84,7 +84,7 @@ block content
 										td.text-end
 											+valueDisplay(new Decimal(tx.fee).dividedBy(coinConfig.baseCurrencyUnit.multiplier))
 
-										td.text-end #{tx.weight.toLocaleString()}
+										td.text-end #{tx.weight.toString()}
 										//td #{tx.depends.map(x => `#${(x - 1)}`).join(", ")}
 
 

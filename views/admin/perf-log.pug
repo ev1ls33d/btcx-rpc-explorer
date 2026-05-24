@@ -23,7 +23,7 @@ block content
 			tbody
 				each item, itemIndex in perfLog
 					tr(xclass=(itemIndex % 2 == 0 ? "bg-dark" : false))
-						td #{item.index.toLocaleString()}
+						td #{item.index.toString()}
 						td #{item.id}
 						td #{item.action}
 						td

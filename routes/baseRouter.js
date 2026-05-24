@@ -1107,7 +1107,7 @@ router.get("/block-height/:blockHeight", asyncHandler(async (req, res, next) => 
 				res.locals.metaDesc = "";
 			}
 		} else {
-			res.locals.metaTitle = `Bitcoin-POCX Block #${blockHeight.toLocaleString()}`;
+			res.locals.metaTitle = `Bitcoin-POCX Block #${blockHeight.toString()}`;
 			res.locals.metaDesc = "";
 		}
 		

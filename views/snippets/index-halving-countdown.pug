@@ -3,7 +3,7 @@ include ../includes/shared-mixins.pug
 if (nextHalvingData.nextHalvingIndex > -1)
 	+summaryRow(5)
 		+summaryItem("Blocks Remaining")
-			| #{nextHalvingData.blocksUntilNextHalving.toLocaleString()}
+			| #{nextHalvingData.blocksUntilNextHalving.toString()}
 
 		+summaryItem("Time Remaining", "The estimated time until halving, based on the number of blocks remaining and the current mining rate (up until the next difficulty adjustment).")
 			+timeAgo(nextHalvingData.nextHalvingDate.getTime() / 1000, {showPlus:false})
@@ -12,7 +12,7 @@ if (nextHalvingData.nextHalvingIndex > -1)
 			+timestamp(nextHalvingData.nextHalvingDate.getTime() / 1000, {includeAgo:false, separateUtcDateIfNeeded:true})
 
 		+summaryItem("Block Height", "The block height at which the new block subsidy will begin.")
-			| #{nextHalvingData.nextHalvingBlock.toLocaleString()}
+			| #{nextHalvingData.nextHalvingBlock.toString()}
 
 		+summaryItem("New Subsidy", "The new supply that will be created (and rewarded to the winning miner) for each new block during the next halving's era.")
 			- let subsidy = coinConfig.blockRewardFunction(nextHalvingData.nextHalvingBlock, global.activeBlockchain);

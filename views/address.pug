@@ -92,7 +92,7 @@ block content
 
 								if (addressDetails && addressDetails.txCount != null)
 									+summaryItem("Transactions")
-										| #{addressDetails.txCount.toLocaleString()}
+										| #{addressDetails.txCount.toString()}
 
 								if (addressDetails && addressDetails.balanceSat !== undefined)
 									+summaryItem("Confirmed Balance")
@@ -186,7 +186,7 @@ block content
 
 					.clearfix
 						.float-start
-							+sectionTitle(addressDetails && addressDetails.txCount ? `${addressDetails.txCount.toLocaleString()} Transaction${addressDetails.txCount == 1 ? "" : "s"}` : "Transactions")
+							+sectionTitle(addressDetails && addressDetails.txCount ? `${addressDetails.txCount.toString()} Transaction${addressDetails.txCount == 1 ? "" : "s"}` : "Transactions")
 						.float-start
 							if (config.addressApi)
 								if (config.addressApi == "electrum" || config.addressApi == "electrumx")
@@ -284,7 +284,7 @@ block content
 										each txid, txidIndex in txids
 											tr
 												td.text-end
-													small.text-muted #{(txidIndex + offset + 1).toLocaleString()}
+													small.text-muted #{(txidIndex + offset + 1).toString()}
 												td
 													- var blockHeight = addressDetails.blockHeightsByTxid[txid];
 													- var blockHeightParam = blockHeight > 0 ? `@${blockHeight}` : "";

@@ -142,7 +142,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 	if (txCount > limit && !options.hidePagination)
 		.rounded-0.rounded-top.bg-content.border
 			.p-3
-				h6.fw-normal.mb-2 #{offset.toLocaleString()} - #{Math.min(offset + limit - 1, txCount - 1).toLocaleString()} of #{txCount.toLocaleString()}
+				h6.fw-normal.mb-2 #{offset.toString()} - #{Math.min(offset + limit - 1, txCount - 1).toString()} of #{txCount.toString()}
 				+pagination(limit, offset, null, txCount, paginationBaseUrl)
 					
 	
@@ -169,9 +169,9 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 				.clearfix
 					.float-start
 						.mb-3.word-wrap
-							span.badge.bg-primary.fw-normal.me-2(title=`#${(txIndex + offset).toLocaleString()}`, data-bs-toggle="tooltip")
+							span.badge.bg-primary.fw-normal.me-2(title=`#${(txIndex + offset).toString()}`, data-bs-toggle="tooltip")
 								span.d-inline.d-sm-none.me-1 tx
-								| ##{(txIndex + offset).toLocaleString()}
+								| ##{(txIndex + offset).toString()}
 							
 							a.d-inline.d-md-none.small(href=`./tx/${tx.txid}${tx_height_param}`) #{utils.ellipsizeMiddle(tx.txid, 24)}
 							a.d-none.d-md-inline.d-lg-none(href=`./tx/${tx.txid}${tx_height_param}`) #{utils.ellipsizeMiddle(tx.txid, 24)}
@@ -236,7 +236,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 
 									if (txFee > 0)
 										span.ms-2 (
-											| #{parseInt(txFee.dividedBy(tx.vsize || tx.size || 1).times(coinConfig.baseCurrencyUnit.multiplier)).toLocaleString()}
+											| #{parseInt(txFee.dividedBy(tx.vsize || tx.size || 1).times(coinConfig.baseCurrencyUnit.multiplier)).toString()}
 											span.text-tiny.ms-1 sat/vB
 											span )
 								
@@ -291,7 +291,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 							if (options.showConfirmations)
 								+darkBadge
 									if (txBlockHeight > 0 || tx.txid == '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b')
-										span(title=`${(options.currentBlockHeight - txBlockHeight + 1).toLocaleString()} confirmation${(options.currentBlockHeight - txBlockHeight > 1) ? "s" :""}`, data-bs-toggle="tooltip")
+										span(title=`${(options.currentBlockHeight - txBlockHeight + 1).toString()} confirmation${(options.currentBlockHeight - txBlockHeight > 1) ? "s" :""}`, data-bs-toggle="tooltip")
 											i.bi-lock.me-1
 											- var confCount = options.currentBlockHeight - txBlockHeight + 1;
 											- var confData = utils.formatLargeNumber(confCount);
@@ -334,7 +334,7 @@ mixin txList(visibleTxs, txCount, limit, offset, inputsByTxid, options={})
 		.rounded-0.rounded-bottom.bg-content.border
 			.p-3
 				if (!crawlerBot && txCount > limit)
-					h6.fw-normal.mb-2 #{offset.toLocaleString()} - #{Math.min(offset + limit - 1, txCount - 1).toLocaleString()} of #{txCount.toLocaleString()}
+					h6.fw-normal.mb-2 #{offset.toString()} - #{Math.min(offset + limit - 1, txCount - 1).toString()} of #{txCount.toString()}
 					+pagination(limit, offset, null, txCount, paginationBaseUrl)
 
 
@@ -404,11 +404,11 @@ mixin _valueDisplaySat(val, summarizeMin=Infinity, summarizeDecimals=3)
 		//span #{JSON.stringify(parts)}
 		- var largeNumberData = utils.formatLargeNumberSignificant(parts.intVal, summarizeDecimals >= 0 ? summarizeDecimals : 3);
 		//span #{JSON.stringify(largeNumberData)} #{parts.intVal}
-		span(title=parts.intVal.toLocaleString(), data-bs-toggle="tooltip") #{largeNumberData[0]}
+		span(title=parts.intVal.toString(), data-bs-toggle="tooltip") #{largeNumberData[0]}
 		span #{largeNumberData[1].abbreviation}
 		
 	else
-		span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{parts.intVal.toLocaleString()}
+		span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{parts.intVal.toString()}
 
 
 	if (exchangeRates)
@@ -431,7 +431,7 @@ mixin _valueDisplayLocal(val, summarizeMin=Infinity, summarizeDecimals=3)
 	if (Math.abs(parts.intVal) >= summarizeMin)
 		- var largeNumberData = utils.formatLargeNumberSignificant(parts.intVal, summarizeDecimals >= 0 ? summarizeDecimals : 3);
 		//span #{JSON.stringify(largeNumberData)} #{parts.intVal}
-		span.border-dotted(title=`${global.currencySymbols[userSettings.localCurrency]}${parts.intVal.toLocaleString()}<br/>${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}`, data-bs-toggle="tooltip", data-bs-html="true")
+		span.border-dotted(title=`${global.currencySymbols[userSettings.localCurrency]}${parts.intVal.toString()}<br/>${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}`, data-bs-toggle="tooltip", data-bs-html="true")
 			span #{largeNumberData[0]}
 			span.ms-1 #{largeNumberData[1].textDesc}
 
@@ -465,7 +465,7 @@ mixin valueDisplaySpecial(val, maxDecimals=-1, summarizeAlways=false, summarizeM
 				span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{largeNumberData[0]} #{largeNumberData[1].textDesc}
 			
 			else if (maxDecimals == 0)
-				span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{parts.intVal.toLocaleString()}
+				span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{parts.intVal.toString()}
 
 			else if (maxDecimals > 0)
 				span(class=(localCurrencyDisplay ? "border-dotted" : false), title=(localCurrencyDisplay ? `${utils.formatCurrencyAmount(val, coinConfig.defaultCurrencyUnit.name.toLowerCase()).simpleVal} ${coinConfig.ticker}` : false), data-bs-toggle=(localCurrencyDisplay ? "tooltip" : false)) #{parts.val}
@@ -492,11 +492,11 @@ mixin valueDisplaySpecial(val, maxDecimals=-1, summarizeAlways=false, summarizeM
 
 mixin confirmations(confirmations, abbreviated=true)
 	if (confirmations < 6)
-		span.text-warning.border-dotted(title="Fewer than 6 confirmations is generally considered <b>unsettled</b> for high-value transactions because block <b>re-organizations</b> that could affect them have reasonable probability.", data-bs-toggle="tooltip", data-bs-html="true") #{confirmations.toLocaleString()}
+		span.text-warning.border-dotted(title="Fewer than 6 confirmations is generally considered <b>unsettled</b> for high-value transactions because block <b>re-organizations</b> that could affect them have reasonable probability.", data-bs-toggle="tooltip", data-bs-html="true") #{confirmations.toString()}
 			i.bi-unlock.ms-1
 	else
 		span.border-dotted.text-success(title="6 confirmations is generally considered <b>settled</b>. High-value transactions may require more;<br/>Low-value transactions may require fewer.", data-bs-toggle="tooltip", data-bs-html="true")
-			| #{abbreviated && confirmations > 1000 ? `${Math.floor(confirmations/1000)}k` : confirmations.toLocaleString()}
+			| #{abbreviated && confirmations > 1000 ? `${Math.floor(confirmations/1000)}k` : confirmations.toString()}
 			i.bi-check2.ms-1
 
 
@@ -766,7 +766,7 @@ mixin blockCountdown(title, blocksLeft)
 					span.me-2 #{title}:
 
 					span.lead(id=`countdown-time-${countdownId}`)
-						| #{blocksLeft.toLocaleString()} block#{blocksLeft > 1 ? "s" : ""}
+						| #{blocksLeft.toString()} block#{blocksLeft > 1 ? "s" : ""}
 						
 						- var secondsToGo = 10 * 60 * blocksLeft;
 						- var minutesToGo = secondsToGo / 60;
@@ -886,11 +886,11 @@ mixin numWithMutedDecimals(numString)
 		- var n = numString.substring(0, numString.indexOf("."));
 		- var dec = numString.substring(numString.indexOf("."));
 
-		span #{n.toLocaleString()}
+		span #{n.toString()}
 		small.text-muted #{dec}
 
 	else
-		span #{parseInt(numString).toLocaleString()}
+		span #{parseInt(numString).toString()}
 				
 
 mixin blockRangeFilters

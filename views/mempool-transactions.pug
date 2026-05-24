@@ -11,7 +11,7 @@ block content
 			code #{JSON.stringify(transactions, null, 4)}
 
 	if (txCount > 0)
-		+contentSection(`${txCount.toLocaleString()} Transaction${txCount == 1 ? "" : "s"}`, false, null, false, false)
+		+contentSection(`${txCount.toString()} Transaction${txCount == 1 ? "" : "s"}`, false, null, false, false)
 			+txList(transactions, txCount, limit, offset, txInputsByTransaction, {mempoolDetailsByTxid:mempoolDetailsByTxid})
 
 				

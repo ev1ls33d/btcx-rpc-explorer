@@ -699,7 +699,7 @@ router.get("/mining/hashrate", asyncHandler(async (req, res, next) => {
 						
 						string1: `${summary[0]}x10^${summary[1].exponent}`,
 						string2: `${summary[0]}e${summary[1].exponent}`,
-						string3: `${(summary[0] * summary[1].val).toLocaleString()}`
+						string3: `${(summary[0] * summary[1].val).toString()}`
 					};
 
 					resolve();

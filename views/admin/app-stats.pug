@@ -29,11 +29,11 @@ block content
 					each item, itemIndex in performanceStats
 						tr
 							td #{item[0]}
-							td.text-end #{Math.round(item[1].min).toLocaleString()}
-							td.text-end #{Math.round(item[1].avg).toLocaleString()}
-							td.text-end #{Math.round(item[1].max).toLocaleString()}
-							td.text-end #{Math.round(item[1].sum).toLocaleString()}
-							td.text-end #{Math.round(item[1].count).toLocaleString()}
+							td.text-end #{Math.round(item[1].min).toString()}
+							td.text-end #{Math.round(item[1].avg).toString()}
+							td.text-end #{Math.round(item[1].max).toString()}
+							td.text-end #{Math.round(item[1].sum).toString()}
+							td.text-end #{Math.round(item[1].count).toString()}
 							td.text-end
 								- var dt = moment.duration(new Date().getTime() - item[1].firstDate.getTime());
 								span #{dt.format()}
@@ -54,7 +54,7 @@ block content
 					each item, itemIndex in eventStats
 						tr
 							td #{item[0]}
-							td.text-end #{item[1].toLocaleString()}
+							td.text-end #{item[1].toString()}
 
 
 	+contentSection("Value Stats")
@@ -75,11 +75,11 @@ block content
 					each item, itemIndex in valueStats
 						tr
 							td #{item[0]}
-							td.text-end #{Math.round(item[1].min).toLocaleString()}
-							td.text-end #{Math.round(item[1].avg).toLocaleString()}
-							td.text-end #{Math.round(item[1].max).toLocaleString()}
-							td.text-end #{Math.round(item[1].sum).toLocaleString()}
-							td.text-end #{Math.round(item[1].count).toLocaleString()}
+							td.text-end #{Math.round(item[1].min).toString()}
+							td.text-end #{Math.round(item[1].avg).toString()}
+							td.text-end #{Math.round(item[1].max).toString()}
+							td.text-end #{Math.round(item[1].sum).toString()}
+							td.text-end #{Math.round(item[1].count).toString()}
 							td.text-end
 								- var dt = moment.duration(new Date().getTime() - item[1].firstDate.getTime());
 								span #{dt.format()}

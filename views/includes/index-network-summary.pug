@@ -84,7 +84,7 @@ if (exchangeRates)
 					small.ms-1.text-muted #{formatData.unit}
 
 			if (networkVolume)
-				+summaryItem("24hr Volume", `Total output of all transactions over the last 24hrs (blocks: [#${networkVolume.d1.endBlock.toLocaleString()} - #${networkVolume.d1.startBlock.toLocaleString()}]).`)
+				+summaryItem("24hr Volume", `Total output of all transactions over the last 24hrs (blocks: [#${networkVolume.d1.endBlock.toString()} - #${networkVolume.d1.startBlock.toString()}]).`)
 					- var currencyValue = parseInt(networkVolume.d1.amt);
 					- var currencyValueDecimals = 0;
 
@@ -140,13 +140,13 @@ if (exchangeRates)
 			
 			+summaryItem("Next Halving", "Details about when the next block subsidy halving will occur", null, null, "icon:bi-square-half", "./next-halving", "View next halving details")
 
-				span.border-dotted(title=`${nextHalvingData.blocksUntilNextHalving.toLocaleString()} blocks left, ${halvingProgressPercent.toDP(2)}% complete`, data-bs-toggle="tooltip")
+				span.border-dotted(title=`${nextHalvingData.blocksUntilNextHalving.toString()} blocks left, ${halvingProgressPercent.toDP(2)}% complete`, data-bs-toggle="tooltip")
 					if (nextHalvingData.blocksUntilNextHalving > 10000)
 						- let halvingBlocksData = utils.formatLargeNumber(nextHalvingData.blocksUntilNextHalving)
 						| #{parseInt(halvingBlocksData[0])}#{halvingBlocksData[1].abbreviation}
 							
 					else
-						| #{nextHalvingData.blocksUntilNextHalving.toLocaleString()}
+						| #{nextHalvingData.blocksUntilNextHalving.toString()}
 
 
 				- var utcMoment = moment.utc(nextHalvingData.nextHalvingDate);
@@ -167,7 +167,7 @@ if (exchangeRates)
 			- var difficultyData = utils.formatLargeNumber(getblockchaininfo.difficulty, 3);
 			
 			if (getblockchaininfo.difficulty > 1000)
-				span.border-dotted(title=parseFloat(getblockchaininfo.difficulty).toLocaleString(), data-bs-toggle="tooltip")
+				span.border-dotted(title=parseFloat(getblockchaininfo.difficulty).toString(), data-bs-toggle="tooltip")
 					span #{difficultyData[0]}
 					span  x 10
 					sup #{difficultyData[1].exponent}
@@ -195,12 +195,12 @@ if (exchangeRates)
 
 		if (chainTxStats && chainTxStats[7 * targetBlocksPerDay])
 			+summaryItem("7d Transactions", "The total number of transactions that have been confirmed in the blockchain over the last 7 days.")
-				| #{chainTxStats[7 * targetBlocksPerDay].window_tx_count.toLocaleString()}
+				| #{chainTxStats[7 * targetBlocksPerDay].window_tx_count.toString()}
 
 		if (difficultyAdjustmentData)
 			- let progressPercent = new Decimal(difficultyAdjustmentData.calculationBlockCount).dividedBy(difficultyAdjustmentData.calculationBlockCount + difficultyAdjustmentData.blocksLeft).times(100);
 
-			- var desc = `Estimate for the difficulty adjustment that will occur in ${difficultyAdjustmentData.blocksLeft.toLocaleString()} block${difficultyAdjustmentData.blocksLeft == 1 ? "" : "s"} (${difficultyAdjustmentData.timeLeftStr}). This is calculated using the average block time during the current difficulty epoch (currently, the last ${difficultyAdjustmentData.calculationBlockCount.toLocaleString()} block${difficultyAdjustmentData.calculationBlockCount == 1 ? "" : "s"}). Note: This estimate becomes more reliable as the difficulty epoch nears its end.`;
+			- var desc = `Estimate for the difficulty adjustment that will occur in ${difficultyAdjustmentData.blocksLeft.toString()} block${difficultyAdjustmentData.blocksLeft == 1 ? "" : "s"} (${difficultyAdjustmentData.timeLeftStr}). This is calculated using the average block time during the current difficulty epoch (currently, the last ${difficultyAdjustmentData.calculationBlockCount.toString()} block${difficultyAdjustmentData.calculationBlockCount == 1 ? "" : "s"}). Note: This estimate becomes more reliable as the difficulty epoch nears its end.`;
 			
 			if (false)
 				pre
@@ -217,7 +217,7 @@ if (exchangeRates)
 
 					span.text-tiny.text-muted.ms-2
 						| (
-						span.border-dotted(title=`${difficultyAdjustmentData.blocksLeft.toLocaleString()} block${difficultyAdjustmentData.blocksLeft == 1 ? "" : "s"} / ${progressPercent.toDP(1)}% done`, data-bs-toggle="tooltip") #{difficultyAdjustmentData.timeLeftStr}
+						span.border-dotted(title=`${difficultyAdjustmentData.blocksLeft.toString()} block${difficultyAdjustmentData.blocksLeft == 1 ? "" : "s"} / ${progressPercent.toDP(1)}% done`, data-bs-toggle="tooltip") #{difficultyAdjustmentData.timeLeftStr}
 						| )
 
 					
@@ -232,7 +232,7 @@ if (exchangeRates)
 			- var maxSupply = coinConfig.maxSupplyByNetwork[activeBlockchain];
 
 			if (utxoSetSummary)
-				span #{parseFloat(utxoSetSummary.total_amount).toLocaleString()}
+				span #{parseFloat(utxoSetSummary.total_amount).toString()}
 				span.text-tiny.ms-2.text-muted
 					| (
 					span.border-dotted(title=`${new Decimal(utxoSetSummary.total_amount).dividedBy(maxSupply).times(100).toDP(5)}% have been mined into circulation`, data-bs-toggle="tooltip") #{new Decimal(utxoSetSummary.total_amount).dividedBy(maxSupply).times(100).toDP(2, Decimal.ROUND_DOWN)}%
@@ -241,7 +241,7 @@ if (exchangeRates)
 			else
 				- var estimatedSupply = utils.estimatedSupply(getblockchaininfo.blocks);
 
-				span #{parseInt(estimatedSupply).toLocaleString()}
+				span #{parseInt(estimatedSupply).toString()}
 				span.text-tiny.ms-2.text-muted
 					| (
 					span.border-dotted(title=`${estimatedSupply.dividedBy(maxSupply).times(100).toDP(4)}% have been mined into circulation`, data-bs-toggle="tooltip") #{estimatedSupply.dividedBy(maxSupply).times(100).toDP(1)}%
@@ -280,14 +280,14 @@ if (exchangeRates)
 			
 			+summaryItem("Mempool", "The number of unconfirmed transactions in your node's mempool, and the number of blocks needed to confirm those transactions", null, null, "icon:bi-hourglass-split", "./mempool-summary", "View mempool summary details")
 				
-				span.border-dotted(title=`<b># Unconfirmed Transactions</b><br/><span class='text-success'>Low (N ≤ ${thresholds_txCount.warning.toLocaleString()})</span><br/><span class='text-warning'>High (${thresholds_txCount.warning.toLocaleString()} < N ≤ ${thresholds_txCount.danger.toLocaleString()})</span><br/><span class='text-danger'>Very High (N > ${thresholds_txCount.danger.toLocaleString()})</span>`, data-bs-toggle="tooltip", data-bs-html="true")
-					span(class=colorClass_txCount) #{mempoolInfo.size.toLocaleString()}
+				span.border-dotted(title=`<b># Unconfirmed Transactions</b><br/><span class='text-success'>Low (N ≤ ${thresholds_txCount.warning.toString()})</span><br/><span class='text-warning'>High (${thresholds_txCount.warning.toString()} < N ≤ ${thresholds_txCount.danger.toString()})</span><br/><span class='text-danger'>Very High (N > ${thresholds_txCount.danger.toString()})</span>`, data-bs-toggle="tooltip", data-bs-html="true")
+					span(class=colorClass_txCount) #{mempoolInfo.size.toString()}
 					span.text-tiny.text-muted.ms-1 tx
 
 				span.mx-2.text-muted /
 
 				span.small
-					span.border-dotted(title=`<b># Blocks to clear this node's mempool</b><br/><span class='text-success'>Low (N ≤ ${thresholds_blockCount.warning.toLocaleString()})</span><br/><span class='text-warning'>High (${thresholds_blockCount.warning.toLocaleString()} < N ≤ ${thresholds_blockCount.danger.toLocaleString()})</span><br/><span class='text-danger'>Very High (N > ${thresholds_blockCount.danger.toLocaleString()})</span>`, data-bs-toggle="tooltip", data-bs-html="true")
+					span.border-dotted(title=`<b># Blocks to clear this node's mempool</b><br/><span class='text-success'>Low (N ≤ ${thresholds_blockCount.warning.toString()})</span><br/><span class='text-warning'>High (${thresholds_blockCount.warning.toString()} < N ≤ ${thresholds_blockCount.danger.toString()})</span><br/><span class='text-danger'>Very High (N > ${thresholds_blockCount.danger.toString()})</span>`, data-bs-toggle="tooltip", data-bs-html="true")
 						span(class=colorClass_blockCount) #{blockCount.toDP(2)}
 						span.text-tiny.text-muted.ms-1
 							i.bi-box
@@ -377,7 +377,7 @@ if (exchangeRates)
 					if (utxoSetSummary)
 						- var utxoCount = utils.formatLargeNumber(utxoSetSummary.txouts, 2);
 						//| #{utxoCount[0]} #{utxoCount[1].abbreviation}
-						| #{utxoSetSummary.txouts.toLocaleString()}
+						| #{utxoSetSummary.txouts.toString()}
 					else
 						small.text-muted.border-dotted(title=utxoCalculatingDesc, data-bs-toggle="tooltip") calculating...
 

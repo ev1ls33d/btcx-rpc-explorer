@@ -46,7 +46,7 @@ block content
 
 						+summaryItem("Status", "Block download progress or synchronized state")
 							if (getblockchaininfo.initialblockdownload || getblockchaininfo.headers > getblockchaininfo.blocks)
-								span Initial block download progress #{(100 * getblockchaininfo.verificationprogress).toLocaleString()}%
+								span Initial block download progress #{(100 * getblockchaininfo.verificationprogress).toString()}%
 							else
 								span.text-success Synchronized
 
@@ -63,14 +63,14 @@ block content
 								span.text-warning #{getblockchaininfo.chain}
 
 						+summaryItem("Block Count", "Current height of the most-work fully-validated chain. Also number of headers this node has validated")
-							| #{getblockchaininfo.blocks.toLocaleString()}
+							| #{getblockchaininfo.blocks.toString()}
 							if (getblockchaininfo.headers != getblockchaininfo.blocks)
 								br
-								small.text-muted (headers: #{getblockchaininfo.headers.toLocaleString()})
+								small.text-muted (headers: #{getblockchaininfo.headers.toString()})
 
 						+summaryItem("Difficulty", "Mining difficulty (adjusted every 2016 blocks to maintain the time it takes to process one block at around 10 minutes)")
 							- var difficultyData = utils.formatLargeNumber(getblockchaininfo.difficulty, 3);
-							span.border-dotted(title=parseFloat(getblockchaininfo.difficulty).toLocaleString(), data-bs-toggle="tooltip")
+							span.border-dotted(title=parseFloat(getblockchaininfo.difficulty).toString(), data-bs-toggle="tooltip")
 								span #{difficultyData[0]}
 								span  x 10
 								sup #{difficultyData[1].exponent}
@@ -86,7 +86,7 @@ block content
 								small.ms-2.text-muted
 									| (
 									span.border-dotted(title="This is the latest block for which your node has all block data; blocks older than this one have had some or all non-essential details deleted.", data-bs-toggle="tooltip")
-										| #{getblockchaininfo.pruneheight.toLocaleString()}+
+										| #{getblockchaininfo.pruneheight.toString()}+
 									| )
 								
 								if (false)
@@ -144,7 +144,7 @@ block content
 										span.me-2
 											span.text-success active
 											span.text-tiny.text-muted.ms-2 (
-												a.border-dotted(href=`./block-height/${item.height}`, title=`${itemName} has been active since block ${item.height.toLocaleString()}`, data-bs-toggle="tooltip") #{item.height.toLocaleString()}
+												a.border-dotted(href=`./block-height/${item.height}`, title=`${itemName} has been active since block ${item.height.toString()}`, data-bs-toggle="tooltip") #{item.height.toString()}
 												| +)
 
 									else
@@ -154,7 +154,7 @@ block content
 											span.me-2
 												span.text-warning.text-lowercase #{bip_status}
 												small.text-muted.ms-2 (
-													a.border-dotted(title=`${itemName.toUpperCase()} ${bip_status.replace("_", " ")} since block ${item[bip].since.toLocaleString()} with BIP${bip.charAt(3)} and LockinOnTimeout=${item[bip].lockinontimeout}`, data-bs-toggle="tooltip") #{item[bip].since}
+													a.border-dotted(title=`${itemName.toUpperCase()} ${bip_status.replace("_", " ")} since block ${item[bip].since.toString()} with BIP${bip.charAt(3)} and LockinOnTimeout=${item[bip].lockinontimeout}`, data-bs-toggle="tooltip") #{item[bip].since}
 													| +)
 
 										if (item.type == "bip9" && item.bip9 && (item.bip9.start_time || item.bip9.timeout))
@@ -173,7 +173,7 @@ block content
 											div.small.text-muted
 												span.border-dotted(title="Minimum activation block height", data-bs-toggle="tooltip") min height
 												span.me-2 :
-												| #{item.bip9.min_activation_height.toLocaleString()}
+												| #{item.bip9.min_activation_height.toString()}
 
 									if (forkUrls[itemName])
 										small
@@ -217,7 +217,7 @@ block content
 											span.me-2
 												span.text-success active
 												small.text-muted.ms-2 (
-													a.border-dotted(href=`./block-height/${item.height}`, title=`${itemName} has been active since block ${item.height.toLocaleString()}`, data-bs-toggle="tooltip") #{item.height.toLocaleString()}
+													a.border-dotted(href=`./block-height/${item.height}`, title=`${itemName} has been active since block ${item.height.toString()}`, data-bs-toggle="tooltip") #{item.height.toString()}
 													| +)
 
 										else if (item.type == "bip8") || (item.type == "bip9")
@@ -226,7 +226,7 @@ block content
 											span.me-2
 												span.text-warning.text-lowercase #{bip_status}
 												small.text-muted.ms-2 (
-													a.border-dotted(title=`${itemName.toUpperCase()} ${bip_status.replace("_", " ")} since block ${item[bip].since.toLocaleString()} with BIP${bip.charAt(3)} and LockinOnTimeout=${item[bip].lockinontimeout}`, data-bs-toggle="tooltip") #{item[bip].since}
+													a.border-dotted(title=`${itemName.toUpperCase()} ${bip_status.replace("_", " ")} since block ${item[bip].since.toString()} with BIP${bip.charAt(3)} and LockinOnTimeout=${item[bip].lockinontimeout}`, data-bs-toggle="tooltip") #{item[bip].since}
 													| +)
 
 										if (forkUrls[itemName])
@@ -250,7 +250,7 @@ block content
 											div.small.text-muted
 												span.border-dotted(title="Minimum activation block height", data-bs-toggle="tooltip") min height
 												span.me-2 :
-												| #{item.bip9.min_activation_height.toLocaleString()}
+												| #{item.bip9.min_activation_height.toString()}
 
 										
 										
@@ -263,11 +263,11 @@ block content
 							span.text-muted :#{global.rpcClient.options.port}
 
 						+summaryItem("Peers", "Number of peers connected to this node.", null, null, "icon:bi-diagram-3", "./peers", "Details about the peers connected to this node")
-							| #{getnetworkinfo.connections.toLocaleString()}
+							| #{getnetworkinfo.connections.toString()}
 
 							if (getnetworkinfo.connections_in)
 								br
-								span.text-muted (#{getnetworkinfo.connections_in.toLocaleString()} in; #{getnetworkinfo.connections_out.toLocaleString()} out)
+								span.text-muted (#{getnetworkinfo.connections_in.toString()} in; #{getnetworkinfo.connections_out.toString()} out)
 
 						+summaryItem("Upload", "Total bytes sent since this node started")
 							- var upData = utils.formatLargeNumber(getnettotals.totalbytessent, 1);
@@ -314,7 +314,7 @@ block content
 									each item, index in getnetworkinfo.localaddresses
 										li
 											span.me-2 #{item.address}:#{item.port}
-											small.text-muted (score: #{item.score.toLocaleString()})
+											small.text-muted (score: #{item.score.toString()})
 
 									if (getnetworkinfo.localaddresses.length == 0)
 										li None

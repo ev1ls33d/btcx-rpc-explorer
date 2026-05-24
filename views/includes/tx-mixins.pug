@@ -69,12 +69,12 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 
 					if (txVin.coinbase || vout || !global.txindexAvailable)
 						.clearfix
-							a.sz-xs-hidden.d-none.d-sm-inline.badge.fw-normal.card-highlight.border.text-decoration-none.me-2(data-bs-toggle="tooltip", title=`Input #${txVinIndex.toLocaleString()}`, style="white-space: nowrap;")
+							a.sz-xs-hidden.d-none.d-sm-inline.badge.fw-normal.card-highlight.border.text-decoration-none.me-2(data-bs-toggle="tooltip", title=`Input #${txVinIndex.toString()}`, style="white-space: nowrap;")
 								i.d-inline.bi-arrow-right.text-danger
 								
-								span.d-none.d-sm-inline.font-monospace.ms-1 #{txVinIndex.toLocaleString()}
+								span.d-none.d-sm-inline.font-monospace.ms-1 #{txVinIndex.toString()}
 
-							a.sz-xs-only.d-inline.d-sm-none.text-decoration-none.me-1(data-bs-toggle="tooltip", title=`Input #${txVinIndex.toLocaleString()}`, style="white-space: nowrap;")
+							a.sz-xs-only.d-inline.d-sm-none.text-decoration-none.me-1(data-bs-toggle="tooltip", title=`Input #${txVinIndex.toString()}`, style="white-space: nowrap;")
 								i.d-inline.bi-arrow-right.text-danger
 
 
@@ -168,14 +168,14 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 
 				if (extraInputCount > 0)
 					.clearfix.mb-sm-2
-						a.sz-md-plus.d-none.d-sm-inline.badge.fw-normal.card-highlight.border.text-decoration-none(data-bs-toggle="tooltip", title=`Input #${(tx.vin.length - extraInputCount + 1).toLocaleString()} - ${tx.vin.length.toLocaleString()}`, style="white-space: nowrap;")
+						a.sz-md-plus.d-none.d-sm-inline.badge.fw-normal.card-highlight.border.text-decoration-none(data-bs-toggle="tooltip", title=`Input #${(tx.vin.length - extraInputCount + 1).toString()} - ${tx.vin.length.toString()}`, style="white-space: nowrap;")
 							i.bi-arrow-right.text-danger.me-sm-2
 							span.d-none.d-sm-inline …
 
-						a.sz-xs-only.d-inline.d-sm-none.text-decoration-none.me-1(data-bs-toggle="tooltip", title=`Input #${(tx.vin.length - extraInputCount + 1).toLocaleString()} - ${tx.vin.length.toLocaleString()}`, style="white-space: nowrap;")
+						a.sz-xs-only.d-inline.d-sm-none.text-decoration-none.me-1(data-bs-toggle="tooltip", title=`Input #${(tx.vin.length - extraInputCount + 1).toString()} - ${tx.vin.length.toString()}`, style="white-space: nowrap;")
 							i.d-inline.bi-arrow-right.text-danger
 
-						small.text-muted.border-dotted.ms-0.ms-sm-2(data-bs-toggle="tooltip", title="The details for the remaining inputs were truncated for performance purposes. Click through to the transaction details to see all inputs.") (#{extraInputCount.toLocaleString()} truncated)
+						small.text-muted.border-dotted.ms-0.ms-sm-2(data-bs-toggle="tooltip", title="The details for the remaining inputs were truncated for performance purposes. Click through to the transaction details to see all inputs.") (#{extraInputCount.toString()} truncated)
 
 						.float-end
 							- var currencyValue = new Decimal(totalIOValues.output).minus(new Decimal(totalIOValues.input));
@@ -238,12 +238,12 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 
 				div(data-txid=tx.txid, class=(hiddenRow ? "d-none" : ""))
 					.clearfix.mb-0.mb-sm-2.mb-md-3
-						a.xs-hidden.d-none.d-sm-inline.badge.card-highlight.border.text-decoration-none.fw-normal.me-2(data-bs-toggle="tooltip", title=`Output #${voutIndex.toLocaleString()}`, style="white-space: nowrap;")
+						a.xs-hidden.d-none.d-sm-inline.badge.card-highlight.border.text-decoration-none.fw-normal.me-2(data-bs-toggle="tooltip", title=`Output #${voutIndex.toString()}`, style="white-space: nowrap;")
 							i.d-inline.bi-arrow-right.text-success
 							
-							span.d-none.d-sm-inline.font-monospace.ms-1 #{voutIndex.toLocaleString()}
+							span.d-none.d-sm-inline.font-monospace.ms-1 #{voutIndex.toString()}
 
-						a.xs-only.d-inline.d-sm-none.text-decoration-none.fw-normal.me-1(data-bs-toggle="tooltip", title=`Output #${voutIndex.toLocaleString()}`, style="white-space: nowrap;")
+						a.xs-only.d-inline.d-sm-none.text-decoration-none.fw-normal.me-1(data-bs-toggle="tooltip", title=`Output #${voutIndex.toString()}`, style="white-space: nowrap;")
 							i.d-inline.bi-arrow-right.text-success
 
 						if (vout && vout.scriptPubKey)
@@ -349,7 +349,7 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 			if (hiddenRowCount > 0)
 				a.small(href="javascript:void(0)", onclick=("showAllTxOutputs(this, '" + tx.txid + "');")) 
 					i.bi-plus-square.text-card-highlight.me-1
-					| Show remaining #{hiddenRowCount.toLocaleString()} outputs
+					| Show remaining #{hiddenRowCount.toString()} outputs
 
 			if (nonZeroVoutValueCount > 1)
 				.row.mb-0.mb-lg-0

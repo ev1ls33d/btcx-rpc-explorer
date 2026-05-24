@@ -44,10 +44,10 @@ script.
 						stepSize: #{graphData.xaxisStep},
 						/*callback: function(value, index, values) {
 							if (value > 1000000) {
-								return (value / 1000000).toLocaleString() + "M";
+								return (value / 1000000).toString() + "M";
 
 							} else if (value > 1000) {
-								return (value / 1000).toLocaleString() + "k";
+								return (value / 1000).toString() + "k";
 
 							} else {
 								return value;
@@ -66,7 +66,7 @@ script.
 					ticks: {
 						callback: function(value, index, values) {
 							if (value > 1000000) {
-								return (value / 1000000).toLocaleString() + "M";
+								return (value / 1000000).toString() + "M";
 
 							} else {
 								return value;

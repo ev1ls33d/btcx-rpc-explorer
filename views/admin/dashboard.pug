@@ -117,23 +117,23 @@ block content
 								each item, itemName in cacheStats
 									tr
 										td #{itemName}
-										td.text-end #{item.try.toLocaleString()}
-										td.text-end #{item.hit.toLocaleString()}
+										td.text-end #{item.try.toString()}
+										td.text-end #{item.hit.toString()}
 											small.text-muted.ms-2 (
 												if (item.try > 0)
-													span #{(100 * item.hit / item.try).toLocaleString()}
+													span #{(100 * item.hit / item.try).toString()}
 														small  %
 												| )
-										td.text-end #{item.miss.toLocaleString()}
+										td.text-end #{item.miss.toString()}
 											small.text-muted.ms-2 (
 												if (item.try > 0)
-													span #{(100 * item.miss / item.try).toLocaleString()}
+													span #{(100 * item.miss / item.try).toString()}
 														small  %
 												| )
-										td.text-end #{item.error.toLocaleString()}
+										td.text-end #{item.error.toString()}
 											small.text-muted.ms-2 (
 												if (item.try > 0)
-													span #{(100 * item.error / item.try).toLocaleString()}
+													span #{(100 * item.error / item.try).toString()}
 														small  %
 												| )
 											
@@ -161,13 +161,13 @@ block content
 							each item, itemName in rpcStats
 								tr
 									td #{itemName}
-									td.text-end #{item.count.toLocaleString()}
-									td.text-end #{(item.time / 1000).toLocaleString()}
-									td.text-end #{(item.time / item.count).toLocaleString()}
+									td.text-end #{item.count.toString()}
+									td.text-end #{(item.time / 1000).toString()}
+									td.text-end #{(item.time / item.count).toString()}
 									td.text-end
-										span.text-success #{item.successes.toLocaleString()}
+										span.text-success #{item.successes.toString()}
 										span.mx-1 /
-										span.text-danger #{item.failures.toLocaleString()}
+										span.text-danger #{item.failures.toString()}
 
 									td.text-end
 										span #{new Decimal(item.successes).dividedBy(new Decimal(item.successes + item.failures)).times(100).toDP(1)}
@@ -188,7 +188,7 @@ block content
 								each item, itemName in electrumStats.base
 									tr
 										td #{itemName}
-										td.text-end #{item.count.toLocaleString()}
+										td.text-end #{item.count.toString()}
 
 										if (item.firstSeenAt)
 											td.text-end #{moment.duration(new Date().getTime() - item.firstSeenAt.getTime()).format()} ago
@@ -219,13 +219,13 @@ block content
 								each item, itemName in electrumStats.rpc
 									tr
 										td #{itemName}
-										td.text-end #{item.count.toLocaleString()}
-										td.text-end #{(item.time / 1000).toLocaleString()}
-										td.text-end #{(item.time / item.count).toLocaleString()}
+										td.text-end #{item.count.toString()}
+										td.text-end #{(item.time / 1000).toString()}
+										td.text-end #{(item.time / item.count).toString()}
 										td.text-end
-											span.text-success #{item.successes.toLocaleString()}
+											span.text-success #{item.successes.toString()}
 											span.mx-1 /
-											span.text-danger #{item.failures.toLocaleString()}
+											span.text-danger #{item.failures.toString()}
 
 										td.text-end
 											span #{new Decimal(item.successes).dividedBy(new Decimal(item.successes + item.failures)).times(100).toDP(1)}
@@ -259,7 +259,7 @@ block content
 															span.badge.bg-primary.me-1.fw-light #{propValue}
 																span.badge.bg-light.text-dark.ms-1 #{propCount}
 
-										td.text-end #{item.count.toLocaleString()}
+										td.text-end #{item.count.toString()}
 										td.text-end #{moment.duration(new Date().getTime() - item.firstSeen).format()} ago
 										td.text-end #{moment.duration(new Date().getTime() - item.lastSeen).format()} ago
 

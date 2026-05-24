@@ -71,7 +71,7 @@ block content
 							+copyTextButton(item.key)
 							.mt-2
 							
-							div.small.text-muted First #{item.firstAddresses.length.toLocaleString()} addresses:
+							div.small.text-muted First #{item.firstAddresses.length.toString()} addresses:
 
 							each addr in item.firstAddresses
 								a(href=`./address/${addr}`) #{utils.ellipsizeMiddle(addr, 16)}
@@ -100,13 +100,13 @@ block content
 								each addressDetails, addressIndex in receiveAddresses
 									tr
 										td.text-end
-											.text-muted ##{(offset + addressIndex).toLocaleString()}
+											.text-muted ##{(offset + addressIndex).toString()}
 
 										td
 											a(href=`./address/${addressDetails.address}`) #{utils.ellipsizeMiddle(addressDetails.address, 24)}
 											+copyTextButton(addressDetails.address)
 
-										td.text-end #{addressDetails.txCount.toLocaleString()}
+										td.text-end #{addressDetails.txCount.toString()}
 
 										td
 											span(class=(addressDetails.balanceSat > 0 ? "text-success" : false))
@@ -128,12 +128,12 @@ block content
 							each addressDetails, addressIndex in changeAddresses
 								tr
 									td.text-end
-										.text-muted ##{(offset + addressIndex).toLocaleString()}
+										.text-muted ##{(offset + addressIndex).toString()}
 									td
 										a(href=`./address/${addressDetails.address}`) #{utils.ellipsizeMiddle(addressDetails.address, 24)}
 										+copyTextButton(addressDetails.address)
 
-									td.text-end #{addressDetails.txCount.toLocaleString()}
+									td.text-end #{addressDetails.txCount.toString()}
 
 									td
 										span(class=(addressDetails.balanceSat > 0 ? "text-success" : false))

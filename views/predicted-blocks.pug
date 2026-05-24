@@ -96,7 +96,7 @@ block endOfBody
 				var percent = new Decimal(res.done).dividedBy(res.count).times(100);
 
 				$("#data-progress").css("width", `${percent.toDP(0)}%`);
-				$("#progress-text").html(`<span class='fw-bold d-inline-block' style="width: 55px;">${percent.toDP(1)}%</span><span class='small fw-light ms-3'>(${res.done.toLocaleString()} of ${res.count.toLocaleString()})</span>`);
+				$("#progress-text").html(`<span class='fw-bold d-inline-block' style="width: 55px;">${percent.toDP(1)}%</span><span class='small fw-light ms-3'>(${res.done.toString()} of ${res.count.toString()})</span>`);
 
 				if (res.done == res.count) {
 					if (blocks == null) {
@@ -161,9 +161,9 @@ block endOfBody
 				row.attr("id", null);
 				row.addClass("block-table-row");
 
-				row.find(".data-label").text(`+${(i + 1).toLocaleString()}`);
+				row.find(".data-label").text(`+${(i + 1).toString()}`);
 
-				row.find(".data-tx-count").text(block.txCount.toLocaleString());
+				row.find(".data-tx-count").text(block.txCount.toString());
 				row.find(".data-sum-fees").text(block.totalFees);
 				row.find(".data-fee-rate").text(block.minFeeRate == block.maxFeeRate ? new Decimal(block.minFeeRate).toDP(2) : `${new Decimal(block.minFeeRate).toDP(2)} - ${new Decimal(block.maxFeeRate).toDP(2)}`);
 				
