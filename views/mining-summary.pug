@@ -100,7 +100,11 @@ block endOfBody
 		$(document).ready(function() {
 			prepareUI();
 
-			loadMiningData(Math.max(0, currentBlockHeight - 720), currentBlockHeight);
+			// highlight 3-day button
+			$("#time-range-buttons .block-count-btn").removeClass("btn-primary").addClass("btn-outline-primary");
+			$("#time-range-buttons .block-count-btn[data-blockCount='2160']").addClass("btn-primary").removeClass("btn-outline-primary");
+
+			loadMiningData(Math.max(0, currentBlockHeight - 2160), currentBlockHeight);
 		});
 
 		function updateStatus() {
