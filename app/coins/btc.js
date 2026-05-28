@@ -86,6 +86,9 @@ module.exports = {
 		"regtest":"Regtest Explorer",
 		"signet":"Signet Explorer",
 	},
+	siteLogoTitleUrlsByNetwork: {
+		"main":"./img/logo/bitcoin-pocxplorer-white.svg"
+	},
 	demoSiteUrlsByNetwork: {
 		"main": "https://explorer.bitcoin-po.cx/",
 		"test": "https://explorer.bitcoin-po.cx/testnet",

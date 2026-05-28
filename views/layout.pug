@@ -63,7 +63,9 @@ html(lang="en")
 						else
 							img.header-image(src=assetUrl("./img/network-mainnet/logo.svg"), alt="logo")
 
-						if (coinConfig.siteTitlesByNetwork && coinConfig.siteTitlesByNetwork[activeBlockchain])
+						if (coinConfig.siteLogoTitleUrlsByNetwork && coinConfig.siteLogoTitleUrlsByNetwork[activeBlockchain])
+							img(src=assetUrl(coinConfig.siteLogoTitleUrlsByNetwork[activeBlockchain]), alt=coinConfig.siteTitlesByNetwork[activeBlockchain], style="height: 44px;")
+						else if (coinConfig.siteTitlesByNetwork && coinConfig.siteTitlesByNetwork[activeBlockchain])
 							span.fw-light #{coinConfig.siteTitlesByNetwork[activeBlockchain]}
 						else
 							span.fw-light Bitcoin-POCX Explorer
