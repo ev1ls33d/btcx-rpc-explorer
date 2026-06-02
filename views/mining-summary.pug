@@ -47,6 +47,8 @@ block content
 										span.border-dotted(title="Σ (Subsidy + Fees)", data-bs-toggle="tooltip") Revenue
 									th.text-end.text-card-highlight.text-uppercase.fw-light
 										span.border-dotted(title="Percent of total subsidy plus fees", data-bs-toggle="tooltip") % Revenue
+									th.text-end.text-card-highlight.text-uppercase.fw-light
+										span.border-dotted(title="Estimated mining capacity in TiB", data-bs-toggle="tooltip") Est. Capacity (TiB)
 									
 							tbody(id="summary-table-body")
 								tr(id="miner-summary-prototype", style="display: none;")
@@ -63,6 +65,9 @@ block content
 									td.text-end.text-nowrap
 										span.miner-percent
 
+									td.text-end.text-nowrap
+										span.miner-capacity-tib
+
 								tr(id="hidden-row-to-fix-stripe-pattern", style="display: none;")
 
 								tr(id="miner-summary-totals", style="display: none;")
@@ -77,6 +82,9 @@ block content
 
 									th.text-end
 										| 100%
+									
+									th.text-end
+										span.miner-capacity-tib
 
 		
 	if (false)
@@ -183,6 +191,16 @@ block endOfBody
 
 			var colorIndex = 0;
 
+			var refAddress = "address-only:pocx1qmadf0xpm0neyyzztf5xg4cn9s56t3xutgh5uww";
+			var refTB = 385;
+			var tbToTiB = 1000000000000 / 1099511627776;
+			var refTiB = refTB * tbToTiB;
+			var refMinerSummary = summary.miners[refAddress];
+			var capacityPerBlockTiB = 0;
+			if (refMinerSummary && refMinerSummary.blocks.length > 0) {
+				capacityPerBlockTiB = refTiB / refMinerSummary.blocks.length;
+			}
+
 
 			for (var i = 0; i < summary.minerNamesSortedByBlockCount.length; i++) {
 				var minerName = summary.minerNamesSortedByBlockCount[i];
@@ -220,6 +238,13 @@ block endOfBody
 
 				row.find(".miner-percent").text(revenuePercent.toDP(2) + "%");
 
+				if (capacityPerBlockTiB > 0) {
+					var estimatedCapacityTiB = minerSummary.blocks.length * capacityPerBlockTiB;
+					row.find(".miner-capacity-tib").text(new Decimal(estimatedCapacityTiB).toDP(2).toString());
+				} else {
+					row.find(".miner-capacity-tib").text("-");
+				}
+
 				if (revenuePercent > 1) {
 					if (minerName.startsWith("address-only:")) {
 						pieChartData.labels.push(minerName.substring("address-only:".length));
@@ -251,6 +276,13 @@ block endOfBody
 			var totalsRow = $("#miner-summary-totals");
 			totalsRow.find(".miner-block-count").text(summary.overall.blockCount.toString());
 			totalsRow.find(".miner-subsidy-fees").text(totalSubsidyPlusFees);
+
+			if (capacityPerBlockTiB > 0) {
+				var totalCapacityTiB = summary.overall.blockCount * capacityPerBlockTiB;
+				totalsRow.find(".miner-capacity-tib").text(new Decimal(totalCapacityTiB).toDP(2).toString());
+			} else {
+				totalsRow.find(".miner-capacity-tib").text("-");
+			}
 
 			updateCurrencyValue(totalsRow.find(".miner-subsidy-fees"), totalSubsidyPlusFees);
 			

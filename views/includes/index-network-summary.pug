@@ -130,7 +130,7 @@ if (exchangeRates)
 
 							else
 								- var ratioPercent = new Decimal(100).minus(new Decimal(ratio).times(100));
-								span.text-danger -#{ratioPercent.toDP(2)}%
+								span.text-danger #{ratioPercent.toDP(2)}%
 
 						| )
 
@@ -187,7 +187,7 @@ if (exchangeRates)
 						- var diffDrop = new Decimal(global.athDifficulty).minus(diffX).dividedBy(global.athDifficulty).times(100).toDP(2);
 
 						span.border-dotted(title=`The current difficulty is ${diffDrop}% lower than the All-Time High.` data-bs-toggle='tooltip')
-							span.text-danger -#{diffDrop}%
+							span.text-danger #{diffDrop}%
 
 					| )
 				
