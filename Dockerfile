@@ -2,6 +2,8 @@ FROM node:20 as builder
 WORKDIR /workspace
 COPY . .
 RUN npm install
+RUN npm run css
+RUN node ./bin/frontend-resource-integrity.js
 
 FROM node:20-alpine
 WORKDIR /workspace
