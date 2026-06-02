@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $body-bg: #fff;
 $body-color: #212529;
 
@@ -12,7 +14,7 @@ $card-highlight-color: #567997;
 $alert-bg-scale: -70%;
 $alert-border-scale: -60%;
 
-$bg-nav-link-hover: darken($body-bg, 10%);
+$bg-nav-link-hover: color.adjust($body-bg, $lightness: -10%);
 
 
 
@@ -20,10 +22,10 @@ $bg-nav-link-hover: darken($body-bg, 10%);
 $table-striped-bg: rgba(0, 0, 0, 0.04);
 
 
-$nav-tabs-border-color: lighten($body-color, 45%);
+$nav-tabs-border-color: color.adjust($body-color, $lightness: 45%);
 
 
-@import "./main";
+@import "main";
 
 
 
@@ -34,7 +36,7 @@ $nav-tabs-border-color: lighten($body-color, 45%);
 }
 
 .bg-darken {
-	background-color: darken($body-bg, 6%) !important;
+	background-color: color.adjust($body-bg, $lightness: -6%) !important;
 }
 
 .bg-header-footer {
@@ -42,7 +44,7 @@ $nav-tabs-border-color: lighten($body-color, 45%);
 }
 
 .bg-header-footer-highlight {
-	background-color: lighten(#212529, 15%) !important;
+	background-color: color.adjust(#212529, $lightness: 15%) !important;
 }
 
 .bg-header-footer {

@@ -1,6 +1,6 @@
 module.exports =
 {
-    "bootstrap.bundle.min.js": "sha384-69YWf9q2FkpNf+nfR2BxBDldK6UFQQR8IANHmf50qHpjO7Ae/cidJqF9E4nFZ3GJ",
+    "bootstrap.bundle.min.js": "sha384-T0Nxoei7M/PidnA3BgjFCGyaX/gL9lSPP4EnR7hVgmkYN0KQFHXrM3GrzPqC+0Tn",
     "chart.min.js": "sha384-9R67RXFKxJXd/+QmlkaEyOhcfa0gbkwDQ4LUr1RvuTZp9u4VDylkCdExAVOi6zqz",
     "chartjs-adapter-moment.min.js": "sha384-Z9r2EsEmivx0l8T8TvYoqqGcpO0cCjKbqVXB8tYUa0hIWKtGVl0TmaF263CjS6XR",
     "dataTables.bootstrap4.min.js": "sha384-uiSTMvD1kcI19sAHJDVf68medP9HA2E2PzGis9Efmfsdb8p9+mvbQNgFhzii1MEX",
@@ -12,11 +12,11 @@ module.exports =
     "sentry.min.js": "sha384-da/Bo2Ah6Uw3mlhl6VINMblg2SyGbSnULKrukse3P5D9PTJi4np9HoKvR19D7zOL",
     "site.js": "sha384-G8o2io5zIdQiiVN+4CAGGXPO4UvV8jGkSMlfddSPbqIUd3x5Rv01pNH6ec8QOATu",
     "bootstrap-icons.css": "sha384-rJFhkIguED0Z4GX6r6ReHpTCkwWtiPHZnQtWVP0DQWcKHzeJAlYb1m/xdYkeEk+f",
-    "dark-v1.min.css": "sha384-+Lt+lp/My97l8sRl8XUbW66QsKgfIg0Hfu+mUxiLw6mmzP83d9XDwkyG2czulEbZ",
-    "dark.min.css": "sha384-DTCgtulK3g6FsxI1uRqyfsKtkZlPcAXUXEPuFV8nl7mleicYJq+qYAnypgMF5fGZ",
+    "dark-v1.min.css": "sha384-uBbcpBlKe3I9NO+3AqXSAgrTfjmvDZdLpRVBHBjKTSthOk+6e/pIQktKvOwOfEUg",
+    "dark.min.css": "sha384-tsP7oWAupwJnFmRs9hr+ISUiDjJ6OSRe8nkWLbvhhhWA6YHyai8iefZtbQerBHd9",
     "dataTables.bootstrap4.min.css": "sha384-EkHEUZ6lErauT712zSr0DZ2uuCmi3DoQj6ecNdHQXpMpFNGAQ48WjfXCE5n20W+R",
     "highlight.min.css": "sha384-s4RLYRjGGbVqKOyMGGwfxUTMOO6D7r2eom7hWZQ6BjK2Df4ZyfzLXEkonSm0KLIQ",
-    "light.min.css": "sha384-V4Whzli4fkIT2RRUhWeD7v4RNsN1qOpIkwYrYVqzcLy+HOykVnTnTPINUQugO25Z",
+    "light.min.css": "sha384-ZTMeJcWZWkO68FJDSKlbHaN+MlvwgZPnrth/vieG8GeAoZoXLQT/XHM744RWhYiU",
     "leaflet.css": "sha384-6wKUKNzA6h/S6gZ1lWQppeGaVXvK1AUAsEznGBghzlEu1fNcxJGYVRiroSHr+OwU",
     "leaflet.js": "sha384-RFZC58YeKApoNsIbBxf4z6JJXmh+geBSgkCQXFyh+4tiFSJmJBt+2FbjxW7Ar16M"
 };

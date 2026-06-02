@@ -1,7 +1,9 @@
+@use "sass:color";
+
 $body-bg: #051c3e;
 $body-color: #f7fafa;
 
-$main-bg: darken($body-bg, 6%);
+$main-bg: color.adjust($body-bg, $lightness: -6%);
 
 $text-muted: #b2bac2;
 
@@ -16,35 +18,35 @@ $blue: #0d6efd;
 $link-color: $blue;
 $card-highlight-color: #406fb4;
 
-$bg-nav-link-hover: lighten($body-bg, 5%);
+$bg-nav-link-hover: color.adjust($body-bg, $lightness: 5%);
 
 
 
 
-$border-color: lighten($body-bg, 4%);
+$border-color: color.adjust($body-bg, $lightness: 4%);
 
 $card-border-color: $border-color;
 
 $link-hover-color:			#408cff;
 
 
-$table-striped-bg: lighten($body-bg, 4%);
+$table-striped-bg: color.adjust($body-bg, $lightness: 4%);
 
 
 $pagination-bg: 					$body-bg;
-$pagination-border-color: 			lighten($border-color, 5%);
+$pagination-border-color: 			color.adjust($border-color, $lightness: 5%);
 $pagination-active-bg: 				$body-bg;
-$pagination-active-border-color: 	lighten($border-color, 5%);
-$pagination-hover-bg: 				lighten($pagination-bg, 15%);
-$pagination-hover-border-color: 	lighten($border-color, 5%);
-$pagination-disabled-bg: 			darken($pagination-bg, 3%);
-$pagination-disabled-border-color: 	lighten($border-color, 5%);
+$pagination-active-border-color: 	color.adjust($border-color, $lightness: 5%);
+$pagination-hover-bg: 				color.adjust($pagination-bg, $lightness: 15%);
+$pagination-hover-border-color: 	color.adjust($border-color, $lightness: 5%);
+$pagination-disabled-bg: 			color.adjust($pagination-bg, $lightness: -3%);
+$pagination-disabled-border-color: 	color.adjust($border-color, $lightness: 5%);
 
 
-$tooltip-bg: lighten($body-bg, 15%);
+$tooltip-bg: color.adjust($body-bg, $lightness: 15%);
 
 
-$nav-tabs-link-active-color:		darken($body-color, 5%);
+$nav-tabs-link-active-color:		color.adjust($body-color, $lightness: -5%);
 //$nav-tabs-link-active-bg:			$body-bg !default;
 $nav-tabs-link-active-border-color:	#ced4da #ced4da $body-bg !important;
 
@@ -54,23 +56,23 @@ $btn-close-color: #fff;
 
 $tooltip-opacity: 1.0;
 
-$dropdown-bg: lighten($body-bg, 10%);
+$dropdown-bg: color.adjust($body-bg, $lightness: 10%);
 $dropdown-link-color: $body-color;
-$dropdown-link-hover-bg: lighten($dropdown-bg, 10%);
+$dropdown-link-hover-bg: color.adjust($dropdown-bg, $lightness: 10%);
 $dropdown-link-hover-color: $body-color;
-$dropdown-link-active-bg: lighten($dropdown-bg, 5%);
+$dropdown-link-active-bg: color.adjust($dropdown-bg, $lightness: 5%);
 $dropdown-dark-bg: #ff0;
 $dropdown-dark-link-hover-bg: #0ff;
 $dropdown-dark-link-active-bg: #f0f;
-$dropdown-link-active-color: lighten($dropdown-bg, 5%);
+$dropdown-link-active-color: color.adjust($dropdown-bg, $lightness: 5%);
 
-$dropdown-header-color: darken($body-color, 25%);
+$dropdown-header-color: color.adjust($body-color, $lightness: -25%);
 
 $dropdown-box-shadow: 0 1.5rem 1rem rgba(#000, .35);
 
 
-$input-bg: darken(#fff, 0%);
-//$input-border-color: lighten($input-bg, 9%);
+$input-bg: color.adjust(#fff, $lightness: 0%);
+//$input-border-color: color.adjust($input-bg, $lightness: 9%);
 $input-color: #212529;
 
 
@@ -80,10 +82,10 @@ $modal-content-color: $body-color;
 
 
 $toast-color:                       $body-color;
-$toast-background-color:            lighten($body-bg, 15%);
+$toast-background-color:            color.adjust($body-bg, $lightness: 15%);
 $toast-border-color:                rgba(255, 255, 255, .1);
 $toast-header-color:                $body-color;
-$toast-header-background-color:     lighten($body-bg, 7%);
+$toast-header-background-color:     color.adjust($body-bg, $lightness: 7%);
 $toast-header-border-color:         rgba(0, 0, 0, .05) !default;
 
 
@@ -91,7 +93,7 @@ $nav-tabs-border-color: $body-color;
 
 
 
-@import "./main";
+@import "main";
 
 
 .table {
@@ -104,8 +106,8 @@ $nav-tabs-border-color: $body-color;
 
 .alert-primary {
 	color: $body-color;
-	background-color: lighten($body-bg, 8%);
-	border-color: lighten($body-bg, 20%);
+	background-color: color.adjust($body-bg, $lightness: 8%);
+	border-color: color.adjust($body-bg, $lightness: 20%);
 	border-width: 2px;
 }
 
@@ -124,21 +126,21 @@ $nav-tabs-border-color: $body-color;
 .alert-warning {
 	color: $body-color;
 	background-color: #d9962b;
-	border-color: darken(#d9962b, 10%);
+	border-color: color.adjust(#d9962b, $lightness: -10%);
 	border-width: 2px;
 }
 
 .alert-success {
 	color: $body-color;
-	background-color: darken(#198754, 10%);
-	border-color: lighten(#198754, 5%);
+	background-color: color.adjust(#198754, $lightness: -10%);
+	border-color: color.adjust(#198754, $lightness: 5%);
 	border-width: 2px;
 }
 
 .alert-info {
 	color: $body-color;
-	background-color: darken(#cff4fc, 60%);
-	border-color: darken(#cff4fc, 50%);
+	background-color: color.adjust(#cff4fc, $lightness: -60%);
+	border-color: color.adjust(#cff4fc, $lightness: -50%);
 	border-width: 2px;
 }
 
