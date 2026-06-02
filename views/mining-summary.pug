@@ -44,11 +44,11 @@ block content
 									th.text-card-highlight.text-uppercase.fw-light Miner
 									th.text-end.text-card-highlight.text-uppercase.fw-light Blocks
 									th.text-end.text-card-highlight.text-uppercase.fw-light
+										span.border-dotted(title="Estimated mining capacity in TiB", data-bs-toggle="tooltip") Est. Capacity (TiB)
+									th.text-end.text-card-highlight.text-uppercase.fw-light
 										span.border-dotted(title="Σ (Subsidy + Fees)", data-bs-toggle="tooltip") Revenue
 									th.text-end.text-card-highlight.text-uppercase.fw-light
 										span.border-dotted(title="Percent of total subsidy plus fees", data-bs-toggle="tooltip") % Revenue
-									th.text-end.text-card-highlight.text-uppercase.fw-light
-										span.border-dotted(title="Estimated mining capacity in TiB", data-bs-toggle="tooltip") Est. Capacity (TiB)
 									
 							tbody(id="summary-table-body")
 								tr(id="miner-summary-prototype", style="display: none;")
@@ -60,13 +60,13 @@ block content
 										span.miner-block-count
 									
 									td.text-end.text-nowrap
+										span.miner-capacity-tib
+
+									td.text-end.text-nowrap
 										span.miner-subsidy-fees
 
 									td.text-end.text-nowrap
 										span.miner-percent
-
-									td.text-end.text-nowrap
-										span.miner-capacity-tib
 
 								tr(id="hidden-row-to-fix-stripe-pattern", style="display: none;")
 
@@ -76,15 +76,15 @@ block content
 									
 									th.text-end
 										span.miner-block-count
+
+									th.text-end
+										span.miner-capacity-tib
 									
 									th.text-end
 										span.miner-subsidy-fees
 
 									th.text-end
 										| 100%
-									
-									th.text-end
-										span.miner-capacity-tib
 
 		
 	if (false)
@@ -192,9 +192,7 @@ block endOfBody
 			var colorIndex = 0;
 
 			var refAddress = "address-only:pocx1qmadf0xpm0neyyzztf5xg4cn9s56t3xutgh5uww";
-			var refTB = 385;
-			var tbToTiB = 1000000000000 / 1099511627776;
-			var refTiB = refTB * tbToTiB;
+			var refTiB = 385; // Using 385 as the TiB base value for the reference address
 			var refMinerSummary = summary.miners[refAddress];
 			var capacityPerBlockTiB = 0;
 			if (refMinerSummary && refMinerSummary.blocks.length > 0) {
