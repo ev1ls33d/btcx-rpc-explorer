@@ -18,11 +18,40 @@ const server = app.listen(app.get('port'), app.get('host'), () => {
 
 	if (app.onStartup) {
 		(async function() {
-			await app.onStartup();
-
+			try {
+				await app.onStartup();
+			} catch (err) {
+				debug('Error during app.onStartup: ' + err);
+				console.error(err);
+				process.exit(1);
+			}
 		})();
 		
 	}
 
 	debug('Express server startup complete.');
+});
+
+server.on('error', (error) => {
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
+
+	const bind = typeof app.get('port') === 'string'
+		? 'Pipe ' + app.get('port')
+		: 'Port ' + app.get('port');
+
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges');
+			process.exit(1);
+			break;
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use');
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
 });

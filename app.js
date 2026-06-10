@@ -508,6 +508,17 @@ async function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
 	global.rpcConnected = true;
 	global.getnetworkinfo = getnetworkinfo;
 
+	try {
+		const genesisHash = await rpcApi.getRpcDataWithParams({method:"getblockhash", parameters:[0]}, true);
+		const genesisBlock = await rpcApi.getRpcDataWithParams({method:"getblock", parameters:[genesisHash]}, true);
+		global.genesisTime = genesisBlock.time;
+
+		debugLog(`Genesis block time: ${global.genesisTime}`);
+
+	} catch (err) {
+		utils.logError("32907ghsd0ge", err, {desc:"Error getting genesis block time"});
+	}
+
 	if (getblockchaininfo.pruned) {
 		global.prunedBlockchain = true;
 		global.pruneHeight = getblockchaininfo.pruneheight;
@@ -1087,6 +1098,7 @@ expressApp.use(function(req, res, next) {
 	res.locals.port = req.session.port;
 
 	res.locals.genesisBlockHash = coreApi.getGenesisBlockHash();
+	res.locals.genesisTime = global.genesisTime;
 	res.locals.genesisCoinbaseTransactionId = coreApi.getGenesisCoinbaseTransactionId();
 
 	res.locals.pageErrors = [];

@@ -4,14 +4,359 @@ block headContent
 	title Search
 
 block content
-	+pageTitle("Search")
+	.clearfix
+		.float-start
+			+pageTitle("Search")
+
+		if (query && (query.includes("*") || query.includes("?")))
+			.float-end
+				div#results-sort(style="display: none;")
+					nav(aria-label="Page navigation")
+						ul.pagination.justify-content-center.mt-3
+							
+							li.page-item(id="sort-desc")
+								a.page-link(href="javascript:void(0)", onclick="changeSort('desc')")
+									span(aria-hidden="true") Newest blocks first
+
+							li.page-item(id="sort-asc")
+								a.page-link(href="javascript:void(0)", onclick="changeSort('asc')")
+									span(aria-hidden="true") Oldest blocks first
 
 	+contentSection
 		form.form.form-inline(method="post", action="./search")
 			input(type="hidden", name="_csrf", value=csrfToken)
 
 			div.input-group
-				input.form-control(type="text", name="query", placeholder="block height/hash, txid, address", value=(query), style="width: 400px;")
+				input.form-control(type="text", name="query", placeholder="block height/hash, txid, address", value=(query), id="search-page-query", style="width: 400px;")
 				
 				button.btn.btn-primary(type="submit") Search
+
+	if (query && (query.includes("*") || query.includes("?")))
+		hr.my-4
+
+		+dismissableInfoAlert("addressSearchPageNoteDismissed", "About Address Wildcard Search...")
+			| !{markdown("The **Address Wildcard Search** tool scans a range of blocks for input or output addresses matching your wildcard pattern.")}
+			| Use the <b>Filters</b> section below to select the range of blocks to analyze.
+
+
+		+contentSection("Filters")
+			+blockRangeFilters
+
+
+		div#progress-wrapper
+			div.card.shadow-sm.mb-3
+				div.card-body
+					.d-flex.align-items-center
+						.spinner-border.spinner-border-sm.text-primary.me-2.ms-2
+						span.fw-bold.me-2 Loading:
+						span.fw-light(id="progress-text") ...
+					
+					div.progress.mt-2(id="progress-bar", style="height: 7px;")
+						div.progress-bar(id="data-progress", role="progressbar", aria-valuenow="0", aria-valuemin="0" ,aria-valuemax="100")
+		
+
+		div#results-table(style="display: none;")
+			+contentSection("Search Results")
+				.table-responsive
+					table.table.table-borderless.table-striped.mb-0
+						thead
+							tr
+								th.text-card-highlight.text-uppercase.fw-light Height
+								th.text-card-highlight.text-uppercase.fw-light Block Hash
+								th.text-card-highlight.text-uppercase.fw-light Matches
+								
+						tbody(id="results-table-body")
+							tr(id="result-prototype", style="display: none;")
+								td
+									a.block-height(href="")
+								
+								td
+									a.block-hash(href="")
+
+								td.block-matches
+
+			div.mt-4(id="results-pagination", style="display: none;")
+				nav(aria-label="Search results pagination")
+					ul.pagination.justify-content-center.pagination-lg(id="pagination-links")
+
+		div#no-results(style="display: none;")
+			.alert.alert-warning
+				| No blocks found matching the pattern in the selected range.
+
+block endOfBody
+	
+	if (query && (query.includes("*") || query.includes("?")))
+		+graphPageScriptSetup
+		
+		
+		script.
+			var results = null;
+			var statusId;
+			var statusInterval;
+			
+			var pageSize = !{limit};
+			var currentPage = !{offset} / pageSize;
+			var currentSort = "!{sort}";
+
+			var currentBlockHeight = !{currentBlockHeight};
+			var query = "!{query}";
+
+			var startBlock = !{startBlock != null ? startBlock : 'null'};
+			var endBlock = !{endBlock != null ? endBlock : 'null'};
+			
+			$(document).ready(function() {
+				prepareUI();
+
+				if (query) {
+					if (startBlock != null && endBlock != null) {
+						$("#custom-range-start").val(startBlock);
+						$("#custom-range-end").val(endBlock);
+						
+						loadAddressSearchData(startBlock, endBlock);
+
+					} else {
+						// highlight 720-block button (approx 1 day)
+						$("#time-range-buttons .block-count-btn").removeClass("btn-primary").addClass("btn-outline-primary");
+						$("#time-range-buttons .block-count-btn[data-blockCount='720']").addClass("btn-primary").removeClass("btn-outline-primary");
+
+						loadAddressSearchData(Math.max(0, currentBlockHeight - 720), currentBlockHeight);
+
+						updateUrl();
+					}
+				}
+			});
+
+			function changePage(pageIndex) {
+				currentPage = pageIndex;
+				updateUrl();
+				displayResults(results);
+				window.scrollTo(0, 0);
+			}
+
+			function changeSort(sort) {
+				currentSort = sort;
+				currentPage = 0;
+				updateUrl();
+				displayResults(results);
+			}
+
+			function updateUrl() {
+				var newUrl = window.location.pathname + "?query=" + encodeURIComponent(query) + "&limit=" + pageSize + "&offset=" + (currentPage * pageSize) + "&sort=" + currentSort;
+				
+				if (startBlock != null && endBlock != null) {
+					newUrl += "&startBlock=" + startBlock + "&endBlock=" + endBlock;
+				}
+
+				history.pushState({path:newUrl}, "", newUrl);
+			}
+
+			function updateStatus() {
+				$.ajax({
+					url: `./internal-api/address-search-status?statusId=${statusId}`
+
+				}).done((res) => {
+					if (!res.count) {
+						// not started yet
+						return;
+					}
+
+					var percent = new Decimal(res.done).dividedBy(res.count).times(100);
+					
+					$("#data-progress").css("width", `${percent.toDP(0)}%`);
+					$("#progress-text").html(`<span class='fw-bold d-inline-block' style='width: 55px;'>${percent.toDP(1)}%</span><span class='small fw-light ms-2'>(${res.done.toString()} of ${res.count.toString()})</span>`);
+
+					if (res.done == res.count) {
+						clearInterval(statusInterval);
+
+						$.ajax({
+							url: `./internal-api/get-address-search?statusId=${statusId}`
+
+						}).done((searchResult) => {
+							if (searchResult) {
+								results = searchResult;
+
+								displayResults(results);
+							}
+						}).always(() => {
+							// nothing
+						});
+					}
+				}).fail((a, b, c) => {
+				}).always(() => {
+				});
+			}
+
+			function loadAddressSearchData(start, end) {
+				startBlock = start;
+				endBlock = end;
+
+				$("#results-table").hide();
+				$("#no-results").hide();
+				$("#results-pagination").hide();
+				$("#results-sort").hide();
+				$("#progress-wrapper").show();
+				$("#results-table-body .result-row").remove();
+
+				var queryValue = $("#search-page-query").val();
+				if (queryValue) {
+					query = queryValue.trim();
+				}
+
+				statusId = Math.random().toString(36).substr(2, 5);
+
+				statusInterval = setInterval(function() { updateStatus(); }, 250);
+
+				$.ajax({
+					url: `./internal-api/build-address-search/${startBlock}/${endBlock}?statusId=${statusId}&query=${encodeURIComponent(query)}`
+
+				}).done((buildResult) => {
+					// we update status elsewhere, this call just kicks off the build
+
+				}).fail((jqXHR, textStatus, errorThrown) => {
+					console.log("Error: " + textStatus);
+				}).always(() => {
+				});
+			}
+
+			function displayResults(results) {
+				$("#progress-wrapper").hide();
+				$("#time-range-buttons .block-count-btn").removeClass("disabled");
+				$("#block-selections-buttons .dropdown-item").removeClass("disabled");
+
+				if (results.length == 0) {
+					$("#no-results").show();
+					return;
+				}
+
+				// Apply sort
+				results.sort((a, b) => {
+					if (currentSort == "desc") return b.height - a.height;
+					return a.height - b.height;
+				});
+
+				$("#results-table-body .result-row").remove();
+
+				var start = currentPage * pageSize;
+				var end = Math.min(start + pageSize, results.length);
+				var pageCount = Math.ceil(results.length / pageSize);
+
+				for (var i = start; i < end; i++) {
+					var result = results[i];
+
+					var row = $("#result-prototype").clone();
+					row.attr("id", null);
+					row.addClass("result-row");
+
+					row.find(".block-height").text(result.height.toLocaleString());
+					row.find(".block-height").attr("href", `./block-height/${result.height}`);
+
+					row.find(".block-hash").text(result.hash);
+					row.find(".block-hash").attr("href", `./block/${result.hash}`);
+
+					var matchesHtml = "";
+					for (var addr in result.matches) {
+						var match = result.matches[addr];
+						matchesHtml += `<div><a href='./address/${addr}'>${addr}</a>: <span class='text-success'>+${match.out}</span> / <span class='text-danger'>-${match.in}</span></div>`;
+					}
+					row.find(".block-matches").html(matchesHtml);
+
+					row.show();
+
+					$("#results-table-body").append(row);
+				}
+
+				// Update sort buttons
+				$("#sort-desc").toggleClass("active", currentSort == "desc");
+				$("#sort-asc").toggleClass("active", currentSort == "asc");
+
+				// Generate pagination links
+				var paginationHtml = "";
+				
+				// Prev
+				paginationHtml += `<li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage - 1})" aria-label="Previous">&laquo;</a></li>`;
+				
+				for (var x = 0; x < pageCount; x++) {
+					var pageNum = x + 1;
+					if (pageNum == 1 || pageNum == pageCount || (pageNum >= (currentPage - 3) && pageNum <= (currentPage + 5))) {
+						paginationHtml += `<li class="page-item ${x == currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" onclick="changePage(${x})">${pageNum}</a></li>`;
+					} else if (pageNum == 2 && currentPage > 5) {
+						paginationHtml += `<li class="page-item disabled"><a class="page-link" href="javascript:void(0)">...</a></li>`;
+					} else if (pageNum == pageCount - 1 && currentPage < pageCount - 6) {
+						paginationHtml += `<li class="page-item disabled"><a class="page-link" href="javascript:void(0)">...</a></li>`;
+					}
+				}
+
+				// Next
+				paginationHtml += `<li class="page-item ${currentPage >= pageCount - 1 ? 'disabled' : ''}"><a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage + 1})" aria-label="Next">&raquo;</a></li>`;
+
+				$("#pagination-links").html(paginationHtml);
+
+				$("#results-table").show();
+				$("#results-pagination").toggle(pageCount > 1);
+				$("#results-sort").show();
+			}
+
+			function prepareUI() {
+				$("#block-selections-buttons .dropdown-item").click(function() {
+					var blocks = $(this).attr("data-blocks");
+					if (blocks) {
+						var parts = blocks.split("-");
+						var start = parts[0];
+						var end = parts[1];
+
+						$("#custom-range-start").val(start);
+						$("#custom-range-end").val(end);
+
+						$("#time-range-buttons .block-count-btn").removeClass("btn-primary").addClass("btn-outline-primary");
+						$("#time-range-buttons .block-count-btn").addClass("disabled");
+						$("#block-selections-buttons .dropdown-item").addClass("disabled");
+
+						currentPage = 0;
+						loadAddressSearchData(start, end);
+						updateUrl();
+					}
+				});
+
+				$("#time-range-buttons .block-count-btn").click(function() {
+					var blockCount = $(this).attr("data-blockCount");
+
+					$("#custom-range-start").val("");
+					$("#custom-range-end").val("");
+
+					$("#time-range-buttons .block-count-btn").removeClass("btn-primary").addClass("btn-outline-primary");
+					$(this).addClass("btn-primary").removeClass("btn-outline-primary");
+
+					$("#time-range-buttons .block-count-btn").addClass("disabled");
+					$("#block-selections-buttons .dropdown-item").addClass("disabled");
+
+					currentPage = 0;
+					loadAddressSearchData(currentBlockHeight - blockCount, currentBlockHeight);
+					updateUrl();
+				});
+
+				$("#custom-range-form").submit(function() {
+					var startBlock = parseInt($("#custom-range-start").val());
+					var endBlock = parseInt($("#custom-range-end").val());
+
+					if (endBlock > currentBlockHeight) {
+						endBlock = currentBlockHeight;
+						$("#custom-range-end").val(endBlock);
+					}
+
+					if (startBlock < 0) {
+						startBlock = 0;
+						$("#custom-range-start").val(startBlock);
+					}
+
+					$("#time-range-buttons .block-count-btn").removeClass("btn-primary").addClass("btn-outline-primary");
+					$("#time-range-buttons .block-count-btn").addClass("disabled");
+					$("#block-selections-buttons .dropdown-item").addClass("disabled");
+
+					currentPage = 0;
+					loadAddressSearchData(startBlock, endBlock);
+					updateUrl();
+
+					return false;
+				});
+			}
 		

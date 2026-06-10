@@ -315,6 +315,77 @@ router.get("/build-mining-summary/:startBlock/:endBlock", asyncHandler(async (re
 
 
 
+const addressSearchStatuses = Object.create(null);
+const addressSearchOutputs = Object.create(null);
+
+router.get("/address-search-status", asyncHandler(async (req, res, next) => {
+	const statusId = req.query.statusId;
+	if (statusId && addressSearchStatuses[statusId]) {
+		res.json(addressSearchStatuses[statusId]);
+
+		next();
+
+	} else {
+		res.json({});
+
+		next();
+	}
+}));
+
+router.get("/get-address-search", asyncHandler(async (req, res, next) => {
+	const statusId = req.query.statusId;
+
+	if (statusId && addressSearchOutputs[statusId]) {
+		let output = addressSearchOutputs[statusId];
+		
+		res.json(output);
+
+		next();
+
+		delete addressSearchOutputs[statusId];
+		delete addressSearchStatuses[statusId];
+
+	} else {
+		res.json({});
+
+		next();
+	}
+}));
+
+router.get("/build-address-search/:startBlock/:endBlock", asyncHandler(async (req, res, next) => {
+	try {
+		// long timeout
+		res.connection.setTimeout(600000);
+
+
+		let startBlock = parseInt(req.params.startBlock);
+		let endBlock = parseInt(req.params.endBlock);
+		let query = req.query.query;
+
+		const statusId = req.query.statusId;
+		if (statusId) {
+			addressSearchStatuses[statusId] = {};
+		}
+
+		res.json({success:true, status:"started"});
+
+		next();
+
+
+		let output = await coreApi.buildAddressSearch(statusId, query, startBlock, endBlock, (update) => {
+			addressSearchStatuses[statusId] = update;
+		});
+
+		// store summary until it's retrieved via /api/get-address-search
+		addressSearchOutputs[statusId] = output;
+
+	} catch (err) {
+		utils.logError("329r7whegee", err);
+	}
+}));
+
+
+
 
 
 

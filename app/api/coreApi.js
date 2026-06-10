@@ -1243,6 +1243,18 @@ const miningPromiseQueue = async.queue((task, callback) => {
 
 }, 30);
 
+let activeAddressSearchQueueTasks = 0;
+const addressSearchPromiseQueue = async.queue((task, callback) => {
+	activeAddressSearchQueueTasks++;
+
+	task.run(() => {
+		callback();
+
+		activeAddressSearchQueueTasks--;
+	});
+
+}, 30);
+
 function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -1394,6 +1406,119 @@ function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
 		} catch (err) {
 			utils.logError("208yrwregud9e3", err);
 
+			reject(err);
+		}
+	});
+}
+
+function buildAddressSearch(statusId, query, startBlock, endBlock, statusFunc) {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const getblockchaininfo = await getBlockchainInfo();
+			if (endBlock > getblockchaininfo.blocks) {
+				endBlock = getblockchaininfo.blocks;
+			}
+
+			if (startBlock < 0) {
+				startBlock = 0;
+			}
+
+			if (startBlock > endBlock) {
+				return resolve([]);
+			}
+
+			const blockCount = (endBlock - startBlock + 1);
+			let doneCount = 0;
+
+			const markItemsDone = (count) => {
+				doneCount += count;
+				if (statusFunc) {
+					statusFunc({count: blockCount, done: doneCount});
+				}
+			};
+
+			const results = [];
+			
+			// Convert wildcard query to regex
+			let regexStr = query.replace(/[.+^${}()|[\]\\]/g, '\\$&') // escape regex chars
+								.replace(/\*/g, '.*')
+								.replace(/\?/g, '.');
+			let regex = new RegExp("^" + regexStr + "$", "i");
+
+			for (let i = endBlock; i >= startBlock; i--) {
+				const height = i;
+				
+				addressSearchPromiseQueue.push({run:async (callback) => {
+					try {
+						const blockHash = await getBlockHashByHeight(height);
+						// Verbosity 2 gives all transactions with details
+						const block = await rpcApi.getRpcDataWithParams({method:"getblock", parameters:[blockHash, 2]});
+
+						if (!block || !block.tx) {
+							markItemsDone(1);
+							callback();
+
+							return;
+						}
+
+						let blockMatches = {};
+						let matchCount = 0;
+						for (const tx of block.tx) {
+							// Check outputs
+							for (const vout of tx.vout) {
+								if (vout.scriptPubKey && vout.scriptPubKey.address) {
+									if (regex.test(vout.scriptPubKey.address)) {
+										let addr = vout.scriptPubKey.address;
+										if (!blockMatches[addr]) blockMatches[addr] = { in: new Decimal(0), out: new Decimal(0) };
+										blockMatches[addr].out = blockMatches[addr].out.plus(vout.value);
+										matchCount++;
+									}
+								}
+							}
+
+							// Check inputs
+							for (const vin of tx.vin) {
+								if (vin.prevout && vin.prevout.scriptPubKey && vin.prevout.scriptPubKey.address) {
+									if (regex.test(vin.prevout.scriptPubKey.address)) {
+										let addr = vin.prevout.scriptPubKey.address;
+										if (!blockMatches[addr]) blockMatches[addr] = { in: new Decimal(0), out: new Decimal(0) };
+										blockMatches[addr].in = blockMatches[addr].in.plus(vin.prevout.value);
+										matchCount++;
+									}
+								}
+							}
+						}
+
+						if (matchCount > 0) {
+							for (let addr in blockMatches) {
+								blockMatches[addr].in = blockMatches[addr].in.toString();
+								blockMatches[addr].out = blockMatches[addr].out.toString();
+							}
+
+							results.push({height: height, hash: blockHash, matches: blockMatches});
+						}
+
+						markItemsDone(1);
+						callback();
+
+					} catch (e) {
+						utils.logError("addressSearch_error", e, {height: height});
+						markItemsDone(1);
+						callback();
+					}
+				}});
+			}
+
+			if (!addressSearchPromiseQueue.idle()) {
+				await addressSearchPromiseQueue.drain();
+			}
+
+			results.sort((a, b) => b.height - a.height);
+
+			resolve(results);
+
+		} catch (err) {
+			utils.logError("buildAddressSearch_topError", err);
 			reject(err);
 		}
 	});
@@ -2293,6 +2418,7 @@ module.exports = {
 	buildMempoolSummary: buildMempoolSummary,
 	buildPredictedBlocks: buildPredictedBlocks,
 	buildMiningSummary: buildMiningSummary,
+	buildAddressSearch: buildAddressSearch,
 	getCachedMempoolTxSummaries: getCachedMempoolTxSummaries,
 	getMempoolTxSummaries: getMempoolTxSummaries,
 	getBlockTemplate: getBlockTemplate,

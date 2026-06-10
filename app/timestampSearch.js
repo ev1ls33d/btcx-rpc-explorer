@@ -32,7 +32,18 @@ async function getInterestingBlockHeights(getblockchaininfo) {
         return global.interestingBlockHeights;
     }
 
-    const genesisTime = 1777777777;
+    let genesisTime = global.genesisTime;
+    if (!genesisTime) {
+        try {
+            const genesisHash = await coreApi.getBlockHashByHeight(0);
+            const genesisBlock = await coreApi.getBlockByHash(genesisHash);
+            genesisTime = genesisBlock.time;
+            global.genesisTime = genesisTime;
+        } catch (err) {
+            genesisTime = 1777777777;
+        }
+    }
+
     const currentHeight = getblockchaininfo.blocks;
     const currentTime = getblockchaininfo.mediantime || Math.floor(Date.now() / 1000);
 

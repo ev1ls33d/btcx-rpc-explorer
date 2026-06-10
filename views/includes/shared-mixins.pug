@@ -913,7 +913,7 @@ mixin blockRangeFilters
 				div.dropdown
 					button.btn.btn-outline-primary.dropdown-toggle(type="button", id="preconfigured-dropdown", data-bs-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Selections
 					div.dropdown-menu(aria-labelledby="preconfigured-dropdown")
-						- var genesisTime = 1777777777;
+						- var genesisTime = (typeof(genesisTime) !== 'undefined' ? genesisTime : (global.genesisTime || 1777777777));
 						- var currentTime = (global.getblockchaininfo || getblockchaininfo || {}).mediantime || Math.floor(Date.now() / 1000);
 						- var avgBlockTime = (currentTime - genesisTime) / ((global.getblockchaininfo || getblockchaininfo || {}).blocks || 1);
 						- var blocksPerDay = typeof interestingBlocks !== 'undefined' && interestingBlocks ? interestingBlocks.firstDay : Math.floor(86400 / avgBlockTime);

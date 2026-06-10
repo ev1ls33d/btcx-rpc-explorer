@@ -934,11 +934,41 @@ router.get("/next-block", asyncHandler(async (req, res, next) => {
 	next();
 }));
 
-router.get("/search", function(req, res, next) {
+router.get("/search", asyncHandler(async (req, res, next) => {
+	res.locals.query = req.query.query;
+
+	let limit = 50;
+	let offset = 0;
+	let sort = "desc";
+
+	if (req.query.limit) {
+		limit = parseInt(req.query.limit);
+	}
+
+	if (req.query.offset) {
+		offset = parseInt(req.query.offset);
+	}
+
+	if (req.query.sort) {
+		sort = req.query.sort;
+	}
+
+	res.locals.limit = limit;
+	res.locals.offset = offset;
+	res.locals.sort = sort;
+
+	res.locals.startBlock = req.query.startBlock ? parseInt(req.query.startBlock) : null;
+	res.locals.endBlock = req.query.endBlock ? parseInt(req.query.endBlock) : null;
+
+	const getblockchaininfo = await coreApi.getBlockchainInfo();
+	res.locals.currentBlockHeight = getblockchaininfo.blocks;
+	res.locals.getblockchaininfo = getblockchaininfo;
+	res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
+
 	res.render("search");
 
 	next();
-});
+}));
 
 router.post("/search", function(req, res, next) {
 	if (!req.body.query) {
@@ -972,6 +1002,19 @@ router.post("/search", function(req, res, next) {
 	// Support txid@height lookups
 	if (/^[a-f0-9]{64}@\d+$/.test(query)) {
 		return res.redirect("./tx/" + query);
+	}
+
+	// Wildcard address search
+	if (query.includes("*") || query.includes("?")) {
+		let queryForLength = query.replace(/^pocx1q/, "");
+		let fixedChars = queryForLength.replace(/[*?]/g, "");
+		if (fixedChars.length >= 5) {
+			return res.redirect("./search?query=" + encodeURIComponent(rawCaseQuery));
+		} else {
+			req.session.userMessage = "Wildcard search requires at least 5 fixed characters (excluding the 'pocx1q' prefix).";
+			res.redirect("./");
+			return;
+		}
 	}
 
 	let parseAddressData = utils.tryParseAddress(rawCaseQuery);
