@@ -137,15 +137,17 @@ block content
 
 									else if (minerInfo.identifiedBy)
 										- var aliasColor = userSettings.aliasBadgeColor || "primary";
-										- var badgeClass = (minerInfo.type == "user-alias" ? ("bg-" + aliasColor) : "bg-primary");
+										- var badgeColor = (minerInfo.type == "user-alias" ? aliasColor : "primary");
+										- var textClass = (badgeColor == "light" || badgeColor == "warning") ? "text-dark" : "";
 										span(data-bs-toggle="tooltip", data-bs-html="true", title=`Identified by: ${minerInfo.identifiedBy}${minerInfo.note ? ("<br/><br/>" + minerInfo.note) : ""}`)
-											span.badge(class=badgeClass) #{minerInfo.name}
+											span.badge(class=`bg-${badgeColor} ${textClass}`) #{minerInfo.name}
 
 									else
 										- var aliasColor = userSettings.aliasBadgeColor || "primary";
-										- var badgeClass = (minerInfo.type == "user-alias" ? ("bg-" + aliasColor) : "bg-primary");
+										- var badgeColor = (minerInfo.type == "user-alias" ? aliasColor : "primary");
+										- var textClass = (badgeColor == "light" || badgeColor == "warning") ? "text-dark" : "";
 										span
-											span.badge(class=badgeClass) #{minerInfo.name}
+											span.badge(class=`bg-${badgeColor} ${textClass}`) #{minerInfo.name}
 											
 
 							+summaryItem("Fees Collected", "The aggregate fees collected by the miner that created this coinbase transaction.")

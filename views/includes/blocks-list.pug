@@ -127,8 +127,9 @@
 								
 								if (userAddressInfo)
 									- var badgeColor = (userAddressInfo.type == "user-alias" ? (userSettings.aliasBadgeColor || "primary") : "primary");
-									span.badge(class=`bg-${badgeColor}`, data-bs-toggle="tooltip", data-bs-html="true", title=`User Alias for:<br/>${address}`)
-										a.text-reset(href=`./address/${address}`) #{userAddressInfo.name}
+									- var textClass = (badgeColor == "light" || badgeColor == "warning") ? "text-dark" : "text-reset";
+									span.badge(class=`bg-${badgeColor} ${textClass}`, data-bs-toggle="tooltip", data-bs-html="true", title=`User Alias for:<br/>${address}`)
+										a(class=textClass, href=`./address/${address}`) #{userAddressInfo.name}
 
 								else if (block.miner.type == "address-only")
 									.d-none.d-md-inline

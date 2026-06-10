@@ -226,7 +226,9 @@ block endOfBody
 						displayName = minerSummary.details.name;
 						badgeClass = "bg-" + aliasBadgeColor;
 						
-						row.find(".miner-name-unknown").removeClass("bg-secondary").addClass(badgeClass);
+						var textClass = (aliasBadgeColor == "light" || aliasBadgeColor == "warning") ? "text-dark" : "text-reset";
+						row.find(".miner-name-unknown").removeClass("bg-secondary").addClass(badgeClass).addClass(textClass);
+						row.find(".miner-name-unknown a").addClass(textClass).removeClass("text-reset");
 
 					} else if (minerSummary.details && minerSummary.details.type == "miner-payout") {
 						displayName = minerSummary.details.name;

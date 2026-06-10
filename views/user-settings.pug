@@ -50,7 +50,8 @@ block content
 					if (userSettings.aliasBadgeColor)
 						.mt-2
 							span.small.text-muted Current: 
-							span.badge(class=`bg-${userSettings.aliasBadgeColor}`) #{userSettings.aliasBadgeColor}
+							- var textClass = (userSettings.aliasBadgeColor == "light" || userSettings.aliasBadgeColor == "warning") ? "text-dark" : "";
+							span.badge(class=`bg-${userSettings.aliasBadgeColor} ${textClass}`) #{userSettings.aliasBadgeColor}
 
 	+contentSection("Address Aliases")
 		p.text-muted You can add custom aliases for any address. These aliases will be used throughout the site and take precedence over default miner/pool names.

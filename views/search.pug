@@ -267,14 +267,18 @@ block endOfBody
 						var displayTitle = (userAlias || staticAlias) ? ("Alias for:<br/>" + addr) : "";
 						
 						var badgeClass = "";
+						var textClass = (userAlias || staticAlias) ? "text-reset" : "";
+
 						if (userAlias) {
 							badgeClass = "badge bg-" + aliasBadgeColor;
+							if (aliasBadgeColor == "light" || aliasBadgeColor == "warning") {
+								textClass = "text-dark";
+								badgeClass += " text-dark";
+							}
 						} else if (staticAlias) {
 							badgeClass = "badge bg-primary";
 						}
 						
-						var textClass = (userAlias || staticAlias) ? "text-reset" : "";
-
 						matchesHtml += `<div><span class='${badgeClass}'><a class='${textClass}' href='./address/${addr}' title='${displayTitle}' data-bs-toggle='tooltip' data-bs-html='true'>${displayName}</a></span>: <span class='text-success'>+${match.out}</span> / <span class='text-danger'>-${match.in}</span></div>`;
 					}
 					row.find(".block-matches").html(matchesHtml);
