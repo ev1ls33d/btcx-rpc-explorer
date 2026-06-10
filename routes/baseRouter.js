@@ -430,7 +430,7 @@ router.get("/changeSetting", function(req, res, next) {
 			req.session.userSettings = Object.create(null);
 		}
 
-		if (typeof req.query.name !== "string" || typeof req.query.value !== "string") {
+		if (typeof req.query.name !== "string") {
 			res.redirect(req.headers.referer);
 
 			return;
@@ -444,12 +444,31 @@ router.get("/changeSetting", function(req, res, next) {
 			}
 		}
 
-		req.session.userSettings[req.query.name.toString()] = req.query.value.toString();
+		if (req.query.name == "addressAliases") {
+			let aliases = req.session.userSettings.addressAliases || {};
+			if (req.query.action == "add") {
+				if (req.query.key && req.query.value) {
+					aliases[req.query.key.trim()] = req.query.value.trim();
+				}
+			} else if (req.query.action == "delete") {
+				if (req.query.key) {
+					delete aliases[req.query.key.trim()];
+				}
+			}
+			req.session.userSettings.addressAliases = aliases;
 
-		let userSettings = JSON.parse(req.cookies["user-settings"] || "{}");
-		userSettings[req.query.name] = req.query.value;
+			let userSettings = JSON.parse(req.cookies["user-settings"] || "{}");
+			userSettings.addressAliases = aliases;
+			res.cookie("user-settings", JSON.stringify(userSettings));
 
-		res.cookie("user-settings", JSON.stringify(userSettings));
+		} else if (req.query.value != null) {
+			req.session.userSettings[req.query.name.toString()] = req.query.value.toString();
+
+			let userSettings = JSON.parse(req.cookies["user-settings"] || "{}");
+			userSettings[req.query.name] = req.query.value;
+
+			res.cookie("user-settings", JSON.stringify(userSettings));
+		}
 	}
 
 	res.redirect(req.headers.referer);
@@ -965,6 +984,16 @@ router.get("/search", asyncHandler(async (req, res, next) => {
 	res.locals.getblockchaininfo = getblockchaininfo;
 	res.locals.interestingBlocks = await timestampSearch.getInterestingBlockHeights(getblockchaininfo);
 
+	const staticAliases = {};
+	if (global.specialAddresses) {
+		for (const [addr, info] of Object.entries(global.specialAddresses)) {
+			if (info.type == "minerPayout") {
+				staticAliases[addr] = info.minerInfo.name;
+			}
+		}
+	}
+	res.locals.staticAliases = staticAliases;
+
 	res.render("search");
 
 	next();
@@ -1008,10 +1037,10 @@ router.post("/search", function(req, res, next) {
 	if (query.includes("*") || query.includes("?")) {
 		let queryForLength = query.replace(/^pocx1q/, "");
 		let fixedChars = queryForLength.replace(/[*?]/g, "");
-		if (fixedChars.length >= 5) {
+		if (fixedChars.length >= 3) {
 			return res.redirect("./search?query=" + encodeURIComponent(rawCaseQuery));
 		} else {
-			req.session.userMessage = "Wildcard search requires at least 5 fixed characters (excluding the 'pocx1q' prefix).";
+			req.session.userMessage = "Wildcard search requires at least 3 fixed characters (excluding the 'pocx1q' prefix).";
 			res.redirect("./");
 			return;
 		}
@@ -1609,6 +1638,11 @@ router.get("/address/:address", asyncHandler(async (req, res, next) => {
 					res.locals.payoutAddressForMiner = global.miningPoolsConfigs[i].payout_addresses[address];
 				}
 			}
+		}
+
+		const userAddressInfo = utils.getAddressInfo(address, res.locals.userSettings);
+		if (userAddressInfo) {
+			res.locals.payoutAddressForMiner = userAddressInfo;
 		}
 
 

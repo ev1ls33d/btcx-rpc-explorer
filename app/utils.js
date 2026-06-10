@@ -554,9 +554,49 @@ function logMemoryUsage() {
 	//debugLog("memoryUsage: heapUsed=" + mbUsed + ", heapTotal=" + mbTotal + ", ratio=" + parseInt(mbUsed / mbTotal * 100));
 }
 
-function identifyMiner(coinbaseTx, blockHeight) {
+function getAddressInfo(address, userSettings) {
+	if (userSettings && userSettings.addressAliases && userSettings.addressAliases[address]) {
+		return {
+			name: userSettings.addressAliases[address],
+			address: address,
+			type: "user-alias",
+			identifiedBy: "user alias"
+		};
+	}
+
+	if (global.specialAddresses && global.specialAddresses[address]) {
+		let saInfo = global.specialAddresses[address];
+		if (saInfo.type == "minerPayout") {
+			let info = Object.assign({}, saInfo.minerInfo);
+			info.address = address;
+			info.type = "miner-payout";
+			return info;
+		}
+	}
+
+	return null;
+}
+
+function identifyMiner(coinbaseTx, blockHeight, userSettings) {
 	if (coinbaseTx == null || coinbaseTx.vin == null || coinbaseTx.vin.length == 0) {
 		return null;
+	}
+
+	if (coinbaseTx.vout && coinbaseTx.vout.length > 0) {
+		for (let i = 0; i < coinbaseTx.vout.length; i++) {
+			const vout = coinbaseTx.vout[i];
+			if (new Decimal(vout.value) > 0) {
+				const payoutAddress = getVoutAddress(vout);
+				if (payoutAddress) {
+					const addressInfo = getAddressInfo(payoutAddress, userSettings);
+					if (addressInfo) {
+						addressInfo.identifiedBy = "payout address " + payoutAddress;
+
+						return addressInfo;
+					}
+				}
+			}
+		}
 	}
 	
 	if (global.miningPoolsConfigs) {
@@ -568,7 +608,9 @@ function identifyMiner(coinbaseTx, blockHeight) {
 					if (miningPoolsConfig.payout_addresses.hasOwnProperty(payoutAddress)) {
 						if (coinbaseTx.vout && coinbaseTx.vout.length > 0) {
 							if (getVoutAddresses(coinbaseTx.vout[0]).includes(payoutAddress)) {
-								let minerInfo = miningPoolsConfig.payout_addresses[payoutAddress];
+								let minerInfo = Object.assign({}, miningPoolsConfig.payout_addresses[payoutAddress]);
+								minerInfo.address = payoutAddress;
+								minerInfo.type = "miner-payout";
 								minerInfo.identifiedBy = "payout address " + payoutAddress;
 
 								return minerInfo;
@@ -582,7 +624,8 @@ function identifyMiner(coinbaseTx, blockHeight) {
 				for (let coinbaseTag in miningPoolsConfig.coinbase_tags) {
 					if (miningPoolsConfig.coinbase_tags.hasOwnProperty(coinbaseTag)) {
 						if (formatHex(coinbaseTx.vin[0].coinbase, "utf8").indexOf(coinbaseTag) != -1) {
-							let minerInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];
+							let minerInfo = Object.assign({}, miningPoolsConfig.coinbase_tags[coinbaseTag]);
+							minerInfo.type = "miner-payout";
 							minerInfo.identifiedBy = "coinbase tag '" + coinbaseTag + "'";
 
 							return minerInfo;
@@ -593,7 +636,8 @@ function identifyMiner(coinbaseTx, blockHeight) {
 
 			for (let blockHash in miningPoolsConfig.block_hashes) {
 				if (blockHash == coinbaseTx.blockhash) {
-					let minerInfo = miningPoolsConfig.block_hashes[blockHash];
+					let minerInfo = Object.assign({}, miningPoolsConfig.block_hashes[blockHash]);
+					minerInfo.type = "miner-payout";
 					minerInfo.identifiedBy = "known block hash '" + blockHash + "'";
 
 					return minerInfo;
@@ -602,8 +646,9 @@ function identifyMiner(coinbaseTx, blockHeight) {
 
 			if (global.activeBlockchain == "main" && miningPoolsConfig.block_heights) {
 				for (let minerName in miningPoolsConfig.block_heights) {
-					let minerInfo = miningPoolsConfig.block_heights[minerName];
+					let minerInfo = Object.assign({}, miningPoolsConfig.block_heights[minerName]);
 					minerInfo.name = minerName;
+					minerInfo.type = "miner-payout";
 
 					if (minerInfo.heights.includes(blockHeight)) {
 						minerInfo.identifiedBy = "known block height #" + blockHeight;
@@ -1716,6 +1761,7 @@ module.exports = {
 	safePromise: safePromise,
 	getVoutAddress: getVoutAddress,
 	getVoutAddresses: getVoutAddresses,
+	getAddressInfo: getAddressInfo,
 	xpubChangeVersionBytes: xpubChangeVersionBytes,
 	bip32Addresses: bip32Addresses,
 	difficultyAdjustmentEstimates: difficultyAdjustmentEstimates,

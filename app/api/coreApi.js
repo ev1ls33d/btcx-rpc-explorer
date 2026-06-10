@@ -1255,7 +1255,12 @@ const addressSearchPromiseQueue = async.queue((task, callback) => {
 
 }, 30);
 
-function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
+function buildMiningSummary(statusId, startBlock, endBlock, userSettings, statusFunc) {
+	if (typeof userSettings === 'function') {
+		statusFunc = userSettings;
+		userSettings = null;
+	}
+
 	return new Promise(async (resolve, reject) => {
 		try {
 			const blockCount = (endBlock - startBlock + 1);
@@ -1301,24 +1306,28 @@ function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
 
 							const coinbaseTx = await getRawTransaction(block.tx[0]);
 
-							const minerInfo = utils.identifyMiner(coinbaseTx, height);
+							const minerInfo = utils.identifyMiner(coinbaseTx, height, userSettings);
 							const totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(coinbaseTx, height);
 							const subsidy = coinConfig.blockRewardFunction(height, global.activeBlockchain);
 
 							let minerName = "Unknown";
+							let minerNameForCache = "Unknown";
 							if (minerInfo) {
-								if (minerInfo.type == "address-only") {
-									minerName = "address-only:" + minerInfo.name;
+								if (minerInfo.type == "address-only" || minerInfo.type == "user-alias") {
+									const payoutAddress = utils.getVoutAddress(coinbaseTx.vout[0]);
+									minerName = (minerInfo.type == "user-alias" ? minerInfo.name : ("address-only:" + minerInfo.name));
+									minerNameForCache = "address-only:" + payoutAddress;
 
 								} else {
 									minerName = minerInfo.name;
+									minerNameForCache = minerInfo.name;
 								}
 							}
 
 							minerInfoByName[minerName] = minerInfo;
 
 							let heightSummary = {
-								mn: minerName,
+								mn: minerNameForCache,
 								tx: block.tx.length,
 								f: totalFees,
 								s: subsidy,
@@ -1365,7 +1374,14 @@ function buildMiningSummary(statusId, startBlock, endBlock, statusFunc) {
 				const blockSummary = summariesByHeight[height];
 				if (!blockSummary) continue; // skip undefined summaries
 				
-				const miner = blockSummary.mn || "Unknown";
+				let miner = blockSummary.mn || "Unknown";
+				if (miner.startsWith("address-only:")) {
+					const address = miner.substring("address-only:".length);
+					const userAlias = utils.getAddressInfo(address, userSettings);
+					if (userAlias) {
+						minerInfoByName[miner] = userAlias;
+					}
+				}
 
 				if (!summary.miners[miner]) {
 					summary.minerNamesSortedByBlockCount.push(miner);

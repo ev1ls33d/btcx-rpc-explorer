@@ -101,6 +101,10 @@ block endOfBody
 			var currentBlockHeight = !{currentBlockHeight};
 			var query = "!{query}";
 
+			var addressAliases = !{JSON.stringify(userSettings.addressAliases || {})};
+			var staticAliases = !{JSON.stringify(staticAliases || {})};
+			var aliasBadgeColor = "!{userSettings.aliasBadgeColor || 'primary'}";
+
 			var startBlock = !{startBlock != null ? startBlock : 'null'};
 			var endBlock = !{endBlock != null ? endBlock : 'null'};
 			
@@ -256,7 +260,22 @@ block endOfBody
 					var matchesHtml = "";
 					for (var addr in result.matches) {
 						var match = result.matches[addr];
-						matchesHtml += `<div><a href='./address/${addr}'>${addr}</a>: <span class='text-success'>+${match.out}</span> / <span class='text-danger'>-${match.in}</span></div>`;
+						var userAlias = addressAliases[addr];
+						var staticAlias = staticAliases[addr];
+						
+						var displayName = userAlias ? userAlias : (staticAlias ? staticAlias : addr);
+						var displayTitle = (userAlias || staticAlias) ? ("Alias for:<br/>" + addr) : "";
+						
+						var badgeClass = "";
+						if (userAlias) {
+							badgeClass = "badge bg-" + aliasBadgeColor;
+						} else if (staticAlias) {
+							badgeClass = "badge bg-primary";
+						}
+						
+						var textClass = (userAlias || staticAlias) ? "text-reset" : "";
+
+						matchesHtml += `<div><span class='${badgeClass}'><a class='${textClass}' href='./address/${addr}' title='${displayTitle}' data-bs-toggle='tooltip' data-bs-html='true'>${displayName}</a></span>: <span class='text-success'>+${match.out}</span> / <span class='text-danger'>-${match.in}</span></div>`;
 					}
 					row.find(".block-matches").html(matchesHtml);
 
@@ -294,6 +313,10 @@ block endOfBody
 				$("#results-table").show();
 				$("#results-pagination").toggle(pageCount > 1);
 				$("#results-sort").show();
+
+				if (typeof enableTooltipsAndPopovers === 'function') {
+					enableTooltipsAndPopovers();
+				}
 			}
 
 			function prepareUI() {

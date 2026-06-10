@@ -32,19 +32,23 @@ block content
 
 					if (payoutAddressForMiner)
 						+funAlert
-							span This looks like a miner payout address for  
-							span.fw-bold #{payoutAddressForMiner.name}
-							if (coinConfig.miningPoolsConfigUrls.length > 1)
-								span  (see the miner-identifications configurations: 
-								each item, index in coinConfig.miningPoolsConfigUrls
-									if (index > 0)
-										span , 
-									a(href=item) config ##{index + 1}
-								span )
+							if (payoutAddressForMiner.type == "user-alias")
+								span This address has a user alias: 
+								span.fw-bold #{payoutAddressForMiner.name}
 							else
-								span  (see the configuration
-								a(href=coinConfig.miningPoolsConfigUrls[0]) here
-								span )
+								span This looks like a miner payout address for  
+								span.fw-bold #{payoutAddressForMiner.name}
+								if (coinConfig.miningPoolsConfigUrls.length > 1)
+									span  (see the miner-identifications configurations: 
+									each item, index in coinConfig.miningPoolsConfigUrls
+										if (index > 0)
+											span , 
+										a(href=item) config ##{index + 1}
+									span )
+								else if (coinConfig.miningPoolsConfigUrls.length == 1)
+									span  (see the configuration
+									a(href=coinConfig.miningPoolsConfigUrls[0]) here
+									span )
 								
 
 					else if (global.specialAddresses[address] && global.specialAddresses[address].type == "fun")

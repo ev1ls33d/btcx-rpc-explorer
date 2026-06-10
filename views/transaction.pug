@@ -86,7 +86,7 @@ block content
 					- isTxConfirmed = false;
 
 				if (isCoinbaseTx)
-					- var minerInfo = utils.identifyMiner(result.getrawtransaction, result.getblock.height);
+					- var minerInfo = utils.identifyMiner(result.getrawtransaction, result.getblock.height, userSettings);
 
 				+contentSection("Summary")
 					+summaryRow((isTxConfirmed ? 2 : 3) + (isCoinbaseTx ? 1 : 2) + (isCoinbaseTx && minerInfo ? 1 : 0))
@@ -136,12 +136,16 @@ block content
 											+copyTextButton(minerInfo.name)
 
 									else if (minerInfo.identifiedBy)
+										- var aliasColor = userSettings.aliasBadgeColor || "primary";
+										- var badgeClass = (minerInfo.type == "user-alias" ? ("bg-" + aliasColor) : "bg-primary");
 										span(data-bs-toggle="tooltip", data-bs-html="true", title=`Identified by: ${minerInfo.identifiedBy}${minerInfo.note ? ("<br/><br/>" + minerInfo.note) : ""}`)
-											+primaryBadge(minerInfo.name, false)
+											span.badge(class=badgeClass) #{minerInfo.name}
 
 									else
+										- var aliasColor = userSettings.aliasBadgeColor || "primary";
+										- var badgeClass = (minerInfo.type == "user-alias" ? ("bg-" + aliasColor) : "bg-primary");
 										span
-											+primaryBadge(minerInfo.name, false)
+											span.badge(class=badgeClass) #{minerInfo.name}
 											
 
 							+summaryItem("Fees Collected", "The aggregate fees collected by the miner that created this coinbase transaction.")

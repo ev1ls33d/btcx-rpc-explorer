@@ -102,6 +102,7 @@ block endOfBody
 		var statusInterval;
 		var graph = null;
 
+		var aliasBadgeColor = "!{userSettings.aliasBadgeColor || 'primary'}";
 		var currentBlockHeight = !{currentBlockHeight};
 		var colors = ["#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#ff7c43", "#ffa600", "#85cb39", "#00d688"];
 		
@@ -219,10 +220,29 @@ block endOfBody
 
 				} else if (minerName.startsWith("address-only:")) {
 					var address = minerName.substring("address-only:".length);
-					row.find(".miner-name-unknown").html(`<a class="text-reset" href='./address/${address}'>${address}</a>`);
+					var displayName = address;
+					var badgeClass = "bg-secondary";
+					if (minerSummary.details && minerSummary.details.type == "user-alias") {
+						displayName = minerSummary.details.name;
+						badgeClass = "bg-" + aliasBadgeColor;
+						
+						row.find(".miner-name-unknown").removeClass("bg-secondary").addClass(badgeClass);
+
+					} else if (minerSummary.details && minerSummary.details.type == "miner-payout") {
+						displayName = minerSummary.details.name;
+						badgeClass = "bg-primary";
+
+						row.find(".miner-name-unknown").removeClass("bg-secondary").addClass(badgeClass);
+					}
+					row.find(".miner-name-unknown").html(`<a class="text-reset" href='./address/${address}'>${displayName}</a>`);
 
 				} else {
-					row.find(".miner-name").text(minerName);
+					var displayName = minerName;
+					var link = `./address-only:${minerName}`; // fallback
+					if (minerSummary.details && minerSummary.details.address) {
+						link = `./address/${minerSummary.details.address}`;
+					}
+					row.find(".miner-name").html(`<a class="text-reset" href='${link}'>${displayName}</a>`);
 				}
 
 				row.find(".miner-block-count").html(`<a href='javascript:void(0);' onclick="javascipt:$('#miner-block-heights-${i}').toggle();" title="Click to show ${minerSummary.blocks.length.toString()} block height(s)" data-bs-toggle="tooltip">${minerSummary.blocks.length.toString()}</a><br/><small id='miner-block-heights-${i}' style='display: none;'>${blockHeightsHtml}</small>`);
@@ -245,7 +265,12 @@ block endOfBody
 
 				if (revenuePercent > 1) {
 					if (minerName.startsWith("address-only:")) {
-						pieChartData.labels.push(minerName.substring("address-only:".length));
+						var address = minerName.substring("address-only:".length);
+						var displayName = address;
+						if (minerSummary.details && minerSummary.details.name) {
+							displayName = minerSummary.details.name;
+						}
+						pieChartData.labels.push(displayName);
 
 					} else {
 						pieChartData.labels.push(minerName);

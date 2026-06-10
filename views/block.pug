@@ -92,11 +92,11 @@ block content
 
 						if result.getblock.pocx_proof !== undefined && result.getblock.pocx_proof.account_id
 							+summaryItem("Miner")
-								a.text-break(href=`./address/${result.getblock.pocx_proof.account_id}`) #{result.getblock.pocx_proof.account_id}
+								+addressName(result.getblock.pocx_proof.account_id, {link:true, ellipsize:24})
 
 						if result.getblock.signer_address !== undefined
 							+summaryItem("Forger")
-								a.text-break(href=`./address/${result.getblock.signer_address}`) #{result.getblock.signer_address}
+								+addressName(result.getblock.signer_address, {link:true, ellipsize:24})
 
 						if result.getblock.time_since_last_block !== undefined
 							+summaryItem("Time Since Last Block")

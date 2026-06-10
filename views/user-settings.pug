@@ -37,6 +37,59 @@ block content
 
 					span.small.text-muted (Example: for New York, enter "-5")
 
+		.row.pb-3.border-bottom.mb-4
+			.col.text-start
+				h6 <br />Alias Badge Color
+				span.text-muted Select the background color for user-defined address aliases.
+			.col.text-end.me-3
+				.d-inline-block
+					- var colors = ["primary", "secondary", "success", "danger", "warning", "info", "light", "dark"];
+					each color in colors
+						a.badge.me-1(href=`./changeSetting?name=aliasBadgeColor&value=${color}`, class=`bg-${color}`, title=color, data-bs-toggle="tooltip", style="width: 24px; height: 24px; border: 2px solid #fff; display: inline-block; vertical-align: middle;") &nbsp;
+					
+					if (userSettings.aliasBadgeColor)
+						.mt-2
+							span.small.text-muted Current: 
+							span.badge(class=`bg-${userSettings.aliasBadgeColor}`) #{userSettings.aliasBadgeColor}
+
+	+contentSection("Address Aliases")
+		p.text-muted You can add custom aliases for any address. These aliases will be used throughout the site and take precedence over default miner/pool names.
+		
+		if (userSettings.addressAliases && Object.keys(userSettings.addressAliases).length > 0)
+			.table-responsive
+				table.table.table-striped
+					thead
+						tr
+							th Address
+							th Alias
+							th.text-end Actions
+					tbody
+						each alias, address in userSettings.addressAliases
+							tr
+								td.font-monospace #{address}
+								td #{alias}
+								td.text-end
+									a.btn.btn-outline-primary.btn-sm.me-1(href="javascript:void(0)", onclick=`editAlias('${address}', '${alias}')`, title="Edit")
+										i.bi-pencil
+									a.btn.btn-outline-danger.btn-sm(href=`./changeSetting?name=addressAliases&action=delete&key=${address}`, title="Delete")
+										i.bi-trash
+		else
+			p.text-muted No aliases defined.
+
+		hr
+
+		h6(id="alias-form-title") Add New Alias
+		form(id="alias-form", method="get", action="./changeSetting")
+			input(type="hidden", name="name", value="addressAliases")
+			input(id="alias-action", type="hidden", name="action", value="add")
+			.row.g-3
+				.col-md-6
+					input.form-control(id="alias-address", type="text", name="key", placeholder="Address (e.g. pocx1q...)", required)
+				.col-md-4
+					input.form-control(id="alias-name", type="text", name="value", placeholder="Alias (e.g. My Cold Wallet)", required)
+				.col-md-2
+					button.btn.btn-primary.w-100(id="alias-submit-btn", type="submit") Add
+
 	+contentSection("User Settings")
 		pre
 			code.json #{JSON.stringify(userSettings, null, 4)}
@@ -44,3 +97,15 @@ block content
 		hr
 
 		a.btn.btn-primary(href="./admin/resetUserSettings") Reset To Defaults
+
+block endOfBody
+	script.
+		function editAlias(address, alias) {
+			$("#alias-address").val(address);
+			$("#alias-name").val(alias);
+			$("#alias-form-title").text("Edit Alias");
+			$("#alias-submit-btn").text("Update");
+			
+			window.scrollTo(0, $("#alias-form").offset().top - 100);
+			$("#alias-name").focus();
+		}

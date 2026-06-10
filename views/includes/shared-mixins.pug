@@ -11,6 +11,11 @@ mixin themeCss
 					url("!{assetUrl("./font/bootstrap-icons.woff")}") format("woff");
 		}
 
+		.tooltip-inner {
+			max-width: none !important;
+			text-align: center !important;
+		}
+
 	link(rel="stylesheet", href=assetUrl(`./style/bootstrap-icons.css`), integrity=assetIntegrity("bootstrap-icons.css"), crossorigin="anonymous")
 
 
@@ -998,6 +1003,28 @@ mixin graphPageScriptSetup(dateAdapterNeeded=false)
 			var gridLineColor = "#dddddd";
 
 	script(src=assetUrl('./js/decimal.js'))
+
+
+mixin addressName(address, options={})
+	- var addressInfo = utils.getAddressInfo(address, userSettings);
+	if (addressInfo)
+		span.border-dotted(title=`User Alias for:<br/>${address}`, data-bs-toggle="tooltip", data-bs-html="true")
+			if (options.link)
+				a(href=`./address/${address}`) #{addressInfo.name}
+			else
+				| #{addressInfo.name}
+	else
+		if (options.link)
+			a(href=`./address/${address}`)
+				if (options.ellipsize)
+					| #{utils.ellipsizeMiddle(address, options.ellipsize)}
+				else
+					| #{address}
+		else
+			if (options.ellipsize)
+				| #{utils.ellipsizeMiddle(address, options.ellipsize)}
+			else
+				| #{address}
 
 
 mixin quote(quote, quoteIndex=-1, options={fontSize: 3, align:"start", includeQuotes:false})

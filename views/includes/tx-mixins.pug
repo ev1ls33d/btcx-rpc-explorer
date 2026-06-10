@@ -125,24 +125,16 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 
 									if (voutAddresses.length > 0)
 										.word-wrap.mt-2.d-none.d-sm-block
-											a.sz-md-plus.d-none.d-md-inline(href=`./address/${voutAddresses[0]}`, class=(txIOHighlightAddress == voutAddresses[0] ? "text-info" : null)) #{utils.ellipsizeMiddle(voutAddresses[0], 44)}
-											a.sz-xs-sm.small.d-inline.d-md-none(href=`./address/${voutAddresses[0]}`, class=(txIOHighlightAddress == voutAddresses[0] ? "text-info" : null)) #{utils.ellipsizeMiddle(voutAddresses[0], 24)}
+											+addressName(voutAddresses[0], {link:true, ellipsize:44})
 
 
 											if (txIOHighlightAddress == voutAddresses[0])
 												span(title="Current address", data-bs-toggle="tooltip")
 													i.bi-arrow-left.text-warning.ms-1.text-info
 
-											if (global.specialAddresses[voutAddresses[0]])
-												- var specialAddressInfo = global.specialAddresses[voutAddresses[0]];
-												if (specialAddressInfo.type == "minerPayout")
-													span  
-													a.d-none.d-sm-inline(data-bs-toggle="tooltip", title=`Miner payout address: ${specialAddressInfo.minerInfo.name}`)
-														+funItemIcon
-
 										.d-block.d-sm-none
 											div(class=`tx-input-address-${tx.txid}`, style="display: none;")
-												a.sz-xs-sm.small(href=`./address/${voutAddresses[0]}`, class=(txIOHighlightAddress == voutAddresses[0] ? "text-info" : null)) #{utils.ellipsizeMiddle(voutAddresses[0], 24)}
+												+addressName(voutAddresses[0], {link:true, ellipsize:24})
 												
 												if (txIOHighlightAddress == voutAddresses[0])
 													span(title="Current address", data-bs-toggle="tooltip")
@@ -304,25 +296,11 @@ mixin txIoDetails(tx, txInputs, totalIOValues, blockHeight, options={})
 						if (voutAddresses.length > 0)
 							.d-inline.d-lg-block.mt-lg-2
 								each addr in voutAddresses
-									a.sz-lg-plus.d-none.d-lg-inline(id=`output-${voutIndex}`, href=`./address/${addr}`)
-										span(class=(highlightRow ? "text-info" : null)) #{utils.ellipsizeMiddle(addr, 44)}
-
-									a.sz-md.d-none.d-md-inline.d-lg-none(id=`output-${voutIndex}`, href=`./address/${addr}`)
-										span(class=(highlightRow ? "text-info" : null)) #{utils.ellipsizeMiddle(addr, 24)}
-
-									a.sz-xs-sm.d-inline.d-md-none(id=`output-${voutIndex}`, href=`./address/${addr}`)
-										span.small(class=(highlightRow ? "text-info" : null)) #{utils.ellipsizeMiddle(addr, 18)}
+									+addressName(addr, {link:true, ellipsize:44})
 
 									if (highlightRow)
 										span(title="Current address", data-bs-toggle="tooltip")
 											i.bi-arrow-left.ms-1.text-warning
-
-									if (global.specialAddresses[addr])
-										- var specialAddressInfo = global.specialAddresses[addr];
-										if (specialAddressInfo.type == "minerPayout")
-											span  
-											a.d-none.d-sm-inline(data-bs-toggle="tooltip", title=`Miner payout address: ${specialAddressInfo.minerInfo.name}`)
-												+funItemIcon
 
 									.d-none.d-sm-block.mb-2
 

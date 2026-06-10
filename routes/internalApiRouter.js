@@ -301,7 +301,7 @@ router.get("/build-mining-summary/:startBlock/:endBlock", asyncHandler(async (re
 		
 
 
-		let summary = await coreApi.buildMiningSummary(statusId, startBlock, endBlock, (update) => {
+		let summary = await coreApi.buildMiningSummary(statusId, startBlock, endBlock, req.session.userSettings, (update) => {
 			miningSummaryStatuses[statusId] = update;
 		});
 
