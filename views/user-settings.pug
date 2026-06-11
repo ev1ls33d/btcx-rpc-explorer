@@ -91,13 +91,34 @@ block content
 				.col-md-2
 					button.btn.btn-primary.w-100(id="alias-submit-btn", type="submit") Add
 
-	+contentSection("User Settings")
-		pre
-			code.json #{JSON.stringify(userSettings, null, 4)}
-
-		hr
-
-		a.btn.btn-primary(href="./admin/resetUserSettings") Reset To Defaults
+	+contentSection("User Settings JSON")
+		form(method="post", action="./updateUserSettings")
+			input(type="hidden", name="_csrf", value=csrfToken)
+			textarea#user-settings-json.form-control.font-monospace.mb-3(name="userSettingsJson", rows=15, readonly) #{JSON.stringify(userSettings, null, 4)}
+			
+			.row
+				.col
+					button#save-settings-btn.btn.btn-primary.d-none(type="submit")
+						i.bi-save.me-2
+						| Save Settings
+					
+					button#enable-edit-btn.btn.btn-outline-primary(type="button", onclick="enableJsonEdit()")
+						i.bi-pencil.me-2
+						| Edit JSON
+					
+					a.btn.btn-outline-primary.ms-2(href="javascript:void(0)", onclick="exportUserSettings()")
+						i.bi-download.me-2
+						| Export
+						
+					label.btn.btn-outline-primary.ms-2.mb-0(for="import-file")
+						i.bi-upload.me-2
+						| Import
+						input#import-file(type="file", style="display: none;", onchange="importUserSettings(this)")
+				
+				.col.text-end
+					a.btn.btn-danger(href="./admin/resetUserSettings", onclick="return confirm('Are you sure you want to reset all settings to defaults?')")
+						i.bi-arrow-counterclockwise.me-2
+						| Reset to Defaults
 
 block endOfBody
 	script.
@@ -109,4 +130,43 @@ block endOfBody
 			
 			window.scrollTo(0, $("#alias-form").offset().top - 100);
 			$("#alias-name").focus();
+		}
+
+		function enableJsonEdit() {
+			$("#user-settings-json").removeAttr("readonly");
+			$("#save-settings-btn").removeClass("d-none");
+			$("#enable-edit-btn").addClass("d-none");
+			$("#user-settings-json").focus();
+		}
+
+		function exportUserSettings() {
+			var settings = $("textarea[name='userSettingsJson']").val();
+			var blob = new Blob([settings], {type: "application/json"});
+			var url = URL.createObjectURL(blob);
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "btcx-user-settings.json";
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+		}
+
+		function importUserSettings(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					try {
+						var json = JSON.parse(e.target.result);
+						$("textarea[name='userSettingsJson']").val(JSON.stringify(json, null, 4));
+						
+						enableJsonEdit();
+						
+						alert("Settings imported into text area. Review and click 'Save Settings' to apply.");
+					} catch (err) {
+						alert("Error parsing JSON: " + err.message);
+					}
+				};
+				reader.readAsText(input.files[0]);
+			}
 		}

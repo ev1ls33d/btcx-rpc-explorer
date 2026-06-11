@@ -474,6 +474,25 @@ router.get("/changeSetting", function(req, res, next) {
 	res.redirect(req.headers.referer);
 });
 
+router.post("/updateUserSettings", function(req, res, next) {
+	if (req.body.userSettingsJson) {
+		try {
+			let userSettings = JSON.parse(req.body.userSettingsJson);
+			req.session.userSettings = userSettings;
+			res.cookie("user-settings", JSON.stringify(userSettings));
+
+			req.session.userMessage = "User settings updated.";
+			req.session.userMessageType = "success";
+
+		} catch (err) {
+			req.session.userMessage = "Error updating user settings: " + err.message;
+			req.session.userMessageType = "danger";
+		}
+	}
+
+	res.redirect(req.headers.referer);
+});
+
 router.get("/session-data", function(req, res, next) {
 	if (req.query.action && req.query.data) {
 		let action = req.query.action;
