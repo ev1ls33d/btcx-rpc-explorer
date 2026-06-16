@@ -459,7 +459,7 @@ router.get("/changeSetting", function(req, res, next) {
 
 			let userSettings = JSON.parse(req.cookies["user-settings"] || "{}");
 			userSettings.addressAliases = aliases;
-			res.cookie("user-settings", JSON.stringify(userSettings));
+			res.cookie("user-settings", JSON.stringify(userSettings), {maxAge:config.userSettingsCookieMaxAge, path:config.baseUrl, secure:config.secureSite});
 
 		} else if (req.query.value != null) {
 			req.session.userSettings[req.query.name.toString()] = req.query.value.toString();
@@ -467,7 +467,7 @@ router.get("/changeSetting", function(req, res, next) {
 			let userSettings = JSON.parse(req.cookies["user-settings"] || "{}");
 			userSettings[req.query.name] = req.query.value;
 
-			res.cookie("user-settings", JSON.stringify(userSettings));
+			res.cookie("user-settings", JSON.stringify(userSettings), {maxAge:config.userSettingsCookieMaxAge, path:config.baseUrl, secure:config.secureSite});
 		}
 	}
 
@@ -479,7 +479,7 @@ router.post("/updateUserSettings", function(req, res, next) {
 		try {
 			let userSettings = JSON.parse(req.body.userSettingsJson);
 			req.session.userSettings = userSettings;
-			res.cookie("user-settings", JSON.stringify(userSettings));
+			res.cookie("user-settings", JSON.stringify(userSettings), {maxAge:config.userSettingsCookieMaxAge, path:config.baseUrl, secure:config.secureSite});
 
 			req.session.userMessage = "User settings updated.";
 			req.session.userMessageType = "success";

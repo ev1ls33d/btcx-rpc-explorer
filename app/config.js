@@ -103,6 +103,7 @@ module.exports = {
 	},
 
 	cookieSecret: cookieSecret,
+	userSettingsCookieMaxAge: (1000 * 60 * 60 * 24 * 365), // 1 year
 
 	privacyMode: (process.env.BTCEXP_PRIVACY_MODE.toLowerCase() == "true"),
 	slowDeviceMode: slowDeviceMode,

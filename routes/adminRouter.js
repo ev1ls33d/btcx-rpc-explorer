@@ -175,7 +175,7 @@ router.get('/resetUserSettings', (req, res) => {
  
 	let userSettings = Object.create(null);
 	
-	res.cookie("user-settings", JSON.stringify(userSettings));
+	res.cookie("user-settings", JSON.stringify(userSettings), {maxAge:config.userSettingsCookieMaxAge, path:config.baseUrl, secure:config.secureSite});
 
 	res.redirect(req.headers.referer);
 });
