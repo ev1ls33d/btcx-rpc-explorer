@@ -7,14 +7,18 @@
 		"pocx1qrp00l665mrl94cuhlwngyvua0q3xsvayg8e6zn": {
 			"name": "Rico's Pool",
 			"link": "https://btcx-pool.cryptoguru.org/info"
-		},
+		}, 
 		"pocx1qn35x85k4ew9h4kvx0z8m4jypsrhnf9zfcetkxv": {
 			"name": "H9 Pool",
 			"link": "https://www.h9.com/pools/pocx"
-		}
-		, "pocx1qgnlrzpluccezkngptzn7t6gwutgvcjkx3yduk0": {
+		}, 
+		"pocx1qgnlrzpluccezkngptzn7t6gwutgvcjkx3yduk0": {
 			"name": "Bitx Pool",
 			"link": "https://pocx.bitxpool.com/guide.html"
+		}, 
+		"pocx1qp0cxp00l5fyfkml3lp6dkxar6hpgq26smjrdm4": {
+			"name": "Mosaic Pool",
+			"link": "https://mosaicpool.eu/"
 		}
 	}
 }
