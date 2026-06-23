@@ -1275,6 +1275,33 @@ function buildMiningSummary(statusId, startBlock, endBlock, userSettings, status
 
 			const summariesByHeight = {};
 			const minerInfoByName = {};
+
+			if (global.miningPoolsConfigs) {
+				for (let i = 0; i < global.miningPoolsConfigs.length; i++) {
+					const config = global.miningPoolsConfigs[i];
+					if (config.payout_addresses) {
+						for (const addr in config.payout_addresses) {
+							const info = Object.assign({}, config.payout_addresses[addr]);
+							info.address = addr;
+							info.type = "miner-payout";
+							
+							minerInfoByName[info.name] = info;
+							minerInfoByName["address-only:" + addr] = info;
+						}
+					}
+
+					if (config.coinbase_tags) {
+						for (const tag in config.coinbase_tags) {
+							const info = Object.assign({}, config.coinbase_tags[tag]);
+							info.type = "miner-payout";
+							
+							if (!minerInfoByName[info.name]) {
+								minerInfoByName[info.name] = info;
+							}
+						}
+					}
+				}
+			}
 			
 
 			for (let i = startBlock; i <= endBlock; i++) {
@@ -1321,10 +1348,17 @@ function buildMiningSummary(statusId, startBlock, endBlock, userSettings, status
 								} else {
 									minerName = minerInfo.name;
 									minerNameForCache = minerInfo.name;
+
+									if (minerInfo.address) {
+										minerNameForCache = "address-only:" + minerInfo.address;
+									}
 								}
 							}
 
 							minerInfoByName[minerName] = minerInfo;
+							if (minerNameForCache != minerName) {
+								minerInfoByName[minerNameForCache] = minerInfo;
+							}
 
 							let heightSummary = {
 								mn: minerNameForCache,
@@ -1380,6 +1414,8 @@ function buildMiningSummary(statusId, startBlock, endBlock, userSettings, status
 					const userAlias = utils.getAddressInfo(address, userSettings);
 					if (userAlias) {
 						minerInfoByName[miner] = userAlias;
+					} else if (global.specialAddresses[address] && global.specialAddresses[address].type == "minerPayout") {
+						minerInfoByName[miner] = Object.assign({address:address, type:"miner-payout"}, global.specialAddresses[address].minerInfo);
 					}
 				}
 

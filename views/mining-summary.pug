@@ -240,14 +240,14 @@ block endOfBody
 
 				} else {
 					var displayName = minerName;
-					var link = `./address-only:${minerName}`; // fallback
+					var link = `./search?query=${minerName}`; // fallback
 					if (minerSummary.details && minerSummary.details.address) {
 						link = `./address/${minerSummary.details.address}`;
 					}
 					row.find(".miner-name").html(`<a class="text-reset" href='${link}'>${displayName}</a>`);
 				}
 
-				row.find(".miner-block-count").html(`<a href='javascript:void(0);' onclick="javascipt:$('#miner-block-heights-${i}').toggle();" title="Click to show ${minerSummary.blocks.length.toString()} block height(s)" data-bs-toggle="tooltip">${minerSummary.blocks.length.toString()}</a><br/><small id='miner-block-heights-${i}' style='display: none;'>${blockHeightsHtml}</small>`);
+				row.find(".miner-block-count").html(`<a href='javascript:void(0);' onclick="javascript:$('#miner-block-heights-${i}').toggle();" title="Click to show ${minerSummary.blocks.length.toString()} block height(s)" data-bs-toggle="tooltip">${minerSummary.blocks.length.toString()}</a><br/><small id='miner-block-heights-${i}' style='display: none;'>${blockHeightsHtml}</small>`);
 				row.find(".miner-block-percent").text(`(${new Decimal(minerSummary.blocks.length).dividedBy(summary.overall.blockCount).times(100).toDecimalPlaces(1)}%)`);
 				
 				var subsidyPlusFees = new Decimal(minerSummary.totalSubsidy).plus(new Decimal(minerSummary.totalFees));
